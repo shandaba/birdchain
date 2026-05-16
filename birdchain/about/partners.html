@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>合作伙伴 - BirdChain鸟链</title>
+  <meta name="description" content="BirdChain鸟链的合作伙伴网络，涵盖教育机构、文旅机构、博物馆、摄影师、器材品牌、出版机构与自然保护组织。">
+  <meta property="og:title" content="合作伙伴 - BirdChain鸟链">
+  <meta property="og:description" content="BirdChain与全球优秀机构合作，共同推动鸟类影像文化的发展。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .bc-partner-section {
+      margin-bottom: 48px;
+    }
+    .bc-partner-section h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .bc-partner-section .section-desc {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    .bc-partner-card {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      transition: all var(--transition-normal);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .bc-partner-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--brand-accent-soft);
+    }
+    .bc-partner-card .partner-logo {
+      width: 64px;
+      height: 64px;
+      border-radius: 12px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.5rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .bc-partner-card h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .bc-partner-card .partner-badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      background: var(--brand-accent-soft);
+      color: var(--brand-accent-dark);
+      margin-bottom: 10px;
+    }
+    .bc-partner-card p {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .bc-partner-cta {
+      background: linear-gradient(135deg, #16395C, #1B4F72);
+      border-radius: var(--radius-lg);
+      padding: 56px 48px;
+      text-align: center;
+      color: #fff;
+      margin: 60px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .bc-partner-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 70% 40%, rgba(199, 165, 109, 0.12), transparent 60%);
+      pointer-events: none;
+    }
+    .bc-partner-cta h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 12px;
+      position: relative;
+    }
+    .bc-partner-cta p {
+      font-size: 1rem;
+      opacity: 0.85;
+      max-width: 520px;
+      margin: 0 auto 28px;
+      position: relative;
+      line-height: 1.7;
+    }
+    .bc-partner-cta .btn {
+      position: relative;
+      font-size: 1.05rem;
+      padding: 14px 36px;
+      border-radius: 28px;
+    }
+    @media (max-width: 767px) {
+      .bc-partner-cta { padding: 40px 24px; margin: 40px 0; }
+      .bc-partner-cta h2 { font-size: 1.35rem; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <nav class="bc-breadcrumb" aria-label="面包屑导航" id="breadcrumb"></nav>
+
+      <section class="section" style="padding-bottom:24px">
+        <h1 class="section-title" style="font-size:1.75rem">合作伙伴</h1>
+        <p class="section-subtitle">与全球优秀机构携手，共建鸟类影像文化生态</p>
+      </section>
+
+      <div class="bc-partner-section">
+        <h3>学校与教育机构</h3>
+        <p class="section-desc">与国内外知名高校及教育机构合作，推动鸟类学与影像艺术的学术研究与人才培养。</p>
+        <div class="grid-3">
+          <div class="bc-partner-card">
+            <div class="partner-logo" style="background:linear-gradient(135deg,#1B4332,#2D6A4F)">北大</div>
+            <h4>北京大学生命科学学院</h4>
+            <span class="partner-badge">学术合作</span>
+            <p>联合开展鸟类生态学研究与自然教育课程开发，共建鸟类物种数据库。</p>
+          </div>
+          <div class="bc-partner-card">
+            <div class="partner-logo" style="background:linear-gradient(135deg,#1B4F72,#2980B9)">康奈尔</div>
+            <h4>康奈尔大学鸟类学实验室</h4>
+            <span class="partner-badge">学术合作</span>
+            <p>全球鸟类学研究的权威机构，在鸟类行为学与保护生物学领域深度合作。</p>
+          </div>
+          <div class="bc-partner-card">
+            <div class="partner-logo" style="background:linear-gradient(135deg,#606C38,#283618)">北林</div>
+            <h4>北京林业大学</h4>
+            <span class="partner-badge">教育合作</span>
+            <p>在野生动物保护与自然保护区管理方向开展教学实践与科研合作。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bc-partner-section">
+        <h3>文旅机构</h3>
+        <p class="section-desc">与全球知名的生态旅游目的地及文化机构合作，打造鸟类影像主题旅行体验。</p>
+        <div class="grid-3">
+          <div class="bc-partner-card">
+            <div class="partner-logo" style="background:linear-gradient(135deg,#6B4226,#8B6914)">鄱阳湖</div>
+            <h4>鄱阳湖国家级自然保护区</h4>
+            <span class="partner-badge">生态旅游</span>
+            <p>亚洲最大的候鸟越冬地，每年吸引数以万计的观鸟爱好者与摄影师。</p>
+          </div>
+          <div class="bc-partner-card">
+            <div class="partner-logo" style="background:linear-gradient(135deg,#006D77,#83C5BE)">哥斯达</div>
+            <h4>哥斯达黎加生态旅游局</h4>
+            <span class="partner-badge">国际目的地</span>
+            <p>全球生物多样性热点地区，拥有超过900种鸟类，是观鸟天堂。</p>
+          </div>
+          <div class="bc-partner-card">
+            <div class="partner-logo" style="background:linear-gradient(135deg,#457B9D,#A8DADC)">云南</div>
+            <h4>云南省文旅厅</h4>
+            <span class="partner-badge">省级合作</span>
+            <p>中国鸟类资源最丰富的省份之一，共建鸟类影像主题旅游线路。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bc-partner-section">
+        <h3>博物馆与展览</h3>
+        <p class="section-desc">与自然博物馆、科技馆及艺术展览机构合作，打造沉浸式鸟类视觉体验。</p>
+        <div class="grid-3">
+          <div class="bc-partner-card">
+            <div class="partner-logo" style="background:linear-gradient(135deg,#2D6A4F,#40916C)">自然博</div>
+            <h4>上海自然博物馆</h4>
+            <span class="partner-badge">展览合作</span>
+            <p>联合举办鸟类影像特展与AR/VR互动体验展，年接待观众超过200万人次。</p>
+          </div>
+          <div class="bc-partner-card">
+            <div class="partner-logo" style="background:linear-gradient(135deg,#023E8A,#0077B6)">NHM</div>
+            <h4>伦敦自然历史博物馆</h4>
+            <span class="partner-badge">国际展览</span>
+            <p>全球顶级的自然历史博物馆，合作开展鸟类科学与艺术跨界展览。</p>
+          </div>
+          <div class="bc-partner-card">
+            <div class="partner-logo" style="background:linear-gradient(135deg,#D4A373,#FAEDCD)">今日</div>
+            <h4>今日美术馆</h4>
+            <span class="partner-badge">艺术展览</span>
+            <p>推动鸟类影像作为当代艺术媒介，举办鸟类视觉艺术双年展。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bc-partner-section">
+        <h3>摄影师与创作者</h3>
+        <p class="section-desc">汇聚全球顶尖的鸟类摄影师与视觉创作者，他们是BirdChain内容生态的核心力量。</p>
+        <div class="grid-3">
+          <div class="bc-partner-card">
+            <div class="partner-logo" style="background:linear-gradient(135deg,#BC6C25,#DDA15E)">张伟</div>
+            <h4>张伟</h4>
+            <span class="partner-badge">签约摄影师</span>
+            <p>国家地理签约摄影师，专注于中国西部高山鸟类摄影，作品多次获国际大奖。</p>
+          </div>
+          <div class="bc-partner-card">
+            <div class="partner-logo" style="background:linear-gradient(135deg,#1B4965,#5FA8D3)">Sarah</div>
+            <h4>Sarah Chen</h4>
+            <span class="partner-badge">签约摄影师</span>
+            <p>野生动物摄影师协会(WPY)年度大奖得主，专注于热带雨林鸟类行为记录。</p>
+          </div>
+          <div class="bc-partner-card">
+            <div class="partner-logo" style="background:linear-gradient(135deg,#386641,#A7C957)">林野</div>
+            <h4>林野工作室</h4>
+            <span class="partner-badge">创作者联盟</span>
+            <p>由5位青年鸟类摄影师组成的创作团队，以创新的视觉语言呈现鸟类之美。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bc-partner-section">
+        <h3>器材品牌</h3>
+        <p class="section-desc">与全球领先的影像器材及户外装备品牌合作，为创作者提供专业设备支持。</p>
+        <div class="grid-3">
+          <div class="bc-partner-card">
+            <div class="partner-logo" style="background:linear-gradient(135deg,#2C3E50,#3498DB)">佳能</div>
+            <h4>Canon 佳能</h4>
+            <span class="partner-badge">战略合作</span>
+            <p>全球影像行业领导者，为BirdChain创作者提供专业器材支持与联合评测。</p>
+          </div>
+          <div class="bc-partner-card">
+            <div class="partner-logo" style="background:linear-gradient(135deg,#7B2D26,#C44536)">尼康</div>
+            <h4>Nikon 尼康</h4>
+            <span class="partner-badge">战略合作</span>
+            <p>在超长焦镜头与鸟类摄影领域深度合作，联合举办鸟类摄影大赛。</p>
+          </div>
+          <div class="bc-partner-card">
+            <div class="partner-logo" style="background:linear-gradient(135deg,#6C584C,#A98467)">施华</div>
+            <h4>Swarovski Optik</h4>
+            <span class="partner-badge">观鸟器材</span>
+            <p>全球顶级观鸟望远镜品牌，为观鸟爱好者提供专业光学设备支持。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bc-partner-section">
+        <h3>出版机构</h3>
+        <p class="section-desc">与国内外优质出版机构合作，将鸟类影像与知识转化为精美的出版物。</p>
+        <div class="grid-3">
+          <div class="bc-partner-card">
+            <div class="partner-logo" style="background:linear-gradient(135deg,#1A535C,#4ECDC4)">中信</div>
+            <h4>中信出版集团</h4>
+            <span class="partner-badge">出版合作</span>
+            <p>联合出版鸟类影像画册、自然科普图书及儿童自然教育绘本系列。</p>
+          </div>
+          <div class="bc-partner-card">
+            <div class="partner-logo" style="background:linear-gradient(135deg,#8E6B3E,#C7A56D)">NG</div>
+            <h4>National Geographic</h4>
+            <span class="partner-badge">内容授权</span>
+            <p>全球知名的科学与探索媒体品牌，在鸟类影像内容领域建立深度合作。</p>
+          </div>
+          <div class="bc-partner-card">
+            <div class="partner-logo" style="background:linear-gradient(135deg,#3A5A40,#588157)">中科</div>
+            <h4>中国科学技术出版社</h4>
+            <span class="partner-badge">学术出版</span>
+            <p>在鸟类学专著、图鉴类工具书及科普读物方面开展联合出版。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bc-partner-section">
+        <h3>自然保护组织</h3>
+        <p class="section-desc">与全球自然保护组织合作，以影像力量推动鸟类及其栖息地的保护行动。</p>
+        <div class="grid-3">
+          <div class="bc-partner-card">
+            <div class="partner-logo" style="background:linear-gradient(135deg,#1B4332,#2D6A4F)">WWF</div>
+            <h4>世界自然基金会 (WWF)</h4>
+            <span class="partner-badge">保护合作</span>
+            <p>全球最大的独立性非政府环境保护组织，在鸟类栖息地保护领域深度合作。</p>
+          </div>
+          <div class="bc-partner-card">
+            <div class="partner-logo" style="background:linear-gradient(135deg,#52796F,#84A98C)">鸟盟</div>
+            <h4>国际鸟盟 (BirdLife)</h4>
+            <span class="partner-badge">保护合作</span>
+            <p>全球最大的鸟类保护组织联盟，覆盖120多个国家，共同推动濒危鸟类保护。</p>
+          </div>
+          <div class="bc-partner-card">
+            <div class="partner-logo" style="background:linear-gradient(135deg,#B8860B,#DAA520)">SEE</div>
+            <h4>阿拉善SEE基金会</h4>
+            <span class="partner-badge">公益合作</span>
+            <p>中国最具影响力的企业家环保组织，在候鸟迁徙通道保护方面联合行动。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bc-partner-cta">
+        <h2>成为合作伙伴</h2>
+        <p>BirdChain诚邀全球优秀机构加入我们的合作伙伴网络，共同推动鸟类影像文化的繁荣与自然保护事业的发展。</p>
+        <button class="btn btn-accent btn-lg" id="openPartnerModal">提交合作申请</button>
+      </div>
+    </main>
+  </div>
+
+  <div class="bc-modal-overlay" id="partnerModalOverlay" style="display:none">
+    <div class="bc-modal" style="max-width:560px">
+      <div class="bc-modal-header">
+        <h3>合作伙伴申请</h3>
+        <button class="bc-modal-close" id="closePartnerModal">&times;</button>
+      </div>
+      <div class="bc-modal-body">
+        <form id="partnerForm" novalidate>
+          <div class="bc-form-group">
+            <label for="partnerOrgName">机构名称 <span style="color:var(--danger)">*</span></label>
+            <input type="text" id="partnerOrgName" class="bc-form-input" placeholder="请输入机构名称" required />
+            <div class="bc-form-error" id="partnerOrgError"></div>
+          </div>
+          <div class="bc-form-group">
+            <label for="partnerType">合作类型 <span style="color:var(--danger)">*</span></label>
+            <select id="partnerType" class="bc-form-select" required>
+              <option value="">请选择合作类型</option>
+              <option value="education">学校与教育机构</option>
+              <option value="tourism">文旅机构</option>
+              <option value="museum">博物馆与展览</option>
+              <option value="photographer">摄影师与创作者</option>
+              <option value="gear">器材品牌</option>
+              <option value="publishing">出版机构</option>
+              <option value="conservation">自然保护组织</option>
+              <option value="other">其他</option>
+            </select>
+            <div class="bc-form-error" id="partnerTypeError"></div>
+          </div>
+          <div class="bc-form-group">
+            <label for="partnerContact">联系人 <span style="color:var(--danger)">*</span></label>
+            <input type="text" id="partnerContact" class="bc-form-input" placeholder="请输入联系人姓名" required />
+            <div class="bc-form-error" id="partnerContactError"></div>
+          </div>
+          <div class="bc-form-group">
+            <label for="partnerEmail">联系邮箱 <span style="color:var(--danger)">*</span></label>
+            <input type="email" id="partnerEmail" class="bc-form-input" placeholder="请输入联系邮箱" required />
+            <div class="bc-form-error" id="partnerEmailError"></div>
+          </div>
+          <div class="bc-form-group">
+            <label for="partnerIntent">合作意向</label>
+            <textarea id="partnerIntent" class="bc-form-textarea" placeholder="请简要描述您的合作意向与期望"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="bc-modal-footer">
+        <button class="btn btn-ghost" id="cancelPartnerBtn">取消</button>
+        <button class="btn btn-accent" id="submitPartnerBtn">提交申请</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BI = window.BirdChainInteractions;
+      var BStore = window.BirdChainStorage;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('about'));
+
+      var breadcrumb = document.getElementById('breadcrumb');
+      breadcrumb.innerHTML = BC.renderBreadcrumb([
+        { label: '关于BirdChain', href: '/about/index.html' },
+        { label: '合作伙伴' }
+      ]);
+
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+
+      BI.initAll();
+
+      var overlay = document.getElementById('partnerModalOverlay');
+      var openBtn = document.getElementById('openPartnerModal');
+      var closeBtn = document.getElementById('closePartnerModal');
+      var cancelBtn = document.getElementById('cancelPartnerBtn');
+      var submitBtn = document.getElementById('submitPartnerBtn');
+      var form = document.getElementById('partnerForm');
+
+      function openModal() {
+        overlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeModal() {
+        overlay.style.display = 'none';
+        document.body.style.overflow = '';
+        clearPartnerErrors();
+      }
+
+      openBtn.addEventListener('click', openModal);
+      closeBtn.addEventListener('click', closeModal);
+      cancelBtn.addEventListener('click', closeModal);
+
+      overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) closeModal();
+      });
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && overlay.style.display === 'flex') closeModal();
+      });
+
+      function clearPartnerErrors() {
+        var fields = ['partnerOrgName', 'partnerType', 'partnerContact', 'partnerEmail'];
+        fields.forEach(function(id) {
+          var el = document.getElementById(id);
+          if (el) el.classList.remove('error');
+          var errEl = document.getElementById(id + 'Error');
+          if (errEl) errEl.textContent = '';
+        });
+      }
+
+      submitBtn.addEventListener('click', function() {
+        clearPartnerErrors();
+
+        var valid = true;
+        var orgName = document.getElementById('partnerOrgName');
+        var partnerType = document.getElementById('partnerType');
+        var contact = document.getElementById('partnerContact');
+        var email = document.getElementById('partnerEmail');
+        var intent = document.getElementById('partnerIntent');
+
+        if (!orgName.value.trim()) {
+          orgName.classList.add('error');
+          document.getElementById('partnerOrgError').textContent = '请输入机构名称';
+          valid = false;
+        }
+
+        if (!partnerType.value) {
+          partnerType.classList.add('error');
+          document.getElementById('partnerTypeError').textContent = '请选择合作类型';
+          valid = false;
+        }
+
+        if (!contact.value.trim()) {
+          contact.classList.add('error');
+          document.getElementById('partnerContactError').textContent = '请输入联系人姓名';
+          valid = false;
+        }
+
+        var emailVal = email.value.trim();
+        if (!emailVal) {
+          email.classList.add('error');
+          document.getElementById('partnerEmailError').textContent = '请输入联系邮箱';
+          valid = false;
+        } else if (emailVal.indexOf('@') === -1 || emailVal.indexOf('.') === -1) {
+          email.classList.add('error');
+          document.getElementById('partnerEmailError').textContent = '请输入有效的邮箱地址';
+          valid = false;
+        }
+
+        if (!valid) return;
+
+        var applications = BStore.getItem('bc_partnerApplications', []);
+        applications.push({
+          id: 'app_' + Date.now(),
+          orgName: orgName.value.trim(),
+          type: partnerType.value,
+          contact: contact.value.trim(),
+          email: emailVal,
+          intent: intent.value.trim(),
+          time: Date.now()
+        });
+        BStore.setItem('bc_partnerApplications', applications);
+
+        form.reset();
+        closeModal();
+        BI.showToast('合作申请已提交，我们会尽快与您联系', 'success');
+      });
+    });
+  </script>
+</body>
+</html>

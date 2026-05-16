@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>联系我们 - BirdChain鸟链</title>
+  <meta name="description" content="联系BirdChain鸟链团队，商务合作、媒体咨询、技术支持，我们期待与您的交流与合作。">
+  <meta property="og:title" content="联系我们 - BirdChain鸟链">
+  <meta property="og:description" content="商务合作、媒体咨询、技术支持，我们期待与您的交流与合作。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .bc-contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+    .bc-contact-info-card {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      text-align: center;
+      transition: all var(--transition-normal);
+    }
+    .bc-contact-info-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+    .bc-contact-info-card .info-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--brand-accent-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 14px;
+      color: var(--brand-accent-dark);
+    }
+    .bc-contact-info-card h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .bc-contact-info-card .info-email {
+      font-size: 0.85rem;
+      color: var(--brand-accent);
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+    .bc-contact-info-card p {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .bc-contact-form-wrap {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+    }
+    .bc-contact-form-wrap h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+    .bc-contact-form-wrap .btn {
+      width: 100%;
+      padding: 13px;
+      font-size: 1rem;
+    }
+    .bc-social-links {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-top: 40px;
+    }
+    .bc-social-link {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1.5px solid var(--line-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      transition: all var(--transition-fast);
+    }
+    .bc-social-link:hover {
+      border-color: var(--brand-accent);
+      color: var(--brand-accent);
+      background: var(--bg-soft);
+    }
+    @media (max-width: 767px) {
+      .bc-contact-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .bc-contact-form-wrap { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <nav class="bc-breadcrumb" aria-label="面包屑导航" id="breadcrumb"></nav>
+
+      <section class="section" style="padding-bottom:24px">
+        <h1 class="section-title" style="font-size:1.75rem">联系我们</h1>
+        <p class="section-subtitle">我们期待与您的交流与合作</p>
+      </section>
+
+      <div class="grid-3" style="margin-bottom:48px">
+        <div class="bc-contact-info-card">
+          <div class="info-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <h4>商务合作</h4>
+          <div class="info-email">business@birdchain.com</div>
+          <p>品牌合作、广告投放、渠道拓展等商务事宜，欢迎与我们联系。</p>
+        </div>
+        <div class="bc-contact-info-card">
+          <div class="info-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          </div>
+          <h4>媒体咨询</h4>
+          <div class="info-email">media@birdchain.com</div>
+          <p>媒体采访、新闻发布、品牌故事等相关咨询，我们将及时回复。</p>
+        </div>
+        <div class="bc-contact-info-card">
+          <div class="info-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </div>
+          <h4>技术支持</h4>
+          <div class="info-email">support@birdchain.com</div>
+          <p>平台使用问题、技术故障、账号相关等技术支持需求，我们将尽快处理。</p>
+        </div>
+      </div>
+
+      <div class="bc-contact-grid" style="margin-bottom:48px">
+        <div class="bc-contact-form-wrap">
+          <h3>发送消息</h3>
+          <form id="contactForm" data-action="contact-form" novalidate>
+            <div class="bc-form-group">
+              <label for="contactName">姓名 <span style="color:var(--danger)">*</span></label>
+              <input type="text" id="contactName" class="bc-form-input" placeholder="请输入您的姓名" required />
+              <div class="bc-form-error" id="nameError"></div>
+            </div>
+            <div class="bc-form-group">
+              <label for="contactEmail">邮箱 <span style="color:var(--danger)">*</span></label>
+              <input type="email" id="contactEmail" class="bc-form-input" placeholder="请输入您的邮箱地址" required />
+              <div class="bc-form-error" id="emailError"></div>
+            </div>
+            <div class="bc-form-group">
+              <label for="contactSubject">主题</label>
+              <select id="contactSubject" class="bc-form-select">
+                <option value="">请选择咨询主题</option>
+                <option value="business">商务合作</option>
+                <option value="media">媒体咨询</option>
+                <option value="support">技术支持</option>
+                <option value="copyright">版权问题</option>
+                <option value="other">其他</option>
+              </select>
+            </div>
+            <div class="bc-form-group">
+              <label for="contactMessage">留言 <span style="color:var(--danger)">*</span></label>
+              <textarea id="contactMessage" class="bc-form-textarea" placeholder="请输入您的留言内容" required></textarea>
+              <div class="bc-form-error" id="messageError"></div>
+            </div>
+            <button type="submit" class="btn btn-accent">发送消息</button>
+          </form>
+        </div>
+        <div>
+          <div style="background:var(--bg-soft);border-radius:var(--radius-lg);padding:32px">
+            <h3 style="font-size:1.1rem;font-weight:600;margin-bottom:12px">办公地址</h3>
+            <p style="font-size:0.9rem;color:var(--text-secondary);line-height:1.7;margin-bottom:20px">
+              中国上海市浦东新区张江高科技园区<br>
+              碧波路888号BirdChain大厦<br>
+              邮编：201203
+            </p>
+            <h3 style="font-size:1.1rem;font-weight:600;margin-bottom:12px">工作时间</h3>
+            <p style="font-size:0.9rem;color:var(--text-secondary);line-height:1.7">
+              周一至周五：9:00 - 18:00 (CST)<br>
+              周末及法定节假日休息
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <section style="text-align:center;padding-bottom:60px">
+        <h3 style="font-size:1.1rem;font-weight:600;margin-bottom:20px">关注我们</h3>
+        <div class="bc-social-links">
+          <a href="#" class="bc-social-link" title="微信" aria-label="微信">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          </a>
+          <a href="#" class="bc-social-link" title="微博" aria-label="微博">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+          <a href="#" class="bc-social-link" title="Instagram" aria-label="Instagram">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="#" class="bc-social-link" title="Twitter / X" aria-label="Twitter">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+          </a>
+          <a href="#" class="bc-social-link" title="YouTube" aria-label="YouTube">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29.94 29.94 0 0 0 1 12a29.94 29.94 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.94 2C5.12 20 12 20 12 20s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2A29.94 29.94 0 0 0 23 12a29.94 29.94 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/></svg>
+          </a>
+        </div>
+      </section>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BI = window.BirdChainInteractions;
+      var BStore = window.BirdChainStorage;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('about'));
+
+      var breadcrumb = document.getElementById('breadcrumb');
+      breadcrumb.innerHTML = BC.renderBreadcrumb([
+        { label: '关于BirdChain', href: '/about/index.html' },
+        { label: '联系我们' }
+      ]);
+
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+
+      BI.initAll();
+
+      var form = document.getElementById('contactForm');
+      var nameInput = document.getElementById('contactName');
+      var emailInput = document.getElementById('contactEmail');
+      var subjectSelect = document.getElementById('contactSubject');
+      var messageInput = document.getElementById('contactMessage');
+
+      var nameError = document.getElementById('nameError');
+      var emailError = document.getElementById('emailError');
+      var messageError = document.getElementById('messageError');
+
+      function clearErrors() {
+        nameInput.classList.remove('error');
+        emailInput.classList.remove('error');
+        messageInput.classList.remove('error');
+        nameError.textContent = '';
+        emailError.textContent = '';
+        messageError.textContent = '';
+      }
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        clearErrors();
+
+        var valid = true;
+
+        if (!nameInput.value.trim()) {
+          nameInput.classList.add('error');
+          nameError.textContent = '请输入您的姓名';
+          valid = false;
+        }
+
+        var emailVal = emailInput.value.trim();
+        if (!emailVal) {
+          emailInput.classList.add('error');
+          emailError.textContent = '请输入邮箱地址';
+          valid = false;
+        } else if (emailVal.indexOf('@') === -1 || emailVal.indexOf('.') === -1) {
+          emailInput.classList.add('error');
+          emailError.textContent = '请输入有效的邮箱地址';
+          valid = false;
+        }
+
+        if (!messageInput.value.trim()) {
+          messageInput.classList.add('error');
+          messageError.textContent = '请输入留言内容';
+          valid = false;
+        }
+
+        if (!valid) return;
+
+        var messages = BStore.getItem('bc_contactMessages', []);
+        messages.push({
+          id: 'msg_' + Date.now(),
+          name: nameInput.value.trim(),
+          email: emailVal,
+          subject: subjectSelect.value || '未选择',
+          message: messageInput.value.trim(),
+          time: Date.now()
+        });
+        BStore.setItem('bc_contactMessages', messages);
+
+        form.reset();
+        BI.showToast('消息已发送，我们会尽快回复', 'success');
+      });
+    });
+  </script>
+</body>
+</html>

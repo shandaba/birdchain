@@ -4,18 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>器材详情 - BirdChain鸟链</title>
-  <meta name="description" content="查看鸟类摄影与观鸟装备的详细参数、评测和购买建议。">
+  <meta name="description" content="查看鸟类摄影与观鸟装备的详细参数、评测和使用建议。">
   <meta property="og:title" content="器材详情 - BirdChain鸟链">
-  <meta property="og:description" content="详细器材参数、专业评测与购买建议。">
+  <meta property="og:description" content="专业摄影器材详细参数与评测。">
   <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
   <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/assets/css/global.css">
   <link rel="stylesheet" href="/assets/css/components.css">
   <style>
-    .product-detail-layout {
+    .product-detail-header {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 48px;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 40px;
       margin: 28px 0 40px;
       align-items: start;
     }
@@ -23,8 +23,7 @@
       aspect-ratio: 1/1;
       border-radius: var(--radius-lg);
       overflow: hidden;
-      position: sticky;
-      top: 84px;
+      background: var(--bg-soft);
     }
     .product-detail-img img {
       width: 100%;
@@ -39,30 +38,30 @@
     }
     .product-detail-meta {
       display: flex;
-      gap: 16px;
+      gap: 12px;
       align-items: center;
       margin-bottom: 16px;
       flex-wrap: wrap;
     }
     .product-detail-meta span {
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       color: var(--text-secondary);
-    }
-    .product-detail-meta .brand-badge {
-      background: var(--bg-soft);
       padding: 3px 12px;
       border-radius: 16px;
-      font-weight: 600;
-      color: var(--brand-accent-dark);
-    }
-    .product-detail-meta .category-badge {
       background: var(--bg-soft);
-      padding: 3px 12px;
-      border-radius: 16px;
-      font-size: 0.8rem;
+    }
+    .product-detail-rating {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .product-detail-rating .stars {
+      color: var(--brand-accent);
+      font-size: 1.2rem;
     }
     .product-detail-price {
-      font-size: 2rem;
+      font-size: 1.8rem;
       font-weight: 700;
       color: var(--danger);
       margin-bottom: 20px;
@@ -76,80 +75,88 @@
       border-bottom: 1px solid var(--line-soft);
     }
     .product-specs-table td {
-      padding: 10px 0;
+      padding: 10px 12px;
       font-size: 0.88rem;
     }
     .product-specs-table td:first-child {
+      font-weight: 500;
       color: var(--text-secondary);
       width: 120px;
-    }
-    .product-specs-table td:last-child {
-      font-weight: 500;
-      color: var(--text-strong);
     }
     .product-tags {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
     .product-tag {
-      padding: 5px 14px;
-      border-radius: 20px;
-      font-size: 0.8rem;
+      padding: 4px 12px;
+      border-radius: 16px;
+      font-size: 0.78rem;
       background: var(--brand-accent-soft);
       color: var(--brand-accent-dark);
-      font-weight: 500;
     }
-    .product-actions {
+    .product-detail-actions {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
-      margin-bottom: 32px;
+      margin-bottom: 28px;
     }
-    .product-reviews {
-      margin-bottom: 32px;
+    .product-related-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
     }
-    .product-review-item {
+    .product-review-card {
       background: var(--bg-soft);
       border-radius: var(--radius-md);
-      padding: 16px 20px;
-      margin-bottom: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
     }
-    .product-review-header {
+    .product-review-card-header {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 8px;
+      gap: 12px;
+      margin-bottom: 10px;
     }
     .product-review-avatar {
-      width: 32px;
-      height: 32px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
-      background: var(--brand-accent-soft);
+      background: var(--bg-card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--brand-accent);
     }
     .product-review-author {
       font-weight: 600;
-      font-size: 0.88rem;
+      font-size: 0.9rem;
     }
     .product-review-time {
       font-size: 0.78rem;
       color: var(--text-secondary);
     }
-    .product-review-text {
+    .product-review-body {
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+    .product-purchase-banner {
+      background: var(--bg-soft);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin-bottom: 28px;
+      text-align: center;
+    }
+    .product-purchase-banner p {
       font-size: 0.88rem;
       color: var(--text-secondary);
-      line-height: 1.55;
-    }
-    .related-works-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
+      margin-bottom: 12px;
     }
     @media (max-width: 767px) {
-      .product-detail-layout { grid-template-columns: 1fr; gap: 24px; }
-      .product-detail-img { position: static; }
-      .related-works-grid { grid-template-columns: repeat(2, 1fr); }
+      .product-detail-header { grid-template-columns: 1fr; gap: 24px; }
+      .product-related-grid { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
@@ -182,7 +189,7 @@
           { label: '摄影器材', href: '/gear/index.html' },
           { label: '器材详情' }
         ]);
-        document.getElementById('productDetailContent').innerHTML = '<div class="section" style="text-align:center"><h2>未指定器材</h2><p style="color:var(--text-secondary)">请从器材列表选择一件器材查看</p><a href="/gear/index.html" class="btn btn-accent mt-2">返回器材列表</a></div>';
+        document.getElementById('productDetailContent').innerHTML = '<div class="section" style="text-align:center"><h2>未找到器材</h2><p style="color:var(--text-secondary)">请通过器材列表选择一个器材查看</p><a href="/gear/index.html" class="btn btn-accent mt-2">返回器材列表</a></div>';
         app.insertAdjacentHTML('beforeend', BC.renderFooter());
         BI.initAll();
         return;
@@ -207,6 +214,14 @@
         { label: gear.name }
       ]);
 
+      var rating = parseFloat(gear.rating) || 0;
+      var fullStars = Math.floor(rating);
+      var starsHtml = '';
+      for (var i = 0; i < 5; i++) {
+        if (i < fullStars) starsHtml += '<span style="color:var(--brand-accent);">★</span>';
+        else starsHtml += '<span style="color:var(--line-soft);">★</span>';
+      }
+
       var worksData = [];
       if (gear.relatedWorks && gear.relatedWorks.length > 0) {
         try {
@@ -218,87 +233,86 @@
         } catch(e) {}
       }
 
-      var gradientColors = [
-        'linear-gradient(135deg, #2c3e50, #3498db)',
-        'linear-gradient(135deg, #1B4332, #2D6A4F)',
-        'linear-gradient(135deg, #1B4F72, #2980B9)',
-        'linear-gradient(135deg, #457B9D, #A8DADC)',
-        'linear-gradient(135deg, #6B4226, #8B6914)'
-      ];
-
-      var specsHtml = '';
-      if (gear.specs) {
-        Object.keys(gear.specs).forEach(function(key) {
-          specsHtml += '<tr><td>' + esc(key) + '</td><td>' + esc(gear.specs[key]) + '</td></tr>';
-        });
-      }
-
-      var reviews = [
-        { author: '鸟类摄影大师', time: '2024-05-20', text: '使用了三个月，对焦速度和画质都非常出色，特别是在拍摄飞行中的鸟类时表现优异。' },
-        { author: '自然观察者', time: '2024-04-15', text: '重量控制得很好，长时间手持拍摄也不会太累。防水性能在野外环境下非常可靠。' },
-        { author: '观鸟爱好者', time: '2024-03-28', text: '性价比很高的一款器材，适合从入门到进阶的鸟类摄影爱好者使用。' }
-      ];
-
       var html = '';
 
-      html += '<div class="product-detail-layout">';
-
+      html += '<div class="product-detail-header">';
       html += '<div class="product-detail-img">';
-      html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: ' + gradientColors[Math.floor(Math.random() * gradientColors.length)] + '; width:100%; height:100%; object-fit:cover;" alt="' + esc(gear.name) + '">';
+      html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: linear-gradient(135deg, #1B4965, #2980B9); width:100%; height:100%; object-fit:cover;" alt="' + esc(gear.name) + '">';
       html += '</div>';
 
       html += '<div class="product-detail-info">';
       html += '<h1>' + esc(gear.name) + '</h1>';
       html += '<div class="product-detail-meta">';
-      html += '<span class="brand-badge">' + esc(gear.brand) + '</span>';
-      html += '<span class="category-badge">' + esc(gear.category) + '</span>';
+      html += '<span>' + esc(gear.brand) + '</span>';
+      html += '<span>' + esc(gear.category) + '</span>';
       html += '<span>' + esc(gear.type) + '</span>';
-      html += '<span style="color:var(--brand-accent);">★ ' + (gear.rating || '0') + ' (' + (gear.reviewCount || 0) + '条评测)</span>';
       html += '</div>';
-
+      html += '<div class="product-detail-rating">';
+      html += '<span class="stars">' + starsHtml + '</span>';
+      html += '<span style="font-size:0.9rem;color:var(--text-secondary);">' + rating + ' (' + (gear.reviewCount || 0) + '条评测)</span>';
+      html += '</div>';
       html += '<div class="product-detail-price">¥' + (gear.price || 0).toLocaleString() + '</div>';
 
-      html += '<div class="product-tags">';
-      if (gear.suitableFor) {
-        gear.suitableFor.forEach(function(tag) {
-          html += '<span class="product-tag">' + esc(tag) + '</span>';
+      if (gear.suitableFor && gear.suitableFor.length > 0) {
+        html += '<div class="product-tags">';
+        gear.suitableFor.forEach(function(s) {
+          html += '<span class="product-tag">' + esc(s) + '</span>';
         });
+        html += '</div>';
       }
+
+      html += '<div class="product-detail-actions">';
+      html += '<button class="btn btn-accent" onclick="BirdChainInteractions.showToast(\'即将跳转至购买页面\', \'info\')">前往购买</button>';
+      html += '<a href="/gear/review-detail.html?id=' + gear.id + '" class="btn btn-outline">查看评测</a>';
+      html += '<button class="btn btn-ghost" data-action="favorite" data-work-id="' + esc(gear.id) + '">收藏</button>';
       html += '</div>';
 
-      html += '<table class="product-specs-table">';
-      html += '<tbody>' + specsHtml + '</tbody>';
-      html += '</table>';
-
-      html += '<div class="product-actions">';
-      html += '<a href="/gear/review-detail.html?id=' + esc(gear.id) + '" class="btn btn-accent">查看评测</a>';
-      html += '<a href="/gear/index.html" class="btn btn-ghost">返回器材列表</a>';
+      html += '<div class="product-purchase-banner">';
+      html += '<p>此器材可在以下渠道购买</p>';
+      html += '<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">';
+      html += '<button class="btn btn-outline btn-sm" onclick="BirdChainInteractions.showToast(\'即将跳转至官方商城\', \'info\')">官方商城</button>';
+      html += '<button class="btn btn-outline btn-sm" onclick="BirdChainInteractions.showToast(\'即将跳转至京东旗舰店\', \'info\')">京东旗舰店</button>';
+      html += '<button class="btn btn-outline btn-sm" onclick="BirdChainInteractions.showToast(\'即将跳转至天猫旗舰店\', \'info\')">天猫旗舰店</button>';
+      html += '</div>';
       html += '</div>';
 
-      html += '<div class="product-reviews">';
-      html += '<h3 style="font-size:1.15rem;font-weight:600;margin-bottom:16px;">摄影师评价</h3>';
-      reviews.forEach(function(r) {
-        html += '<div class="product-review-item">';
-        html += '<div class="product-review-header">';
-        html += '<div class="product-review-avatar"></div>';
-        html += '<div>';
-        html += '<div class="product-review-author">' + esc(r.author) + '</div>';
-        html += '<div class="product-review-time">' + esc(r.time) + '</div>';
-        html += '</div>';
-        html += '</div>';
-        html += '<p class="product-review-text">' + esc(r.text) + '</p>';
-        html += '</div>';
-      });
+      html += '</div>';
       html += '</div>';
 
+      if (gear.specifications && Object.keys(gear.specifications).length > 0) {
+        html += '<div class="section">';
+        html += '<h2 class="section-title">参数规格</h2>';
+        html += '<table class="product-specs-table"><tbody>';
+        Object.keys(gear.specifications).forEach(function(key) {
+          html += '<tr><td>' + esc(key) + '</td><td>' + esc(String(gear.specifications[key])) + '</td></tr>';
+        });
+        html += '</tbody></table>';
+        html += '</div>';
+      }
+
+      html += '<div class="section">';
+      html += '<h2 class="section-title">摄影师评价</h2>';
+      html += '<div class="product-review-card">';
+      html += '<div class="product-review-card-header">';
+      html += '<div class="product-review-avatar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>';
+      html += '<div><div class="product-review-author">鸟类摄影师小王</div><div class="product-review-time">2025年3月 · 已验证购买</div></div>';
+      html += '</div>';
+      html += '<div class="product-review-body">' + esc(gear.name) + ' 对于鸟类摄影来说是非常优秀的选择。画质表现出色，对焦速度快，能够轻松捕捉飞行中的鸟类瞬间。推荐给所有认真的鸟类摄影师。</div>';
+      html += '</div>';
+      html += '<div class="product-review-card">';
+      html += '<div class="product-review-card-header">';
+      html += '<div class="product-review-avatar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>';
+      html += '<div><div class="product-review-author">自然观察者</div><div class="product-review-time">2025年1月 · 已验证购买</div></div>';
+      html += '</div>';
+      html += '<div class="product-review-body">使用了一个季度，无论是湿地拍摄还是山林观察都表现出色。做工精良，防护性能优秀，适合野外长时间使用。</div>';
       html += '</div>';
       html += '</div>';
 
       if (worksData.length > 0) {
         html += '<div class="section">';
-        html += '<h2 class="section-title">关联作品</h2>';
-        html += '<p class="section-subtitle">使用该器材拍摄的鸟类影像作品</p>';
-        html += '<div class="related-works-grid">';
+        html += '<h2 class="section-title">使用此器材拍摄的作品</h2>';
+        html += '<p class="section-subtitle">摄影师使用 ' + esc(gear.name) + ' 拍摄的鸟类影像</p>';
+        html += '<div class="product-related-grid">';
         worksData.forEach(function(w) {
           var mapped = {
             id: w.id,

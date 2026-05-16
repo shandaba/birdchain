@@ -134,9 +134,53 @@
       margin-bottom: 20px;
       line-height: 1.65;
     }
+    .museum-hall-cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      margin: 40px 0;
+    }
+    .museum-hall-card {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      aspect-ratio: 16/9;
+      cursor: pointer;
+      transition: all var(--transition-normal);
+    }
+    .museum-hall-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+    .museum-hall-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .museum-hall-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(7,27,45,0.85), rgba(7,27,45,0.2));
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 32px;
+      color: #fff;
+    }
+    .museum-hall-card-overlay h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .museum-hall-card-overlay p {
+      font-size: 0.9rem;
+      opacity: 0.85;
+      margin-bottom: 16px;
+    }
     .museum-exhibit-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 20px;
     }
     .museum-exhibit-card {
@@ -232,6 +276,119 @@
       color: var(--text-secondary);
       line-height: 1.55;
     }
+    .bc-map-area {
+      background: linear-gradient(135deg, #1B4F72, #16395C);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      margin: 40px 0;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    .bc-map-area::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 30%, rgba(199, 165, 109, 0.15), transparent 60%);
+      pointer-events: none;
+    }
+    .bc-map-area h2 {
+      color: #fff;
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 1;
+    }
+    .bc-map-area > p {
+      color: rgba(255,255,255,0.75);
+      margin-bottom: 28px;
+      position: relative;
+      z-index: 1;
+    }
+    .bc-map-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      position: relative;
+      z-index: 1;
+    }
+    .bc-map-marker {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      text-align: center;
+      transition: all var(--transition-fast);
+      cursor: pointer;
+    }
+    .bc-map-marker:hover {
+      background: rgba(255,255,255,0.18);
+      border-color: var(--brand-accent);
+    }
+    .bc-map-marker-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(199, 165, 109, 0.3);
+      margin: 0 auto 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .bc-map-marker h6 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .bc-map-marker span {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.6);
+    }
+    .bc-sound-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .bc-sound-card {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: all var(--transition-fast);
+    }
+    .bc-sound-card:hover {
+      border-color: var(--brand-accent);
+      box-shadow: var(--shadow-sm);
+    }
+    .bc-sound-play-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--brand-accent);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all var(--transition-fast);
+    }
+    .bc-sound-play-btn:hover { background: var(--brand-accent-dark); }
+    .bc-sound-play-btn.playing { background: var(--danger); }
+    .bc-sound-info h6 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .bc-sound-info span {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+    }
     .museum-partner-banner {
       background: linear-gradient(135deg, #1B4F72, #2980B9);
       border-radius: var(--radius-lg);
@@ -253,6 +410,9 @@
       opacity: 0.85;
       font-size: 0.9rem;
     }
+    @media (max-width: 1199px) {
+      .museum-exhibit-grid { grid-template-columns: repeat(3, 1fr); }
+    }
     @media (max-width: 991px) {
       .museum-exhibit-grid { grid-template-columns: repeat(2, 1fr); }
       .museum-feature-cards { grid-template-columns: repeat(2, 1fr); }
@@ -260,6 +420,9 @@
       .museum-hero-content h1 { font-size: 1.8rem; }
       .vr-hall-cta { flex-direction: column; text-align: center; padding: 36px 24px; }
       .museum-partner-banner { flex-direction: column; text-align: center; }
+      .museum-hall-cards { grid-template-columns: 1fr; }
+      .bc-map-grid { grid-template-columns: repeat(2, 1fr); }
+      .bc-sound-grid { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 767px) {
       .museum-exhibit-grid { grid-template-columns: 1fr; }
@@ -268,6 +431,8 @@
       .museum-hero-content h1 { font-size: 1.5rem; }
       .museum-hero-stats { gap: 20px; }
       .museum-hero-img { display: none; }
+      .bc-map-grid { grid-template-columns: 1fr; }
+      .bc-sound-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -294,14 +459,163 @@
         </div>
       </div>
 
-      <section class="section" id="featuredExhibits">
+      <div class="museum-hall-cards">
+        <a href="/museum/index.html" class="museum-hall-card">
+          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+               style="background: linear-gradient(135deg, #2D6A4F, #40916C); width:100%; aspect-ratio:16/9; object-fit:cover;" alt="鸟类数字展厅">
+          <div class="museum-hall-card-overlay">
+            <h3>鸟类数字展厅</h3>
+            <p>高清投影、全息影像、互动触控——数字化展示鸟类生命故事与生态知识</p>
+            <span class="btn btn-accent">进入展厅</span>
+          </div>
+        </a>
+        <a href="/museum/vr-hall.html" class="museum-hall-card">
+          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+               style="background: linear-gradient(135deg, #16395C, #2980B9); width:100%; aspect-ratio:16/9; object-fit:cover;" alt="VR沉浸体验">
+          <div class="museum-hall-card-overlay">
+            <h3>VR沉浸体验</h3>
+            <p>戴上VR设备，360°探索鸟类栖息地，与珍稀鸟类近距离互动</p>
+            <span class="btn btn-accent">开始体验</span>
+          </div>
+        </a>
+      </div>
+
+      <section class="section" id="featuredExhibits" style="padding-top:0;">
         <div class="section-header">
           <div>
-            <h2 class="section-title">精选数字展项</h2>
+            <h2 class="section-title">鸟种展柜</h2>
             <p class="section-subtitle">科技与自然交汇的沉浸式展览体验</p>
           </div>
         </div>
         <div class="museum-exhibit-grid" id="exhibitGrid"></div>
+      </section>
+
+      <div class="bc-map-area">
+        <h2>候鸟迁徙地图</h2>
+        <p>互动式数字迁徙地图，追踪东亚-澳大利西亚迁徙路线上的旗舰物种</p>
+        <div class="bc-map-grid">
+          <div class="bc-map-marker">
+            <div class="bc-map-marker-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <h6>扎龙湿地</h6>
+            <span>丹顶鹤繁殖地</span>
+          </div>
+          <div class="bc-map-marker">
+            <div class="bc-map-marker-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <h6>鄱阳湖</h6>
+            <span>白鹤越冬地</span>
+          </div>
+          <div class="bc-map-marker">
+            <div class="bc-map-marker-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <h6>闽江口</h6>
+            <span>黑脸琵鹭停歇地</span>
+          </div>
+          <div class="bc-map-marker">
+            <div class="bc-map-marker-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <h6>盐城湿地</h6>
+            <span>丹顶鹤越冬地</span>
+          </div>
+          <div class="bc-map-marker">
+            <div class="bc-map-marker-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <h6>婺源</h6>
+            <span>中华秋沙鸭栖息地</span>
+          </div>
+          <div class="bc-map-marker">
+            <div class="bc-map-marker-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <h6>秦岭洋县</h6>
+            <span>朱鹮繁殖地</span>
+          </div>
+          <div class="bc-map-marker">
+            <div class="bc-map-marker-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <h6>考艾国家公园</h6>
+            <span>双角犀鸟栖息地</span>
+          </div>
+          <div class="bc-map-marker">
+            <div class="bc-map-marker-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <h6>洱海湿地</h6>
+            <span>翠鸟栖息地</span>
+          </div>
+        </div>
+      </div>
+
+      <section class="section" style="padding-top:0;">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">鸟鸣声音库</h2>
+            <p class="section-subtitle">收录中国100种鸟类鸣声，沉浸式聆听鸟类的声音世界</p>
+          </div>
+        </div>
+        <div class="bc-sound-grid">
+          <div class="bc-sound-card">
+            <button class="bc-sound-play-btn" data-audio="/assets/audio/crane-call.mp3" data-action="play-audio" aria-label="播放丹顶鹤鸣声">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </button>
+            <div class="bc-sound-info">
+              <h6>丹顶鹤</h6>
+              <span>嘹亮悠远 · 求偶鸣叫</span>
+            </div>
+          </div>
+          <div class="bc-sound-card">
+            <button class="bc-sound-play-btn" data-audio="/assets/audio/kingfisher-dive-sound.mp3" data-action="play-audio" aria-label="播放翠鸟鸣声">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </button>
+            <div class="bc-sound-info">
+              <h6>翠鸟</h6>
+              <span>尖锐清脆 · 飞行鸣叫</span>
+            </div>
+          </div>
+          <div class="bc-sound-card">
+            <button class="bc-sound-play-btn" data-audio="/assets/audio/bird-sound-collection.mp3" data-action="play-audio" aria-label="播放朱鹮鸣声">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </button>
+            <div class="bc-sound-info">
+              <h6>朱鹮</h6>
+              <span>低沉沙哑 · 集群鸣叫</span>
+            </div>
+          </div>
+          <div class="bc-sound-card">
+            <button class="bc-sound-play-btn" data-audio="/assets/audio/rainforest-soundscape.mp3" data-action="play-audio" aria-label="播放热带雨林声景">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </button>
+            <div class="bc-sound-info">
+              <h6>热带雨林声景</h6>
+              <span>360°环绕 · 黎明至夜晚</span>
+            </div>
+          </div>
+          <div class="bc-sound-card">
+            <button class="bc-sound-play-btn" data-audio="/assets/audio/ibis-conservation-story.mp3" data-action="play-audio" aria-label="播放白鹤鸣声">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </button>
+            <div class="bc-sound-info">
+              <h6>白鹤</h6>
+              <span>悠长响亮 · 迁徙鸣叫</span>
+            </div>
+          </div>
+          <div class="bc-sound-card">
+            <button class="bc-sound-play-btn" data-action="play-audio" aria-label="播放黑脸琵鹭鸣声">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </button>
+            <div class="bc-sound-info">
+              <h6>黑脸琵鹭</h6>
+              <span>低沉咕噜 · 觅食鸣叫</span>
+            </div>
+          </div>
+        </div>
       </section>
 
       <div class="vr-hall-cta">
@@ -396,6 +710,38 @@
       app.insertAdjacentHTML('beforeend', BC.renderFooter());
 
       BI.initAll();
+
+      var currentAudio = null;
+      document.addEventListener('click', function(e) {
+        var btn = e.target.closest('[data-action="play-audio"]');
+        if (!btn) return;
+        e.preventDefault();
+        var audioUrl = btn.getAttribute('data-audio');
+        if (currentAudio && !currentAudio.paused) {
+          currentAudio.pause();
+          currentAudio = null;
+          btn.classList.remove('playing');
+          btn.querySelector('svg').innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
+          return;
+        }
+        document.querySelectorAll('[data-action="play-audio"].playing').forEach(function(b) {
+          b.classList.remove('playing');
+          b.querySelector('svg').innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
+        });
+        if (audioUrl) {
+          currentAudio = new Audio(audioUrl);
+          currentAudio.play().catch(function() {});
+          btn.classList.add('playing');
+          btn.querySelector('svg').innerHTML = '<rect x="6" y="4" width="4" height="16" fill="currentColor"/><rect x="14" y="4" width="4" height="16" fill="currentColor"/>';
+          currentAudio.addEventListener('ended', function() {
+            btn.classList.remove('playing');
+            btn.querySelector('svg').innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
+            currentAudio = null;
+          });
+        } else {
+          BI.showToast('音频文件暂不可用', 'warning');
+        }
+      });
     });
   </script>
 </body>

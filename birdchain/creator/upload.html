@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>上传作品 - 创作者中心 - BirdChain鸟链</title>
+  <meta name="description" content="上传你的鸟类影像作品到BirdChain平台。">
+  <meta property="og:title" content="上传作品 - 创作者中心 - BirdChain鸟链">
+  <meta property="og:description" content="上传你的鸟类影像作品到BirdChain平台。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .upload-form {
+      max-width: 720px;
+      margin: 0 auto;
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+    }
+    .upload-form h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .upload-area {
+      border: 2px dashed var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 40px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      margin-bottom: 8px;
+      background: var(--bg-soft);
+    }
+    .upload-area:hover {
+      border-color: var(--brand-accent);
+      background: var(--brand-accent-soft);
+    }
+    .upload-area .icon {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+      color: var(--text-secondary);
+    }
+    .upload-area .text {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+    .upload-area .hint {
+      font-size: 0.78rem;
+      color: var(--neutral-soft);
+    }
+    .upload-filename {
+      font-size: 0.85rem;
+      color: var(--brand-accent-dark);
+      font-weight: 500;
+      margin-bottom: 16px;
+      display: none;
+      padding: 8px 12px;
+      background: var(--brand-accent-soft);
+      border-radius: var(--radius-sm);
+    }
+    .checkbox-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .checkbox-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.85rem;
+    }
+    .checkbox-item input[type="checkbox"] {
+      margin-top: 2px;
+      accent-color: var(--brand-accent);
+      flex-shrink: 0;
+    }
+    .checkbox-item .explain {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+    @media (max-width: 767px) {
+      .upload-form { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+      <div id="uploadFormContainer"></div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BD = window.BirdChainData;
+      var BI = window.BirdChainInteractions;
+      var BStor = window.BirdChainStorage;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('creator'));
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '创作者中心', href: '/creator/index.html' },
+        { label: '上传作品' }
+      ]);
+
+      BI.initAll();
+
+      var species = await BD.loadData('species');
+
+      var speciesOptions = '';
+      species.forEach(function(s) {
+        speciesOptions += '<option value="' + s.nameCn + '">' + s.nameCn + '</option>';
+      });
+
+      var formHtml = '<div class="upload-form">'
+        + '<h2>&#128247; 上传作品</h2>'
+
+        + '<div class="bc-form-group">'
+        + '<label>作品图片 <span style="color:var(--danger)">*</span></label>'
+        + '<div class="upload-area" id="uploadArea">'
+        + '<div class="icon">&#128247;</div>'
+        + '<div class="text">点击或拖拽上传作品图片</div>'
+        + '<div class="hint">支持 JPG/PNG/WebP，最大 50MB</div>'
+        + '</div>'
+        + '<input type="file" id="fileInput" accept="image/*" style="display:none;" />'
+        + '<div class="upload-filename" id="uploadFilename"></div>'
+        + '<div class="bc-form-error" id="fileError" style="display:none;">请上传作品图片</div>'
+        + '</div>'
+
+        + '<div class="bc-form-group">'
+        + '<label for="workTitle">作品标题 <span style="color:var(--danger)">*</span></label>'
+        + '<input type="text" class="bc-form-input" id="workTitle" placeholder="请输入作品标题" />'
+        + '<div class="bc-form-error" id="titleError" style="display:none;">请输入作品标题</div>'
+        + '</div>'
+
+        + '<div class="bc-form-group">'
+        + '<label for="workSpecies">鸟种 <span style="color:var(--danger)">*</span></label>'
+        + '<select class="bc-form-select" id="workSpecies"><option value="">请选择鸟种</option>' + speciesOptions + '</select>'
+        + '<div class="bc-form-error" id="speciesError" style="display:none;">请选择鸟种</div>'
+        + '</div>'
+
+        + '<div class="bc-form-group">'
+        + '<label for="workLocation">拍摄地</label>'
+        + '<input type="text" class="bc-form-input" id="workLocation" placeholder="如：云南洱海湿地" />'
+        + '</div>'
+
+        + '<div class="bc-form-group">'
+        + '<label for="workCategory">分类 <span style="color:var(--danger)">*</span></label>'
+        + '<select class="bc-form-select" id="workCategory">'
+        + '<option value="">请选择分类</option>'
+        + '<option value="摄影">摄影</option>'
+        + '<option value="数字艺术">数字艺术</option>'
+        + '<option value="插画">插画</option>'
+        + '<option value="AI创作">AI创作</option>'
+        + '</select>'
+        + '<div class="bc-form-error" id="categoryError" style="display:none;">请选择分类</div>'
+        + '</div>'
+
+        + '<div class="bc-form-group">'
+        + '<label>版权与授权设置</label>'
+        + '<div class="checkbox-group">'
+        + '<div class="checkbox-item"><input type="checkbox" id="enterMarket" /><div><strong>进入版权市场</strong><div class="explain">允许其他用户在版权市场购买授权使用此作品</div></div></div>'
+        + '<div class="checkbox-item"><input type="checkbox" id="allowAI" /><div><strong>允许AI二创</strong><div class="explain">允许其他用户基于此作品进行AI二次创作</div></div></div>'
+        + '<div class="checkbox-item"><input type="checkbox" id="allowMerch" /><div><strong>允许商品化</strong><div class="explain">允许此作品用于周边商品制作（T恤、明信片等）</div></div></div>'
+        + '</div>'
+        + '</div>'
+
+        + '<div class="bc-form-group">'
+        + '<label for="workDesc">作品描述</label>'
+        + '<textarea class="bc-form-textarea" id="workDesc" placeholder="描述你的创作理念、拍摄背景、使用的设备等..."></textarea>'
+        + '</div>'
+
+        + '<button class="btn btn-accent btn-lg" id="submitBtn" style="width:100%;">提交作品</button>'
+        + '</div>';
+
+      document.getElementById('uploadFormContainer').innerHTML = formHtml;
+
+      var selectedFileName = '';
+
+      document.getElementById('uploadArea').addEventListener('click', function() {
+        document.getElementById('fileInput').click();
+      });
+
+      document.getElementById('fileInput').addEventListener('change', function(e) {
+        var file = e.target.files[0];
+        if (file) {
+          selectedFileName = file.name;
+          var filenameEl = document.getElementById('uploadFilename');
+          filenameEl.textContent = '已选择: ' + file.name;
+          filenameEl.style.display = 'block';
+          document.getElementById('fileError').style.display = 'none';
+          BI.showToast('图片已选择: ' + file.name, 'info');
+        }
+      });
+
+      document.getElementById('submitBtn').addEventListener('click', function() {
+        var title = document.getElementById('workTitle').value.trim();
+        var speciesVal = document.getElementById('workSpecies').value;
+        var category = document.getElementById('workCategory').value;
+        var valid = true;
+
+        if (!selectedFileName) {
+          document.getElementById('fileError').style.display = 'block';
+          BI.showToast('请上传作品图片', 'warning');
+          valid = false;
+        } else {
+          document.getElementById('fileError').style.display = 'none';
+        }
+
+        if (!title) {
+          document.getElementById('titleError').style.display = 'block';
+          document.getElementById('workTitle').classList.add('error');
+          BI.showToast('请输入作品标题', 'warning');
+          valid = false;
+        } else {
+          document.getElementById('titleError').style.display = 'none';
+          document.getElementById('workTitle').classList.remove('error');
+        }
+
+        if (!speciesVal) {
+          document.getElementById('speciesError').style.display = 'block';
+          BI.showToast('请选择鸟种', 'warning');
+          valid = false;
+        } else {
+          document.getElementById('speciesError').style.display = 'none';
+        }
+
+        if (!category) {
+          document.getElementById('categoryError').style.display = 'block';
+          BI.showToast('请选择分类', 'warning');
+          valid = false;
+        } else {
+          document.getElementById('categoryError').style.display = 'none';
+        }
+
+        if (!valid) return;
+
+        var workId = 'uw_' + Date.now();
+        var workData = {
+          id: workId,
+          title: title,
+          species: speciesVal,
+          location: document.getElementById('workLocation').value.trim(),
+          category: category,
+          description: document.getElementById('workDesc').value.trim(),
+          enterMarket: document.getElementById('enterMarket').checked,
+          allowAI: document.getElementById('allowAI').checked,
+          allowMerch: document.getElementById('allowMerch').checked,
+          fileName: selectedFileName,
+          createdAt: new Date().toISOString(),
+          status: 'pending_review',
+          author: BStor.getItem('bc_userProfile', {}).name || '王志远'
+        };
+
+        var userWorks = BStor.getItem(BStor.KEYS.userWorks, []);
+        userWorks.unshift(workData);
+        BStor.setItem(BStor.KEYS.userWorks, userWorks);
+
+        BI.showToast('作品已提交，等待审核中...', 'success');
+
+        setTimeout(function() {
+          window.location.href = '/creator/index.html';
+        }, 2000);
+      });
+    });
+  </script>
+</body>
+</html>

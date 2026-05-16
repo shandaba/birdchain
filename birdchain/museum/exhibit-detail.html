@@ -20,7 +20,7 @@
       align-items: start;
     }
     .exhibit-detail-img {
-      aspect-ratio: 4/3;
+      aspect-ratio: 16/9;
       border-radius: var(--radius-lg);
       overflow: hidden;
     }
@@ -75,6 +75,36 @@
     .exhibit-detail-species-item strong {
       color: var(--text-strong);
     }
+    .exhibit-detail-species-card {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .exhibit-detail-species-card-img {
+      aspect-ratio: 3/1;
+      overflow: hidden;
+    }
+    .exhibit-detail-species-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .exhibit-detail-species-card-body {
+      padding: 16px 20px;
+    }
+    .exhibit-detail-species-card-body h4 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .exhibit-detail-species-card-body .sci-name {
+      font-style: italic;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
     .exhibit-audio-player {
       background: var(--bg-soft);
       border-radius: var(--radius-md);
@@ -87,6 +117,40 @@
     .exhibit-audio-player audio {
       flex: 1;
       height: 36px;
+    }
+    .exhibit-video-placeholder {
+      aspect-ratio: 16/9;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: 24px;
+      position: relative;
+      background: #000;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .exhibit-video-placeholder img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.6;
+    }
+    .exhibit-video-play-btn {
+      position: absolute;
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: rgba(199, 165, 109, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      transition: all var(--transition-fast);
+    }
+    .exhibit-video-play-btn:hover {
+      transform: scale(1.1);
+      background: var(--brand-accent);
     }
     .exhibit-detail-actions {
       display: flex;
@@ -181,26 +245,41 @@
         } catch(e) {}
       }
 
+      var typeColor = typeColors[exhibit.type] || '#16395C';
       var html = '';
 
       html += '<div class="exhibit-detail-header">';
       html += '<div class="exhibit-detail-img">';
-      html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: linear-gradient(135deg, ' + (typeColors[exhibit.type] || '#16395C') + ', ' + (typeColors[exhibit.type] || '#16395C') + '); width:100%; height:100%; object-fit:cover;" alt="' + esc(exhibit.title) + '">';
+      html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: linear-gradient(135deg, ' + typeColor + ', ' + typeColor + '); width:100%; height:100%; object-fit:cover;" alt="' + esc(exhibit.title) + '">';
       html += '</div>';
 
       html += '<div class="exhibit-detail-info">';
       html += '<h1>' + esc(exhibit.title) + '</h1>';
-      html += '<span class="exhibit-detail-type">' + esc(exhibit.type) + '</span>';
+      html += '<span class="exhibit-detail-type" style="background: ' + typeColor + '; color: #fff;">' + esc(exhibit.type) + '</span>';
       html += '<p class="exhibit-detail-desc">' + esc(exhibit.description) + '</p>';
 
       if (species) {
-        html += '<div class="exhibit-detail-species">';
-        html += '<h6>相关鸟种信息</h6>';
-        html += '<div class="exhibit-detail-species-info">';
-        html += '<span class="exhibit-detail-species-item"><strong>中文名：</strong>' + esc(species.nameCn) + '</span>';
-        html += '<span class="exhibit-detail-species-item"><strong>学名：</strong><em>' + esc(species.scientificName) + '</em></span>';
+        html += '<div class="exhibit-detail-species-card">';
+        html += '<div class="exhibit-detail-species-card-img">';
+        html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: linear-gradient(135deg, #2D6A4F, #40916C); width:100%; height:100%; object-fit:cover;" alt="' + esc(species.nameCn) + '">';
+        html += '</div>';
+        html += '<div class="exhibit-detail-species-card-body">';
+        html += '<h4>' + esc(species.nameCn) + '</h4>';
+        html += '<div class="sci-name">' + esc(species.scientificName) + '</div>';
+        html += '<div class="exhibit-detail-species-info" style="margin-top:8px;">';
         html += '<span class="exhibit-detail-species-item"><strong>保护等级：</strong>' + esc(species.conservation) + '</span>';
         html += '<span class="exhibit-detail-species-item"><strong>栖息地：</strong>' + esc(species.habitat) + '</span>';
+        html += '</div>';
+        html += '<p style="font-size:0.85rem;color:var(--text-secondary);margin-top:8px;">' + esc(species.description || '') + '</p>';
+        html += '</div>';
+        html += '</div>';
+      }
+
+      if (exhibit.videoUrl) {
+        html += '<div class="exhibit-video-placeholder" data-action="play-video" data-video-url="' + esc(exhibit.videoUrl) + '">';
+        html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: linear-gradient(135deg, ' + typeColor + ', ' + typeColor + '); width:100%; height:100%; object-fit:cover;" alt="视频预览">';
+        html += '<div class="exhibit-video-play-btn">';
+        html += '<svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg>';
         html += '</div>';
         html += '</div>';
       }
@@ -214,6 +293,10 @@
 
       html += '<div class="exhibit-detail-actions">';
       html += '<a href="/museum/vr-hall.html" class="btn btn-accent">进入VR展厅</a>';
+      html += '<button class="btn btn-outline" data-action="favorite" data-work-id="' + esc(exhibit.id) + '">';
+      html += '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+      html += ' 收藏展项';
+      html += '</button>';
       html += '<a href="/museum/index.html" class="btn btn-ghost">返回展项列表</a>';
       html += '</div>';
 
@@ -248,6 +331,26 @@
       document.getElementById('exhibitDetailContent').innerHTML = html;
 
       app.insertAdjacentHTML('beforeend', BC.renderFooter());
+
+      document.addEventListener('click', function(e) {
+        var btn = e.target.closest('[data-action="play-video"]');
+        if (!btn) return;
+        e.preventDefault();
+        var videoUrl = btn.getAttribute('data-video-url');
+        if (videoUrl) {
+          var videoEl = document.createElement('video');
+          videoEl.controls = true;
+          videoEl.autoplay = true;
+          videoEl.style.width = '100%';
+          videoEl.style.height = '100%';
+          videoEl.style.objectFit = 'cover';
+          videoEl.innerHTML = '<source src="' + videoUrl + '" type="video/mp4">';
+          btn.innerHTML = '';
+          btn.appendChild(videoEl);
+        } else {
+          BI.showToast('视频暂不可用', 'warning');
+        }
+      });
 
       BI.initAll();
     });

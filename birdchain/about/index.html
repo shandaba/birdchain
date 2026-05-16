@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>关于BirdChain - BirdChain鸟链</title>
+  <meta name="description" content="BirdChain鸟链是全球鸟类影像版权存证、授权交易、AI视觉创作与生态文化消费平台。了解我们的使命、愿景与业务结构。">
+  <meta property="og:title" content="关于BirdChain - 全球鸟类影像与创作平台">
+  <meta property="og:description" content="BirdChain是全球鸟类影像版权存证、授权交易、AI视觉创作与生态文化消费平台。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .bc-about-intro {
+      max-width: 800px;
+      font-size: 1.05rem;
+      line-height: 1.9;
+      color: var(--text-main);
+      margin-bottom: 48px;
+    }
+    .bc-about-intro p {
+      margin-bottom: 16px;
+    }
+    .bc-mission-card {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 28px 24px;
+      text-align: center;
+      transition: all var(--transition-normal);
+    }
+    .bc-mission-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+    .bc-mission-card .icon-wrap {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--brand-accent-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      color: var(--brand-accent-dark);
+    }
+    .bc-mission-card h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .bc-mission-card p {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+    .bc-biz-card {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      transition: all var(--transition-normal);
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .bc-biz-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--brand-accent-soft);
+    }
+    .bc-biz-card .biz-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: var(--brand-primary);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .bc-biz-card h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .bc-biz-card p {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .bc-collab-section {
+      background: var(--bg-soft);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      margin: 48px 0;
+    }
+    .bc-collab-section h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .bc-collab-section p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      max-width: 700px;
+    }
+    .bc-about-cta {
+      background: linear-gradient(135deg, #1B4332, #2D6A4F, #40916C);
+      border-radius: var(--radius-lg);
+      padding: 56px 48px;
+      text-align: center;
+      color: #fff;
+      margin: 60px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .bc-about-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(199, 165, 109, 0.15), transparent 60%);
+      pointer-events: none;
+    }
+    .bc-about-cta h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 12px;
+      position: relative;
+    }
+    .bc-about-cta p {
+      font-size: 1rem;
+      opacity: 0.88;
+      max-width: 520px;
+      margin: 0 auto 28px;
+      position: relative;
+      line-height: 1.7;
+    }
+    .bc-about-cta .btn {
+      position: relative;
+      font-size: 1.05rem;
+      padding: 14px 36px;
+      border-radius: 28px;
+    }
+    @media (max-width: 767px) {
+      .bc-about-intro { font-size: 0.95rem; }
+      .bc-collab-section { padding: 24px; }
+      .bc-about-cta { padding: 40px 24px; margin: 40px 0; }
+      .bc-about-cta h2 { font-size: 1.35rem; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <nav class="bc-breadcrumb" aria-label="面包屑导航" id="breadcrumb"></nav>
+
+      <div class="bc-page-hero">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+             style="background: linear-gradient(135deg, #1B4332, #2D6A4F, #40916C); width:100%; height:100%; object-fit:cover;"
+             alt="BirdChain鸟链">
+        <div class="bc-page-hero-content">
+          <h1>关于BirdChain</h1>
+          <p>用影像连接自然，以技术守护创作</p>
+        </div>
+      </div>
+
+      <section class="section" style="padding-top:0">
+        <div class="bc-about-intro">
+          <p>BirdChain是全球鸟类影像版权存证、授权交易、AI视觉创作与生态文化消费平台。我们致力于构建一个连接全球鸟类摄影师、数字艺术家、自然保护者与影像使用者的数字生态体系。</p>
+          <p>通过区块链存证技术保障每一幅鸟类影像作品的原创权益，借助AI技术赋能视觉创作，依托全球地方站网络连接在地观鸟社群与自然爱好者——BirdChain让每一只鸟的影像都拥有可追溯的价值，让每一位创作者都能获得应有的尊重与回报。</p>
+        </div>
+      </section>
+
+      <section class="section" style="padding-top:0">
+        <h2 class="section-title">使命与愿景</h2>
+        <p class="section-subtitle">我们相信影像的力量可以改变世界对自然的态度</p>
+        <div class="grid-3">
+          <div class="bc-mission-card">
+            <div class="icon-wrap">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <h3>保护创作者权益</h3>
+            <p>运用区块链技术为每一幅鸟类影像作品提供不可篡改的版权存证，建立透明、高效的授权交易机制，确保创作者的智力成果得到充分尊重与合理回报。</p>
+          </div>
+          <div class="bc-mission-card">
+            <div class="icon-wrap">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </div>
+            <h3>释放影像价值</h3>
+            <p>打造全球领先的鸟类影像交易市场，通过AI视觉创作工具降低创作门槛，让每一幅鸟类影像都能在商业、教育、文化等多个领域实现其最大价值。</p>
+          </div>
+          <div class="bc-mission-card">
+            <div class="icon-wrap">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <h3>连接自然与人类</h3>
+            <p>以鸟类影像为媒介，连接全球自然爱好者、科研工作者与普通公众，通过优质内容与教育项目，唤醒人们对自然的热爱与保护意识。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">业务结构</h2>
+        <p class="section-subtitle">六大业务板块，构建完整的鸟类影像生态</p>
+        <div class="grid-3">
+          <div class="bc-biz-card">
+            <div class="biz-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <div>
+              <h4>版权存证与授权</h4>
+              <p>区块链版权存证、智能合约授权交易、侵权监测与维权支持，为每一幅作品建立可信的数字身份。</p>
+            </div>
+          </div>
+          <div class="bc-biz-card">
+            <div class="biz-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l7 7-7 7-7-7 7-7z"/><path d="M12 9v10"/></svg>
+            </div>
+            <div>
+              <h4>AI视觉创作</h4>
+              <p>AI鸟类影像生成、风格迁移、智能修图与创意工具集，让人人都能成为鸟类视觉创作者。</p>
+            </div>
+          </div>
+          <div class="bc-biz-card">
+            <div class="biz-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </div>
+            <div>
+              <h4>深度专题内容</h4>
+              <p>专业鸟类学知识、摄影师深度访谈、物种图鉴与生态故事，提供高质量的自然科普内容。</p>
+            </div>
+          </div>
+          <div class="bc-biz-card">
+            <div class="biz-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div>
+              <h4>全球地方站网络</h4>
+              <p>遍布世界各地的观鸟站点网络，连接在地社群，提供物种观测记录、拍摄攻略与在地服务。</p>
+            </div>
+          </div>
+          <div class="bc-biz-card">
+            <div class="biz-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            </div>
+            <div>
+              <h4>创作周边与生活方式</h4>
+              <p>鸟类影像衍生品、艺术家联名款、户外装备与自然生活方式产品，将鸟类之美融入日常。</p>
+            </div>
+          </div>
+          <div class="bc-biz-card">
+            <div class="biz-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1.1 2.7 2 6 2s6-.9 6-2v-5"/></svg>
+            </div>
+            <div>
+              <h4>自然教育与保护</h4>
+              <p>面向全年龄段的自然教育课程、AR/VR鸟类博物馆、保护项目募资与公益行动。</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="bc-collab-section">
+          <h2>轻量协作模式</h2>
+          <p>BirdChain采用轻量化的平台协作模式——我们提供版权存证、授权交易、内容分发与AI创作的基础设施，创作者、地方站运营者、内容合作方与品牌方可以在平台上自由组合协作。无需繁重的合同流程，通过智能合约与平台规则即可完成从作品上传、版权登记、授权签约到收益分成的全流程，让每一位参与者都能专注于自己最擅长的事情。</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">平台数据</h2>
+        <p class="section-subtitle">用数字见证BirdChain的成长</p>
+        <div class="bc-creator-stats">
+          <div class="bc-stat-card">
+            <div class="value" id="statWorks">--</div>
+            <div class="label">影像作品</div>
+          </div>
+          <div class="bc-stat-card">
+            <div class="value" id="statCreators">--</div>
+            <div class="label">认证创作者</div>
+          </div>
+          <div class="bc-stat-card">
+            <div class="value" id="statStations">--</div>
+            <div class="label">全球地方站</div>
+          </div>
+          <div class="bc-stat-card">
+            <div class="value" id="statSpecies">--</div>
+            <div class="label">物种记录</div>
+          </div>
+        </div>
+      </section>
+
+      <div class="bc-about-cta">
+        <h2>加入BirdChain生态</h2>
+        <p>无论你是鸟类摄影师、自然爱好者、品牌合作方还是内容创作者，BirdChain都欢迎你加入我们的生态体系，共同推动鸟类影像文化的繁荣发展。</p>
+        <a href="/about/contact.html" class="btn btn-accent btn-lg">联系我们</a>
+      </div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BD = window.BirdChainData;
+      var BI = window.BirdChainInteractions;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('about'));
+
+      var breadcrumb = document.getElementById('breadcrumb');
+      breadcrumb.innerHTML = BC.renderBreadcrumb([
+        { label: '关于BirdChain' }
+      ]);
+
+      try {
+        var works = await BD.loadData('works');
+        var creators = await BD.loadData('creators');
+        var stations = await BD.loadData('stations');
+        var species = await BD.loadData('species');
+
+        var formatNum = function(n) {
+          if (n >= 10000) return (n / 10000).toFixed(1) + '万';
+          if (n >= 1000) return (n / 1000).toFixed(1) + 'k';
+          return String(n);
+        };
+
+        document.getElementById('statWorks').textContent = formatNum(works.length);
+        document.getElementById('statCreators').textContent = formatNum(creators.length);
+        document.getElementById('statStations').textContent = formatNum(stations.length);
+        document.getElementById('statSpecies').textContent = formatNum(species.length);
+      } catch (e) {
+        document.getElementById('statWorks').textContent = '5000+';
+        document.getElementById('statCreators').textContent = '800+';
+        document.getElementById('statStations').textContent = '120+';
+        document.getElementById('statSpecies').textContent = '3500+';
+      }
+
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+
+      BI.initAll();
+    });
+  </script>
+</body>
+</html>
