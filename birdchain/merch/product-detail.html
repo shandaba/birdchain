@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>商品详情 - 创作周边 - BirdChain鸟链</title>
+  <meta name="description" content="查看BirdChain创作周边商品详情，了解商品故事、授权信息和购买选项。">
+  <meta property="og:title" content="商品详情 - BirdChain鸟链">
+  <meta property="og:description" content="查看创作周边商品详情。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .pd-layout { display: grid; grid-template-columns: 1fr 400px; gap: 32px; margin-bottom: 40px; }
+    .pd-gallery { }
+    .pd-main-img { border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-card); border: 1px solid var(--line-soft); margin-bottom: 12px; }
+    .pd-main-img img { width: 100%; aspect-ratio: 4/3; object-fit: cover; }
+    .pd-thumbs { display: flex; gap: 10px; }
+    .pd-thumb { width: 80px; height: 60px; border-radius: var(--radius-sm); overflow: hidden; border: 2px solid transparent; cursor: pointer; transition: all var(--transition-fast); }
+    .pd-thumb.active { border-color: var(--brand-accent); }
+    .pd-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .pd-info { background: var(--bg-card); border: 1px solid var(--line-soft); border-radius: var(--radius-lg); padding: 24px; position: sticky; top: calc(var(--header-height) + 20px); }
+    .pd-info h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 8px; }
+    .pd-price { font-size: 1.6rem; font-weight: 700; color: var(--brand-accent-dark); margin-bottom: 16px; }
+    .pd-desc { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--line-soft); }
+    .pd-qty { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; }
+    .pd-qty label { font-size: 0.88rem; font-weight: 500; }
+    .pd-qty-controls { display: flex; align-items: center; gap: 4px; }
+    .pd-qty-controls button { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--line-soft); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 600; transition: all var(--transition-fast); cursor: pointer; }
+    .pd-qty-controls button:hover { border-color: var(--brand-accent); color: var(--brand-accent); }
+    .pd-qty-controls span { min-width: 40px; text-align: center; font-size: 1rem; font-weight: 600; }
+    .pd-actions { display: flex; gap: 10px; }
+    .pd-actions button { flex: 1; padding: 14px; border-radius: var(--radius-md); font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all var(--transition-fast); }
+    .btn-add-cart { background: var(--brand-accent); color: #fff; border: none; }
+    .btn-add-cart:hover { background: var(--brand-accent-dark); }
+    .btn-buy-now { background: var(--brand-primary); color: #fff; border: none; }
+    .btn-buy-now:hover { background: var(--brand-primary-dark); }
+    .pd-related-work { background: var(--bg-soft); border-radius: var(--radius-md); padding: 14px; margin: 16px 0; }
+    .pd-related-work h5 { font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; }
+    .pd-related-work .meta { font-size: 0.78rem; color: var(--text-secondary); }
+    .pd-license-badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; background: var(--brand-accent-soft); color: var(--brand-accent-dark); }
+    .pd-recommend-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+    @media (max-width:1024px) { .pd-layout { grid-template-columns: 1fr; } .pd-info { position: static; } .pd-recommend-grid { grid-template-columns: repeat(2,1fr); } }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div class="bc-breadcrumb">
+        <a href="/">首页</a><span class="sep">/</span><a href="/merch/index.html">创作周边</a><span class="sep">/</span><span class="current">商品详情</span>
+      </div>
+      <div id="productContent"></div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      app.insertAdjacentHTML('afterbegin', BirdChainComponents.renderHeader('merch'));
+      app.insertAdjacentHTML('beforeend', BirdChainComponents.renderFooter());
+      BirdChainInteractions.initAll();
+
+      var BC = window.BirdChainStorage;
+      var BCD = window.BirdChainData;
+      var params = new URLSearchParams(window.location.search);
+      var productId = params.get('id');
+      var container = document.getElementById('productContent');
+
+      if (!productId) {
+        container.innerHTML = '<div class="bc-empty"><div class="bc-empty-icon">🔍</div><h4>未指定商品ID</h4></div>';
+        return;
+      }
+
+      var product = await BCD.getProductById(productId);
+      if (!product) {
+        container.innerHTML = '<div class="bc-empty"><div class="bc-empty-icon">🔍</div><h4>商品未找到</h4></div>';
+        return;
+      }
+
+      var sourceWork = product.sourceWorkId ? await BCD.getWorkById(product.sourceWorkId) : null;
+      var creator = sourceWork && sourceWork.creatorId ? await BCD.getCreatorById(sourceWork.creatorId) : null;
+
+      var gradients = ['#1B4332,#2D6A4F','#1B4F72,#2980B9','#B8860B,#DAA520','#006D77,#83C5BE','#2D6A4F,#40916C','#3A5A40,#588157'];
+      var mainGrad = gradients[Math.floor(Math.random() * gradients.length)];
+
+      container.innerHTML =
+        '<div class="pd-layout">' +
+        '<div class="pd-gallery">' +
+        '<div class="pd-main-img">' +
+        '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background:linear-gradient(135deg,' + mainGrad + ');width:100%;aspect-ratio:4/3;object-fit:cover;" alt="' + (product.name||'') + '">' +
+        '</div>' +
+        '<div class="pd-thumbs">' +
+        '<div class="pd-thumb active">' +
+        '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background:linear-gradient(135deg,' + gradients[0] + ');width:100%;height:100%;object-fit:cover;" alt="缩略图1" loading="lazy">' +
+        '</div>' +
+        '<div class="pd-thumb">' +
+        '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background:linear-gradient(135deg,' + gradients[1] + ');width:100%;height:100%;object-fit:cover;" alt="缩略图2" loading="lazy">' +
+        '</div>' +
+        '<div class="pd-thumb">' +
+        '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background:linear-gradient(135deg,' + gradients[2] + ');width:100%;height:100%;object-fit:cover;" alt="缩略图3" loading="lazy">' +
+        '</div>' +
+        '</div>' +
+        '</div>' +
+        '<div class="pd-info">' +
+        '<span class="tag tag-accent">' + (product.category||'') + '</span>' +
+        '<h2>' + (product.name||'') + '</h2>' +
+        '<div class="pd-price">' + (typeof formatPrice !== 'undefined' ? formatPrice(product.price) : '¥' + (product.price||0)) + '</div>' +
+        '<div class="pd-desc">' + (product.description||'暂无商品描述') + '</div>' +
+        (sourceWork ? '<div class="pd-related-work"><h5>📷 关联摄影作品</h5><div class="meta">' + (sourceWork.title||'') + ' · ' + (sourceWork.species||'') + '</div></div>' : '') +
+        (creator ? '<div class="pd-related-work"><h5>👤 关联创作者</h5><div class="meta">' + (creator.name||'') + ' · ' + (creator.specialty||'') + '</div></div>' : '') +
+        '<div style="margin-bottom:16px;"><span class="pd-license-badge">✓ 正版授权</span></div>' +
+        '<div class="pd-qty"><label>数量</label><div class="pd-qty-controls"><button data-action="qty-minus">-</button><span id="qtyDisplay">1</span><button data-action="qty-plus">+</button></div></div>' +
+        '<div class="pd-actions">' +
+        '<button class="btn-add-cart" data-action="add-product-to-cart">加入购物车</button>' +
+        '<button class="btn-buy-now" data-action="buy-now">立即购买</button>' +
+        '</div>' +
+        '</div>' +
+        '</div>';
+
+      var qty = 1;
+      var qtyDisplay = document.getElementById('qtyDisplay');
+
+      container.addEventListener('click', function(e) {
+        var minusBtn = e.target.closest('[data-action="qty-minus"]');
+        var plusBtn = e.target.closest('[data-action="qty-plus"]');
+        var addCartBtn = e.target.closest('[data-action="add-product-to-cart"]');
+        var buyNowBtn = e.target.closest('[data-action="buy-now"]');
+
+        if (minusBtn) { qty = Math.max(1, qty - 1); qtyDisplay.textContent = qty; }
+        if (plusBtn) { qty = Math.min(99, qty + 1); qtyDisplay.textContent = qty; }
+
+        if (addCartBtn) {
+          var cart = BC.getItem(BC.KEYS.cartItems, []);
+          var existing = cart.find(function(item) { return item.id === product.id; });
+          if (existing) {
+            existing.quantity += qty;
+          } else {
+            cart.push({ id: product.id, name: product.name, price: product.price, type: 'product', image: product.cover || '', quantity: qty });
+          }
+          BC.setItem(BC.KEYS.cartItems, cart);
+          BirdChainInteractions.updateCartBadge();
+          BirdChainInteractions.showToast('已添加 ' + qty + ' 件 ' + product.name + ' 到购物车', 'success');
+        }
+
+        if (buyNowBtn) {
+          var cart = BC.getItem(BC.KEYS.cartItems, []);
+          var existing = cart.find(function(item) { return item.id === product.id; });
+          if (existing) {
+            existing.quantity += qty;
+          } else {
+            cart.push({ id: product.id, name: product.name, price: product.price, type: 'product', image: product.cover || '', quantity: qty });
+          }
+          BC.setItem(BC.KEYS.cartItems, cart);
+          window.location.href = '/merch/checkout.html';
+        }
+      });
+
+      var allProducts = await BCD.loadData('products');
+      var recommendGrid = document.createElement('div');
+      recommendGrid.className = 'pd-recommend-grid';
+      recommendGrid.style.marginTop = '40px';
+      var recommendHeader = document.createElement('div');
+      recommendHeader.className = 'section-header';
+      recommendHeader.innerHTML = '<h2 class="section-title">推荐商品</h2>';
+      container.appendChild(recommendHeader);
+      container.appendChild(recommendGrid);
+
+      var recommended = allProducts.filter(function(p) { return p.id !== product.id && p.category === product.category; }).slice(0, 4);
+      if (recommended.length === 0) recommended = allProducts.filter(function(p) { return p.id !== product.id; }).slice(0, 4);
+
+      recommended.forEach(function(p, i) {
+        var card = document.createElement('div');
+        card.className = 'bc-product-card';
+        var grad = gradients[(i + 3) % gradients.length];
+        card.innerHTML =
+          '<div class="bc-product-card-img">' +
+          '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background:linear-gradient(135deg,' + grad + ');width:100%;height:100%;object-fit:cover;" alt="' + (p.name||'') + '" loading="lazy">' +
+          '</div>' +
+          '<div class="bc-product-card-body">' +
+          '<div class="bc-product-card-title">' + (p.name||'') + '</div>' +
+          '<div class="bc-product-card-category">' + (p.category||'') + '</div>' +
+          '<div class="bc-product-card-price">' + (typeof formatPrice !== 'undefined' ? formatPrice(p.price) : '¥' + p.price) + '</div>' +
+          '</div>';
+        card.addEventListener('click', function() { window.location.href = '/merch/product-detail.html?id=' + p.id; });
+        recommendGrid.appendChild(card);
+      });
+    });
+  </script>
+</body>
+</html>

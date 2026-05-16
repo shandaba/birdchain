@@ -1,0 +1,90 @@
+[
+  {
+    "id": "exhibit-001",
+    "title": "丹顶鹤数字生态展柜",
+    "speciesId": "species-002",
+    "type": "数字展柜",
+    "cover": "/assets/images/exhibits/crane-digital-display.jpg",
+    "description": "通过高清投影和全息影像技术，全方位展示丹顶鹤从求偶舞蹈到育雏的完整生命周期。观众可通过触控屏幕与虚拟丹顶鹤互动。",
+    "audioUrl": "/assets/audio/crane-call.mp3",
+    "videoUrl": "/assets/video/crane-life-cycle.mp4",
+    "relatedWorks": ["work-002"]
+  },
+  {
+    "id": "exhibit-002",
+    "title": "东亚候鸟迁徙路线动态地图",
+    "speciesId": "species-005",
+    "type": "迁徙地图",
+    "cover": "/assets/images/exhibits/migration-map.jpg",
+    "description": "大型互动式数字迁徙地图，实时追踪黑脸琵鹭、白鹤等旗舰物种的迁徙路线。观众可通过手势操作放大缩小，查看不同时间段的迁徙数据。",
+    "audioUrl": null,
+    "videoUrl": "/assets/video/migration-simulation.mp4",
+    "relatedWorks": ["work-005", "work-013"]
+  },
+  {
+    "id": "exhibit-003",
+    "title": "中国珍稀鸟类鸣声库",
+    "speciesId": "species-004",
+    "type": "鸟鸣声音库",
+    "cover": "/assets/images/exhibits/bird-sound-library.jpg",
+    "description": "收录中国100种鸟类的鸣声数据库，包括朱鹮、丹顶鹤、中华秋沙鸭等珍稀物种。观众戴上耳机即可沉浸式聆听鸟类的声音世界。",
+    "audioUrl": "/assets/audio/bird-sound-collection.mp3",
+    "videoUrl": null,
+    "relatedWorks": ["work-004", "work-002", "work-011"]
+  },
+  {
+    "id": "exhibit-004",
+    "title": "翠鸟捕鱼AR互动体验",
+    "speciesId": "species-001",
+    "type": "AR互动",
+    "cover": "/assets/images/exhibits/kingfisher-ar.jpg",
+    "description": "使用增强现实技术，让观众在展厅中与虚拟翠鸟互动。观众可以触发翠鸟从树枝俯冲入水捕鱼的完整动画，并从任意角度观察这一精彩瞬间。",
+    "audioUrl": "/assets/audio/kingfisher-dive-sound.mp3",
+    "videoUrl": "/assets/video/kingfisher-ar-demo.mp4",
+    "relatedWorks": ["work-001"]
+  },
+  {
+    "id": "exhibit-005",
+    "title": "朱鹮重生——从7到7000的数字展",
+    "speciesId": "species-004",
+    "type": "数字展柜",
+    "cover": "/assets/images/exhibits/crested-ibis-story-display.jpg",
+    "description": "以时间轴和数据可视化方式讲述朱鹮从1981年仅存7只到如今超过7000只的保护奇迹。包含珍贵历史影像和保护工作者口述史。",
+    "audioUrl": "/assets/audio/ibis-conservation-story.mp3",
+    "videoUrl": "/assets/video/ibis-recovery.mp4",
+    "relatedWorks": ["work-004"]
+  },
+  {
+    "id": "exhibit-006",
+    "title": "金雕之眼——猛禽视角VR体验",
+    "speciesId": "species-006",
+    "type": "AR互动",
+    "cover": "/assets/images/exhibits/eagle-vision-vr.jpg",
+    "description": "通过VR技术模拟金雕在青藏高原翱翔的第一视角，体验猛禽超强的远视能力和高空飞行的震撼感。",
+    "audioUrl": null,
+    "videoUrl": "/assets/video/eagle-vr-experience.mp4",
+    "relatedWorks": ["work-006"]
+  },
+  {
+    "id": "exhibit-007",
+    "title": "热带雨林鸟类声景沉浸厅",
+    "speciesId": "species-020",
+    "type": "鸟鸣声音库",
+    "cover": "/assets/images/exhibits/rainforest-soundscape.jpg",
+    "description": "360度环绕声系统再现东南亚热带雨林从黎明到夜晚的完整鸟类声景。观众闭上眼睛即可感受置身雨林的沉浸式听觉体验。",
+    "audioUrl": "/assets/audio/rainforest-soundscape.mp3",
+    "videoUrl": "/assets/video/rainforest-ambient.mp4",
+    "relatedWorks": ["work-024", "work-018"]
+  },
+  {
+    "id": "exhibit-008",
+    "title": "鸟类羽毛微观世界数字展",
+    "speciesId": "species-007",
+    "type": "数字展柜",
+    "cover": "/assets/images/exhibits/feather-microscope.jpg",
+    "description": "通过显微摄影和数字放大技术，展示红腹锦鸡、翠鸟、孔雀等鸟类羽毛的微观结构。揭示鸟类绚丽色彩背后的物理光学原理。",
+    "audioUrl": null,
+    "videoUrl": "/assets/video/feather-microstructure.mp4",
+    "relatedWorks": ["work-007", "work-001", "work-014"]
+  }
+]

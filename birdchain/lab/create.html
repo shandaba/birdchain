@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>开始创作 - 鸟类视觉实验室 - BirdChain鸟链</title>
+  <meta name="description" content="使用AI技术进行鸟类视觉创作，选择风格与类型，生成独特的鸟类视觉作品。">
+  <meta property="og:title" content="开始创作 - 鸟类视觉实验室 - BirdChain鸟链">
+  <meta property="og:description" content="使用AI技术进行鸟类视觉创作。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .create-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-bottom: 40px; }
+    .create-prompt-box { background: var(--bg-card); border: 1px solid var(--line-soft); border-radius: var(--radius-lg); padding: 24px; }
+    .create-prompt-box h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 16px; }
+    .create-prompt-box textarea { width: 100%; min-height: 140px; padding: 14px; border-radius: var(--radius-md); border: 1.5px solid var(--line-soft); background: var(--bg-soft); font-size: 0.95rem; resize: vertical; outline: none; transition: border-color var(--transition-fast); }
+    .create-prompt-box textarea:focus { border-color: var(--brand-accent); }
+    .create-upload-area {
+      margin-top: 16px;
+      border: 2px dashed var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+    }
+    .create-upload-area:hover { border-color: var(--brand-accent); color: var(--brand-accent); }
+    .create-upload-area.has-file { border-color: var(--brand-accent); background: var(--brand-accent-soft); color: var(--brand-accent-dark); }
+    .create-select-row { margin-top: 16px; }
+    .create-select-row label { display: block; font-size: 0.85rem; font-weight: 500; margin-bottom: 6px; color: var(--text-main); }
+    .create-select-row select { width: 100%; padding: 10px 14px; border-radius: var(--radius-sm); border: 1.5px solid var(--line-soft); background: var(--bg-card); color: var(--text-main); font-size: 0.9rem; outline: none; transition: border-color var(--transition-fast); }
+    .create-select-row select:focus { border-color: var(--brand-accent); }
+    .create-style-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+    .create-style-chip {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      border: 1px solid var(--line-soft);
+      background: var(--bg-soft);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .create-style-chip:hover, .create-style-chip.selected { background: var(--brand-accent-soft); color: var(--brand-accent-dark); border-color: var(--brand-accent); }
+    .create-generate-btn { display: block; width: 100%; margin-top: 24px; padding: 14px; border-radius: var(--radius-md); background: var(--brand-accent); color: #fff; font-size: 1.05rem; font-weight: 600; text-align: center; transition: all var(--transition-fast); cursor: pointer; }
+    .create-generate-btn:hover { background: var(--brand-accent-dark); }
+    .create-generate-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .create-results-area { display: none; }
+    .create-results-area.visible { display: block; }
+    .create-loading { display: none; align-items: center; justify-content: center; gap: 12px; padding: 40px; }
+    .create-loading.visible { display: flex; }
+    .create-loading-text { color: var(--text-secondary); font-size: 0.95rem; }
+    .create-result-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 16px; }
+    .create-result-card {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+    }
+    .create-result-card img { width: 100%; aspect-ratio: 4/3; object-fit: cover; }
+    .create-result-card-body { padding: 12px; }
+    .create-result-card-body h5 { font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; }
+    .create-result-actions { display: flex; gap: 8px; }
+    .create-result-actions button { flex: 1; padding: 8px; border-radius: var(--radius-sm); font-size: 0.82rem; font-weight: 500; cursor: pointer; transition: all var(--transition-fast); }
+    .create-btn-download { background: var(--bg-soft); color: var(--text-main); border: 1px solid var(--line-soft); }
+    .create-btn-download:hover { border-color: var(--brand-accent); color: var(--brand-accent); }
+    .create-btn-save { background: var(--brand-primary); color: #fff; border: none; }
+    .create-btn-save:hover { background: var(--brand-primary-dark); }
+    @media (max-width:767px) { .create-layout { grid-template-columns: 1fr; } .create-result-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div class="bc-breadcrumb">
+        <a href="/">首页</a><span class="sep">/</span><a href="/lab/index.html">鸟类视觉实验室</a><span class="sep">/</span><span class="current">开始创作</span>
+      </div>
+      <div class="create-layout">
+        <div>
+          <div class="create-prompt-box">
+            <h3>AI创作提示</h3>
+            <textarea id="promptInput" placeholder="描述你想要的鸟类视觉作品，例如：一只丹顶鹤在晨雾中的水墨画风格，背景有芦苇荡和远山..."></textarea>
+            <div class="create-upload-area" id="uploadArea" data-action="upload-ref">
+              <div id="uploadHint">📁 点击上传参考图（可选）</div>
+              <input type="file" id="refFileInput" accept="image/*" style="display:none">
+              <div id="uploadFileName" style="display:none;color:var(--brand-accent-dark);font-weight:500;"></div>
+            </div>
+            <div class="create-select-row">
+              <label for="createType">创作类型</label>
+              <select id="createType">
+                <option value="海报设计">海报设计</option>
+                <option value="鸟类插画">鸟类插画</option>
+                <option value="科普卡片">科普卡片</option>
+                <option value="封面设计">封面设计</option>
+                <option value="视觉素材">视觉素材</option>
+                <option value="创作周边">创作周边</option>
+              </select>
+            </div>
+            <div class="create-select-row">
+              <label>风格选择</label>
+              <div class="create-style-chips" id="styleChips">
+                <span class="create-style-chip" data-style="水彩插画">水彩插画</span>
+                <span class="create-style-chip" data-style="自然写实">自然写实</span>
+                <span class="create-style-chip" data-style="复古图鉴">复古图鉴</span>
+                <span class="create-style-chip" data-style="扁平设计">扁平设计</span>
+                <span class="create-style-chip" data-style="国风水墨">国风水墨</span>
+                <span class="create-style-chip" data-style="手绘素描">手绘素描</span>
+                <span class="create-style-chip" data-style="极简线稿">极简线稿</span>
+              </div>
+            </div>
+            <button class="create-generate-btn" id="generateBtn">生成作品</button>
+          </div>
+        </div>
+        <div>
+          <div class="create-loading" id="loadingArea">
+            <div class="bc-spinner"></div>
+            <span class="create-loading-text">AI正在创作中...</span>
+          </div>
+          <div class="create-results-area" id="resultsArea">
+            <h3 style="margin-bottom:16px;">生成结果</h3>
+            <div class="create-result-grid" id="resultsGrid"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      app.insertAdjacentHTML('afterbegin', BirdChainComponents.renderHeader('lab'));
+      app.insertAdjacentHTML('beforeend', BirdChainComponents.renderFooter());
+      BirdChainInteractions.initAll();
+
+      var BC = window.BirdChainStorage;
+      var BCD = window.BirdChainData;
+
+      var selectedStyle = null;
+      var styleChips = document.querySelectorAll('#styleChips .create-style-chip');
+      styleChips.forEach(function(chip) {
+        chip.addEventListener('click', function() {
+          styleChips.forEach(function(c) { c.classList.remove('selected'); });
+          chip.classList.add('selected');
+          selectedStyle = chip.getAttribute('data-style');
+        });
+      });
+
+      var uploadArea = document.getElementById('uploadArea');
+      var refFileInput = document.getElementById('refFileInput');
+      var uploadHint = document.getElementById('uploadHint');
+      var uploadFileName = document.getElementById('uploadFileName');
+      uploadArea.addEventListener('click', function() { refFileInput.click(); });
+      refFileInput.addEventListener('change', function() {
+        if (refFileInput.files.length > 0) {
+          uploadArea.classList.add('has-file');
+          uploadHint.style.display = 'none';
+          uploadFileName.style.display = 'block';
+          uploadFileName.textContent = '已选择: ' + refFileInput.files[0].name;
+        } else {
+          uploadArea.classList.remove('has-file');
+          uploadHint.style.display = 'block';
+          uploadFileName.style.display = 'none';
+        }
+      });
+
+      var generateBtn = document.getElementById('generateBtn');
+      var loadingArea = document.getElementById('loadingArea');
+      var resultsArea = document.getElementById('resultsArea');
+      var resultsGrid = document.getElementById('resultsGrid');
+
+      generateBtn.addEventListener('click', async function() {
+        var prompt = document.getElementById('promptInput').value.trim();
+        if (!prompt) {
+          BirdChainInteractions.showToast('请输入创作提示词', 'warning');
+          return;
+        }
+        if (!selectedStyle) {
+          BirdChainInteractions.showToast('请选择一种风格', 'warning');
+          return;
+        }
+
+        generateBtn.disabled = true;
+        generateBtn.textContent = '生成中...';
+        resultsArea.classList.remove('visible');
+        loadingArea.classList.add('visible');
+
+        await new Promise(function(r) { setTimeout(r, 1500); });
+
+        loadingArea.classList.remove('visible');
+        resultsArea.classList.add('visible');
+        resultsGrid.innerHTML = '';
+
+        var works = await BCD.loadData('works');
+        var aiWorks = works.filter(function(w) { return w.category === 'AI创作'; });
+        var shuffled = aiWorks.sort(function() { return Math.random() - 0.5; });
+        var results = shuffled.slice(0, Math.floor(Math.random() * 2) + 2);
+
+        var gradients = ['#1B4332,#2D6A4F','#1B4F72,#2980B9','#B8860B,#DAA520','#006D77,#83C5BE','#2D6A4F,#40916C','#3A5A40,#588157','#BC6C25,#DDA15E','#1B4965,#5FA8D3'];
+
+        results.forEach(function(w) {
+          var card = document.createElement('div');
+          card.className = 'create-result-card';
+          var grad = gradients[Math.floor(Math.random() * gradients.length)];
+          card.innerHTML =
+            '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background:linear-gradient(135deg,' + grad + ');width:100%;aspect-ratio:4/3;object-fit:cover;" alt="' + (w.title||'') + '" loading="lazy">' +
+            '<div class="create-result-card-body"><h5>' + (w.title||'') + '</h5>' +
+            '<div class="create-result-actions">' +
+            '<button class="create-btn-download" data-action="download-work" data-work-id="' + w.id + '">下载</button>' +
+            '<button class="create-btn-save" data-action="save-work" data-work-id="' + w.id + '">保存</button>' +
+            '</div></div>';
+          resultsGrid.appendChild(card);
+        });
+
+        var history = BC.getItem(BC.KEYS.aiCreationHistory, []);
+        history.unshift({
+          prompt: prompt,
+          style: selectedStyle,
+          type: document.getElementById('createType').value,
+          timestamp: Date.now(),
+          results: results.map(function(w) { return { id: w.id, title: w.title }; })
+        });
+        if (history.length > 50) history = history.slice(0, 50);
+        BC.setItem(BC.KEYS.aiCreationHistory, history);
+
+        generateBtn.disabled = false;
+        generateBtn.textContent = '生成作品';
+        BirdChainInteractions.showToast('AI创作完成！生成了 ' + results.length + ' 个作品', 'success');
+      });
+
+      resultsGrid.addEventListener('click', function(e) {
+        var downloadBtn = e.target.closest('[data-action="download-work"]');
+        var saveBtn = e.target.closest('[data-action="save-work"]');
+        if (downloadBtn) {
+          e.preventDefault();
+          BirdChainInteractions.showToast('模拟下载：作品已开始下载', 'success');
+        }
+        if (saveBtn) {
+          e.preventDefault();
+          var workId = saveBtn.getAttribute('data-work-id');
+          var savedWorks = BC.getItem('bc_savedWorks', []);
+          if (savedWorks.indexOf(workId) === -1) {
+            savedWorks.push(workId);
+            BC.setItem('bc_savedWorks', savedWorks);
+            BirdChainInteractions.showToast('作品已保存到我的收藏', 'success');
+          } else {
+            BirdChainInteractions.showToast('作品已在收藏中', 'info');
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>展项详情 - BirdChain鸟链</title>
+  <meta name="description" content="查看BirdChain AR/VR鸟类博物馆数字展项详情，探索沉浸式鸟类展览体验。">
+  <meta property="og:title" content="展项详情 - BirdChain鸟链">
+  <meta property="og:description" content="探索数字展项详情，体验鸟类博物馆的沉浸式展览。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .exhibit-detail-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin: 28px 0 40px;
+      align-items: start;
+    }
+    .exhibit-detail-img {
+      aspect-ratio: 4/3;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .exhibit-detail-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .exhibit-detail-info h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text-strong);
+    }
+    .exhibit-detail-type {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: var(--bg-soft);
+      color: var(--brand-accent-dark);
+      margin-bottom: 16px;
+    }
+    .exhibit-detail-desc {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+    .exhibit-detail-species {
+      background: var(--bg-soft);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      margin-bottom: 24px;
+    }
+    .exhibit-detail-species h6 {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+    .exhibit-detail-species-info {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .exhibit-detail-species-item {
+      font-size: 0.88rem;
+    }
+    .exhibit-detail-species-item strong {
+      color: var(--text-strong);
+    }
+    .exhibit-audio-player {
+      background: var(--bg-soft);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .exhibit-audio-player audio {
+      flex: 1;
+      height: 36px;
+    }
+    .exhibit-detail-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .exhibit-related-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 767px) {
+      .exhibit-detail-header { grid-template-columns: 1fr; gap: 24px; }
+      .exhibit-related-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+      <div id="exhibitDetailContent"></div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BI = window.BirdChainInteractions;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('museum'));
+
+      var params = new URLSearchParams(window.location.search);
+      var exhibitId = params.get('id');
+
+      var typeColors = {
+        '数字展柜': '#2D6A4F',
+        '迁徙地图': '#1B4F72',
+        '鸟鸣声音库': '#B8860B',
+        'AR互动': '#6B4226'
+      };
+
+      if (!exhibitId) {
+        document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+          { label: 'AR/VR鸟类博物馆', href: '/museum/index.html' },
+          { label: '展项详情' }
+        ]);
+        document.getElementById('exhibitDetailContent').innerHTML = '<div class="section" style="text-align:center"><h2>未找到展项</h2><p style="color:var(--text-secondary)">请通过展项列表选择一个展项查看</p><a href="/museum/index.html" class="btn btn-accent mt-2">返回博物馆</a></div>';
+        app.insertAdjacentHTML('beforeend', BC.renderFooter());
+        BI.initAll();
+        return;
+      }
+
+      var exhibits = await loadData('museumExhibits');
+      var exhibit = findById(exhibits, exhibitId);
+
+      if (!exhibit) {
+        document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+          { label: 'AR/VR鸟类博物馆', href: '/museum/index.html' },
+          { label: '展项详情' }
+        ]);
+        document.getElementById('exhibitDetailContent').innerHTML = '<div class="section" style="text-align:center"><h2>展项不存在</h2><p style="color:var(--text-secondary)">未找到ID为 ' + esc(exhibitId) + ' 的展项</p><a href="/museum/index.html" class="btn btn-accent mt-2">返回博物馆</a></div>';
+        app.insertAdjacentHTML('beforeend', BC.renderFooter());
+        BI.initAll();
+        return;
+      }
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: 'AR/VR鸟类博物馆', href: '/museum/index.html' },
+        { label: exhibit.title }
+      ]);
+
+      var species = null;
+      if (exhibit.speciesId) {
+        try { species = await getSpeciesById(exhibit.speciesId); } catch(e) {}
+      }
+
+      var worksData = [];
+      if (exhibit.relatedWorks && exhibit.relatedWorks.length > 0) {
+        try {
+          var allWorks = await loadData('works');
+          exhibit.relatedWorks.forEach(function(wId) {
+            var w = findById(allWorks, wId);
+            if (w) worksData.push(w);
+          });
+        } catch(e) {}
+      }
+
+      var html = '';
+
+      html += '<div class="exhibit-detail-header">';
+      html += '<div class="exhibit-detail-img">';
+      html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: linear-gradient(135deg, ' + (typeColors[exhibit.type] || '#16395C') + ', ' + (typeColors[exhibit.type] || '#16395C') + '); width:100%; height:100%; object-fit:cover;" alt="' + esc(exhibit.title) + '">';
+      html += '</div>';
+
+      html += '<div class="exhibit-detail-info">';
+      html += '<h1>' + esc(exhibit.title) + '</h1>';
+      html += '<span class="exhibit-detail-type">' + esc(exhibit.type) + '</span>';
+      html += '<p class="exhibit-detail-desc">' + esc(exhibit.description) + '</p>';
+
+      if (species) {
+        html += '<div class="exhibit-detail-species">';
+        html += '<h6>相关鸟种信息</h6>';
+        html += '<div class="exhibit-detail-species-info">';
+        html += '<span class="exhibit-detail-species-item"><strong>中文名：</strong>' + esc(species.nameCn) + '</span>';
+        html += '<span class="exhibit-detail-species-item"><strong>学名：</strong><em>' + esc(species.scientificName) + '</em></span>';
+        html += '<span class="exhibit-detail-species-item"><strong>保护等级：</strong>' + esc(species.conservation) + '</span>';
+        html += '<span class="exhibit-detail-species-item"><strong>栖息地：</strong>' + esc(species.habitat) + '</span>';
+        html += '</div>';
+        html += '</div>';
+      }
+
+      if (exhibit.audioUrl) {
+        html += '<div class="exhibit-audio-player">';
+        html += '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>';
+        html += '<audio controls><source src="' + esc(exhibit.audioUrl) + '" type="audio/mpeg">您的浏览器不支持音频播放</audio>';
+        html += '</div>';
+      }
+
+      html += '<div class="exhibit-detail-actions">';
+      html += '<a href="/museum/vr-hall.html" class="btn btn-accent">进入VR展厅</a>';
+      html += '<a href="/museum/index.html" class="btn btn-ghost">返回展项列表</a>';
+      html += '</div>';
+
+      html += '</div>';
+      html += '</div>';
+
+      if (worksData.length > 0) {
+        html += '<div class="section">';
+        html += '<h2 class="section-title">相关作品</h2>';
+        html += '<p class="section-subtitle">与该展项相关的鸟类影像作品</p>';
+        html += '<div class="exhibit-related-grid">';
+        worksData.forEach(function(w) {
+          var mapped = {
+            id: w.id,
+            title: w.title,
+            image: w.image,
+            dataImg: w.dataImg || null,
+            aspectRatio: w.orientation === '竖图' ? '3/4' : (w.orientation === '方图' ? '1/1' : '4/3'),
+            author: w.creator || '未知创作者',
+            authorAvatar: null,
+            authorDataImg: null,
+            likes: w.likes || 0,
+            views: w.views || 0,
+            price: w.basePrice || 0
+          };
+          html += BC.renderWorkCard(mapped);
+        });
+        html += '</div>';
+        html += '</div>';
+      }
+
+      document.getElementById('exhibitDetailContent').innerHTML = html;
+
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+
+      BI.initAll();
+    });
+  </script>
+</body>
+</html>

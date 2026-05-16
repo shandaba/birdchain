@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>发现/灵感 - BirdChain鸟链</title>
+  <meta name="description" content="探索全球鸟类影像与视觉创作，发现最优秀的鸟类摄影、数字艺术、插画和AI创作作品。">
+  <meta property="og:title" content="发现/灵感 - BirdChain鸟链">
+  <meta property="og:description" content="探索全球鸟类影像与视觉创作，发现最优秀的鸟类摄影、数字艺术、插画和AI创作作品。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .bc-discover-hero {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      height: 240px;
+      margin: 20px 0 32px;
+    }
+    .bc-discover-hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .bc-discover-hero-content {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(7, 27, 45, 0.8), rgba(7, 27, 45, 0.15));
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 32px;
+      color: #fff;
+    }
+    .bc-discover-hero-content h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .bc-discover-hero-content p {
+      font-size: 0.95rem;
+      opacity: 0.85;
+      max-width: 560px;
+    }
+    .bc-discover-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      padding: 12px 0;
+    }
+    .bc-discover-toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .bc-discover-toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .bc-secondary-chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .bc-secondary-chip {
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      background: var(--bg-soft);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      white-space: nowrap;
+      border: 1px solid transparent;
+    }
+    .bc-secondary-chip:hover,
+    .bc-secondary-chip.active {
+      background: var(--brand-accent-soft);
+      color: var(--brand-accent-dark);
+      border-color: var(--brand-accent);
+    }
+    .bc-masonry.grid-mode {
+      columns: auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .bc-masonry.grid-mode .bc-work-card {
+      margin-bottom: 0;
+    }
+    .bc-collections-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .bc-collection-card {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      transition: all var(--transition-normal);
+      cursor: pointer;
+    }
+    .bc-collection-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+    .bc-collection-card-img {
+      aspect-ratio: 16/9;
+      overflow: hidden;
+      position: relative;
+    }
+    .bc-collection-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform var(--transition-slow);
+    }
+    .bc-collection-card:hover .bc-collection-card-img img {
+      transform: scale(1.04);
+    }
+    .bc-collection-card-count {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      background: rgba(7, 27, 45, 0.75);
+      color: #fff;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    .bc-collection-card-body {
+      padding: 14px;
+    }
+    .bc-collection-card-body h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .bc-collection-card-body p {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .bc-upload-cta {
+      background: linear-gradient(135deg, #1B4332, #2D6A4F, #40916C);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      text-align: center;
+      color: #fff;
+      margin: 40px 0;
+    }
+    .bc-upload-cta h3 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .bc-upload-cta p {
+      font-size: 0.95rem;
+      opacity: 0.85;
+      margin-bottom: 20px;
+    }
+    .bc-upload-cta .btn {
+      font-size: 1rem;
+      padding: 12px 32px;
+      border-radius: 28px;
+    }
+    @media (max-width: 1199px) {
+      .bc-masonry.grid-mode { grid-template-columns: repeat(3, 1fr); }
+      .bc-collections-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 767px) {
+      .bc-discover-hero { height: 160px; margin: 12px 0 20px; border-radius: var(--radius-md); }
+      .bc-discover-hero-content { padding: 20px; }
+      .bc-discover-hero-content h1 { font-size: 1.35rem; }
+      .bc-masonry.grid-mode { grid-template-columns: repeat(2, 1fr); }
+      .bc-collections-grid { grid-template-columns: 1fr; }
+      .bc-upload-cta { padding: 28px 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+      <div class="bc-discover-hero">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+             style="background: linear-gradient(135deg, #1B4332, #2D6A4F, #40916C); width:100%; height:100%; object-fit:cover;" alt="发现灵感">
+        <div class="bc-discover-hero-content">
+          <h1>发现/灵感</h1>
+          <p>探索全球鸟类影像与视觉创作</p>
+        </div>
+      </div>
+
+      <div class="bc-tabs" id="categoryTabs">
+        <button class="bc-tab active" data-category="all">推荐</button>
+        <button class="bc-tab" data-category="摄影">摄影</button>
+        <button class="bc-tab" data-category="数字艺术">数字艺术</button>
+        <button class="bc-tab" data-category="插画">插画</button>
+        <button class="bc-tab" data-category="视频">视频</button>
+        <button class="bc-tab" data-category="AI创作">AI创作</button>
+        <button class="bc-tab" data-category="设计">设计</button>
+        <button class="bc-tab" data-category="手工艺">手工艺</button>
+        <button class="bc-tab" data-category="知识科普">知识科普</button>
+      </div>
+
+      <div class="bc-secondary-chips" id="secondaryChips">
+        <button class="bc-secondary-chip" data-tag="野生">野生鸟类</button>
+        <button class="bc-secondary-chip" data-tag="宠物">宠物鸟</button>
+        <button class="bc-secondary-chip" data-tag="生态">鸟类生态</button>
+        <button class="bc-secondary-chip" data-tag="自然">鸟与自然</button>
+        <button class="bc-secondary-chip" data-tag="行为">鸟类行为</button>
+        <button class="bc-secondary-chip" data-tag="节日">节日主题</button>
+        <button class="bc-secondary-chip" data-tag="更多">更多</button>
+      </div>
+
+      <div class="bc-discover-toolbar">
+        <div class="bc-discover-toolbar-left">
+          <select class="bc-filter-select" id="sortSelect">
+            <option value="newest">最新发布</option>
+            <option value="popular">最多收藏</option>
+            <option value="views">最多浏览</option>
+            <option value="editor">编辑精选</option>
+          </select>
+          <span class="text-sm text-secondary" id="resultCount"></span>
+        </div>
+        <div class="bc-discover-toolbar-right">
+          <div class="bc-view-toggle" id="viewToggle">
+            <button class="active" data-view="masonry" title="瀑布流">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="10"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="8"/><rect x="3" y="17" width="7" height="5"/></svg>
+            </button>
+            <button data-view="grid" title="网格">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="bc-layout-sidebar-right">
+        <div class="bc-detail-main">
+          <div class="bc-masonry" id="worksGrid"></div>
+          <div id="paginationContainer"></div>
+        </div>
+        <aside class="bc-detail-sidebar">
+          <div class="bc-ranking-panel" id="rankingPanel">
+            <h4>作品排行 TOP10</h4>
+            <div id="rankingList"></div>
+            <a href="/discover/ranking.html" class="btn btn-ghost btn-sm mt-2" style="width:100%;text-align:center;">查看完整榜单 &rarr;</a>
+          </div>
+        </aside>
+      </div>
+
+      <section class="section" id="collectionsSection">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">精选合集</h2>
+            <p class="section-subtitle">探索编辑精心策划的作品合集</p>
+          </div>
+        </div>
+        <div class="bc-collections-grid" id="collectionsGrid"></div>
+      </section>
+
+      <div class="bc-upload-cta">
+        <h3>分享你的鸟类影像作品</h3>
+        <p>加入全球鸟类影像创作者社区，上传你的作品，获得曝光与版权收益</p>
+        <a href="/upload.html" class="btn btn-accent">立即上传</a>
+      </div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BD = window.BirdChainData;
+      var BI = window.BirdChainInteractions;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('discover'));
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '发现/灵感' }
+      ]);
+
+      var allWorks = await BD.loadData('works');
+      var creators = await BD.loadData('creators');
+      var creatorMap = {};
+      creators.forEach(function(c) { creatorMap[c.id] = c; });
+
+      var currentCategory = 'all';
+      var currentTag = null;
+      var currentSort = 'newest';
+      var currentView = 'masonry';
+      var currentPage = 1;
+      var perPage = 12;
+
+      function mapWork(w) {
+        var creator = creatorMap[w.creatorId] || {};
+        var aspectMap = { '横图': '16/9', '竖图': '3/4', '方图': '1/1' };
+        return {
+          id: w.id,
+          title: w.title,
+          image: w.image,
+          dataImg: w.dataImg || null,
+          aspectRatio: aspectMap[w.orientation] || '4/3',
+          author: creator.name || w.creator || '未知创作者',
+          authorAvatar: creator.avatar || null,
+          authorDataImg: creator.dataImg || null,
+          likes: w.likes || 0,
+          views: w.views || 0,
+          price: w.basePrice || 0
+        };
+      }
+
+      function getFilteredWorks() {
+        var filtered = allWorks.slice();
+        if (currentCategory !== 'all') {
+          filtered = filtered.filter(function(w) { return w.category === currentCategory; });
+        }
+        if (currentTag) {
+          filtered = filtered.filter(function(w) {
+            return w.tags && w.tags.some(function(t) { return t.indexOf(currentTag) !== -1; });
+          });
+        }
+        switch (currentSort) {
+          case 'popular':
+            filtered.sort(function(a, b) { return (b.favorites || 0) - (a.favorites || 0); });
+            break;
+          case 'views':
+            filtered.sort(function(a, b) { return (b.views || 0) - (a.views || 0); });
+            break;
+          case 'editor':
+            filtered.sort(function(a, b) { return (b.isPremium ? 1 : 0) - (a.isPremium ? 1 : 0) || (b.views || 0) - (a.views || 0); });
+            break;
+          default:
+            filtered.sort(function(a, b) { return new Date(b.createdAt || 0) - new Date(a.createdAt || 0); });
+            break;
+        }
+        return filtered;
+      }
+
+      function renderWorks() {
+        var filtered = getFilteredWorks();
+        var totalPages = Math.ceil(filtered.length / perPage);
+        if (currentPage > totalPages) currentPage = totalPages || 1;
+        var start = (currentPage - 1) * perPage;
+        var pageWorks = filtered.slice(start, start + perPage);
+
+        var grid = document.getElementById('worksGrid');
+        var html = '';
+        pageWorks.forEach(function(w) {
+          html += BC.renderWorkCard(mapWork(w));
+        });
+
+        if (html === '') {
+          html = BC.renderEmptyState('暂无符合条件的作品');
+        }
+
+        grid.innerHTML = html;
+
+        document.getElementById('resultCount').textContent = '共 ' + filtered.length + ' 件作品';
+
+        var pagContainer = document.getElementById('paginationContainer');
+        pagContainer.innerHTML = BC.renderPagination(currentPage, totalPages);
+
+        pagContainer.querySelectorAll('button[data-page]').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            var page = parseInt(this.getAttribute('data-page'));
+            if (page >= 1 && page <= totalPages) {
+              currentPage = page;
+              renderWorks();
+              window.scrollTo({ top: grid.offsetTop - 100, behavior: 'smooth' });
+            }
+          });
+        });
+
+        BI.initLikeButtons();
+        BI.initFavoriteButtons();
+        BI.initCartButtons();
+      }
+
+      function renderRanking() {
+        var sorted = allWorks.slice().sort(function(a, b) { return (b.views || 0) - (a.views || 0); });
+        var top10 = sorted.slice(0, 10);
+        var html = '';
+        top10.forEach(function(w, i) {
+          html += '<div class="bc-ranking-item" onclick="window.location.href=\'/discover/work-detail.html?id=' + w.id + '\'">';
+          html += '<span class="bc-ranking-rank">' + (i + 1) + '</span>';
+          html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: linear-gradient(135deg, #2a5c4a, #1a3a2a); width:40px; height:40px; border-radius:4px; object-fit:cover;" alt="' + esc(w.title) + '">';
+          html += '<div class="bc-ranking-item-info">';
+          html += '<div class="bc-ranking-item-title">' + esc(w.title) + '</div>';
+          html += '<div class="bc-ranking-item-meta">' + EYE_ICON_SVG + ' ' + formatNumber(w.views || 0) + '</div>';
+          html += '</div>';
+          html += '</div>';
+        });
+        document.getElementById('rankingList').innerHTML = html;
+      }
+
+      function renderCollections() {
+        var collections = [
+          { id: 'col-001', title: '湿地精灵', description: '探索全球湿地生态中的鸟类多样性，从白鹭到丹顶鹤', workCount: 8, tag: '湿地' },
+          { id: 'col-002', title: '猛禽之王', description: '金雕、白头海雕等顶级掠食者的震撼瞬间', workCount: 6, tag: '猛禽' },
+          { id: 'col-003', title: 'AI鸟类幻想', description: 'AI技术创造的超现实鸟类视觉艺术', workCount: 5, tag: 'AI创作' },
+          { id: 'col-004', title: '中国特有鸟类', description: '记录中国独有的珍稀鸟类物种', workCount: 7, tag: '中国特有' },
+          { id: 'col-005', title: '热带羽色', description: '热带地区色彩斑斓的鸟类视觉盛宴', workCount: 6, tag: '热带' },
+          { id: 'col-006', title: '冬日飞羽', description: '冬季候鸟迁徙与越冬的动人画面', workCount: 5, tag: '冬季' }
+        ];
+
+        var gradients = [
+          'linear-gradient(135deg, #1B4332, #40916C)',
+          'linear-gradient(135deg, #1B4F72, #2980B9)',
+          'linear-gradient(135deg, #B8860B, #DAA520)',
+          'linear-gradient(135deg, #006D77, #83C5BE)',
+          'linear-gradient(135deg, #D4A373, #FAEDCD)',
+          'linear-gradient(135deg, #457B9D, #A8DADC)'
+        ];
+
+        var html = '';
+        collections.forEach(function(col, i) {
+          html += '<a href="/discover/collection-detail.html?id=' + col.id + '" class="bc-collection-card">';
+          html += '<div class="bc-collection-card-img">';
+          html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: ' + gradients[i] + '; width:100%; height:100%; object-fit:cover;" alt="' + esc(col.title) + '">';
+          html += '<span class="bc-collection-card-count">' + col.workCount + ' 件作品</span>';
+          html += '</div>';
+          html += '<div class="bc-collection-card-body">';
+          html += '<h4>' + esc(col.title) + '</h4>';
+          html += '<p>' + esc(col.description) + '</p>';
+          html += '</div>';
+          html += '</a>';
+        });
+        document.getElementById('collectionsGrid').innerHTML = html;
+      }
+
+      document.getElementById('categoryTabs').addEventListener('click', function(e) {
+        var tab = e.target.closest('.bc-tab');
+        if (!tab) return;
+        this.querySelectorAll('.bc-tab').forEach(function(t) { t.classList.remove('active'); });
+        tab.classList.add('active');
+        currentCategory = tab.getAttribute('data-category');
+        currentPage = 1;
+        renderWorks();
+      });
+
+      document.getElementById('secondaryChips').addEventListener('click', function(e) {
+        var chip = e.target.closest('.bc-secondary-chip');
+        if (!chip) return;
+        var tag = chip.getAttribute('data-tag');
+        if (chip.classList.contains('active')) {
+          chip.classList.remove('active');
+          currentTag = null;
+        } else {
+          this.querySelectorAll('.bc-secondary-chip').forEach(function(c) { c.classList.remove('active'); });
+          chip.classList.add('active');
+          currentTag = tag;
+        }
+        currentPage = 1;
+        renderWorks();
+      });
+
+      document.getElementById('sortSelect').addEventListener('change', function() {
+        currentSort = this.value;
+        currentPage = 1;
+        renderWorks();
+      });
+
+      document.getElementById('viewToggle').addEventListener('click', function(e) {
+        var btn = e.target.closest('button');
+        if (!btn) return;
+        this.querySelectorAll('button').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        currentView = btn.getAttribute('data-view');
+        var grid = document.getElementById('worksGrid');
+        if (currentView === 'grid') {
+          grid.classList.add('grid-mode');
+        } else {
+          grid.classList.remove('grid-mode');
+        }
+      });
+
+      BI.initLikeButtons();
+      BI.initFavoriteButtons();
+      BI.initFollowButtons();
+      BI.initCartButtons();
+      BI.initNewsletterForm();
+      BI.initThemeToggle();
+      BI.initMobileMenu();
+      BI.initSearchBar();
+      BI.updateCartBadge();
+
+      renderWorks();
+      renderRanking();
+      renderCollections();
+    });
+  </script>
+</body>
+</html>

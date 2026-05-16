@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>作品详情 - BirdChain鸟链</title>
+  <meta name="description" content="查看鸟类影像版权作品详情，获取授权方案。">
+  <meta property="og:title" content="作品详情 - BirdChain鸟链">
+  <meta property="og:description" content="查看鸟类影像版权作品详情，获取授权方案。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .bc-work-hero-img {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      aspect-ratio: 16/10;
+      margin-bottom: 24px;
+      position: relative;
+    }
+    .bc-work-hero-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .bc-watermark-notice {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      background: rgba(7, 27, 45, 0.75);
+      color: #fff;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .bc-work-header h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .bc-work-header-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+    .bc-work-author-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .bc-work-author-row img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .bc-work-author-name {
+      font-weight: 600;
+      color: var(--text-strong);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .bc-work-stats-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin: 16px 0;
+      flex-wrap: wrap;
+    }
+    .bc-work-stat {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+    .bc-work-stat strong {
+      color: var(--text-strong);
+    }
+    .bc-work-actions-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .bc-work-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 20px;
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      font-weight: 500;
+      border: 1.5px solid var(--line-soft);
+      background: var(--bg-card);
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .bc-work-action-btn:hover {
+      border-color: var(--brand-accent);
+      color: var(--brand-accent);
+    }
+    .bc-work-action-btn.favorited {
+      background: var(--danger);
+      color: #fff;
+      border-color: var(--danger);
+    }
+    .bc-license-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: var(--brand-accent-soft);
+      color: var(--brand-accent-dark);
+    }
+    .bc-tags-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .bc-cert-status {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+    .bc-cert-status-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: rgba(47, 125, 81, 0.1);
+      color: var(--success);
+    }
+    .bc-license-calc {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 20px;
+    }
+    .bc-license-calc h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .bc-license-calc label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+    .bc-license-calc select {
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--line-soft);
+      background: var(--bg-card);
+      color: var(--text-main);
+      font-size: 0.9rem;
+      outline: none;
+      margin-bottom: 14px;
+      cursor: pointer;
+      transition: border-color var(--transition-fast);
+    }
+    .bc-license-calc select:focus {
+      border-color: var(--brand-accent);
+    }
+    .bc-license-calc .bc-calc-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      font-size: 0.84rem;
+    }
+    .bc-license-calc .bc-calc-option input {
+      accent-color: var(--brand-accent);
+    }
+    .bc-price-breakdown {
+      background: var(--bg-soft);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      margin: 16px 0;
+      font-size: 0.82rem;
+    }
+    .bc-price-breakdown-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+      color: var(--text-secondary);
+    }
+    .bc-price-breakdown-row.total {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid var(--line-soft);
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text-strong);
+    }
+    .bc-price-breakdown-row .coeff {
+      font-size: 0.75rem;
+      opacity: 0.7;
+    }
+    .bc-license-calc .btn {
+      width: 100%;
+      margin-top: 12px;
+      padding: 12px;
+      font-size: 0.95rem;
+      border-radius: var(--radius-md);
+    }
+    .bc-description-block {
+      font-size: 0.92rem;
+      line-height: 1.8;
+      color: var(--text-main);
+      margin-bottom: 20px;
+    }
+    .bc-similar-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 767px) {
+      .bc-work-header h1 { font-size: 1.25rem; }
+      .bc-work-hero-img { border-radius: var(--radius-md); }
+      .bc-similar-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+
+      <div class="bc-detail-layout">
+        <div class="bc-detail-main">
+          <div class="bc-work-hero-img" id="workHeroImg">
+            <div class="bc-watermark-notice">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              预览图，购买授权后获取无水印原图
+            </div>
+          </div>
+
+          <div id="workContent"></div>
+
+          <section class="section" id="similarSection">
+            <h2 class="section-title">推荐相似作品</h2>
+            <p class="section-subtitle">根据当前作品推荐的相关版权作品</p>
+            <div class="bc-similar-grid" id="similarGrid"></div>
+          </section>
+        </div>
+
+        <aside class="bc-detail-sidebar">
+          <div class="bc-license-calc" id="licenseCalc">
+            <h4>授权计算器</h4>
+            <label>授权用途</label>
+            <select id="usageSelect">
+              <option value="个人">个人 / 社交媒体</option>
+              <option value="自媒体">自媒体运营</option>
+              <option value="企业宣传">企业宣传</option>
+              <option value="广告营销">广告营销</option>
+              <option value="图书画册">图书画册 / 出版物</option>
+              <option value="文创商品">文创商品 / 产品包装</option>
+              <option value="AI二创">AI二次创作</option>
+              <option value="AI训练">AI模型训练</option>
+              <option value="独家">独家授权</option>
+            </select>
+
+            <label>授权区域</label>
+            <select id="regionSelect">
+              <option value="单地区">单地区</option>
+              <option value="全国">全国</option>
+              <option value="全球">全球</option>
+            </select>
+
+            <label>授权期限</label>
+            <select id="durationSelect">
+              <option value="单次">单次使用</option>
+              <option value="一年">一年</option>
+              <option value="三年">三年</option>
+              <option value="永久">永久</option>
+            </select>
+
+            <div class="bc-calc-option">
+              <input type="checkbox" id="allowAI">
+              <span>允许AI二创 (×5)</span>
+            </div>
+            <div class="bc-calc-option">
+              <input type="checkbox" id="allowMerch">
+              <span>允许商品化 (×3)</span>
+            </div>
+
+            <div class="bc-price-breakdown" id="priceBreakdown">
+              <div class="bc-price-breakdown-row"><span>基础价格</span><span id="bpBase">¥0.00</span></div>
+              <div class="bc-price-breakdown-row"><span>用途系数 <span class="coeff" id="coeffUsage">×1</span></span><span id="bpUsage">+¥0.00</span></div>
+              <div class="bc-price-breakdown-row"><span>期限系数 <span class="coeff" id="coeffDuration">×1</span></span><span id="bpDuration">+¥0.00</span></div>
+              <div class="bc-price-breakdown-row"><span>区域系数 <span class="coeff" id="coeffRegion">×1</span></span><span id="bpRegion">+¥0.00</span></div>
+              <div class="bc-price-breakdown-row" id="rowAI" style="display:none"><span>AI二创 <span class="coeff">×5</span></span><span id="bpAI">+¥0.00</span></div>
+              <div class="bc-price-breakdown-row" id="rowMerch" style="display:none"><span>商品化 <span class="coeff">×3</span></span><span id="bpMerch">+¥0.00</span></div>
+              <div class="bc-price-breakdown-row total"><span>总计</span><span id="bpTotal">¥0.00</span></div>
+            </div>
+
+            <button class="btn btn-primary" id="addToCartBtn">加入授权清单</button>
+          </div>
+        </aside>
+      </div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BD = window.BirdChainData;
+      var BI = window.BirdChainInteractions;
+      var BS = window.BirdChainStorage;
+      var BP = window.BirdChainPricing;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('market'));
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+
+      var params = new URLSearchParams(window.location.search);
+      var workId = params.get('id') || 'work-001';
+
+      var works = await BD.loadData('works');
+      var creators = await BD.loadData('creators');
+
+      var work = works.find(function(w) { return w.id === workId; });
+      if (!work) work = works[0];
+
+      var creator = creators.find(function(c) { return c.id === work.creatorId; }) || {};
+      var creatorMap = {};
+      creators.forEach(function(c) { creatorMap[c.id] = c; });
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '版权市场', href: '/market/index.html' },
+        { label: work.title }
+      ]);
+
+      document.title = work.title + ' - BirdChain鸟链';
+      var ogTitle = document.querySelector('meta[property="og:title"]');
+      if (ogTitle) ogTitle.setAttribute('content', work.title + ' - BirdChain鸟链');
+
+      document.getElementById('workHeroImg').innerHTML =
+        '<img src="' + TRANSPARENT_PIXEL + '" alt="' + esc(work.title) + '" style="' + bgGradient(work.dataImg) + ' width:100%; height:100%; object-fit:cover;">' +
+        document.getElementById('workHeroImg').innerHTML;
+
+      var contentHtml = '';
+      contentHtml += '<div class="bc-work-header">';
+      contentHtml += '<h1>' + esc(work.title) + '</h1>';
+      contentHtml += '<div class="bc-work-header-meta">';
+      contentHtml += '<div class="bc-work-author-row">';
+      contentHtml += '<img src="' + TRANSPARENT_PIXEL + '" alt="" style="' + bgGradient(creator.dataImg) + ' width:40px; height:40px; border-radius:50%; object-fit:cover;">';
+      contentHtml += '<div>';
+      contentHtml += '<div class="bc-work-author-name">' + esc(creator.name || '未知创作者');
+      if (creator.verified) contentHtml += VERIFIED_SVG;
+      contentHtml += '</div>';
+      contentHtml += '<div class="text-xs text-secondary">' + esc(creator.specialties ? creator.specialties.join(' / ') : '') + '</div>';
+      contentHtml += '</div>';
+      contentHtml += '</div>';
+      contentHtml += '<span>' + LOCATION_ICON_SVG + ' ' + esc(work.country || '') + '</span>';
+      contentHtml += '</div>';
+      contentHtml += '</div>';
+
+      contentHtml += '<div class="bc-tags-row">';
+      if (work.species) contentHtml += '<span class="tag tag-accent">' + esc(work.species) + '</span>';
+      if (work.habitat) contentHtml += '<span class="tag">' + esc(work.habitat) + '</span>';
+      if (work.tags) {
+        work.tags.forEach(function(t) { contentHtml += '<span class="tag">' + esc(t) + '</span>'; });
+      }
+      contentHtml += '</div>';
+
+      contentHtml += '<div class="bc-work-stats-row">';
+      contentHtml += '<div class="bc-work-stat">' + EYE_ICON_SVG + ' <strong>' + formatNumber(work.views || 0) + '</strong> 浏览</div>';
+      contentHtml += '<div class="bc-work-stat">' + HEART_ICON_SVG + ' <strong>' + formatNumber(work.likes || 0) + '</strong> 喜欢</div>';
+      contentHtml += '<div class="bc-work-stat">' + STAR_ICON_SVG + ' <strong>' + formatNumber(work.favorites || 0) + '</strong> 收藏</div>';
+      contentHtml += '</div>';
+
+      contentHtml += '<div class="bc-work-actions-row mt-2">';
+      contentHtml += '<button class="bc-work-action-btn" data-action="favorite" data-work-id="' + esc(work.id) + '">' + STAR_ICON_SVG + ' 收藏</button>';
+      contentHtml += '</div>';
+
+      contentHtml += '<span class="bc-license-badge">' + esc(work.licenseType || '标准授权') + '</span>';
+
+      contentHtml += '<div class="bc-cert-status mt-2">';
+      contentHtml += '<span class="bc-cert-status-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 已存证</span>';
+      contentHtml += '<span class="bc-cert-status-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 可验证</span>';
+      contentHtml += '<span class="bc-cert-status-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 证书编号: ' + esc(work.certificateId || '—') + '</span>';
+      contentHtml += '</div>';
+
+      if (work.description) {
+        contentHtml += '<div class="bc-description-block mt-2">' + esc(work.description) + '</div>';
+      }
+
+      document.getElementById('workContent').innerHTML = contentHtml;
+
+      function renderSimilar() {
+        var similar = works.filter(function(w) {
+          return w.id !== work.id && (w.species === work.species || w.licenseType === work.licenseType);
+        }).slice(0, 3);
+
+        var html = '';
+        similar.forEach(function(rw) {
+          var rCreator = creatorMap[rw.creatorId] || {};
+          var aspectMap = { '横图': '16/9', '竖图': '3/4', '方图': '1/1' };
+          html += BC.renderWorkCard({
+            id: rw.id, title: rw.title, image: rw.image, dataImg: rw.dataImg || null,
+            aspectRatio: aspectMap[rw.orientation] || '4/3',
+            author: rCreator.name || rw.creator || '未知创作者',
+            authorAvatar: rCreator.avatar || null, authorDataImg: rCreator.dataImg || null,
+            likes: rw.likes || 0, views: rw.views || 0, price: rw.basePrice || 0
+          });
+        });
+        if (html === '') html = BC.renderEmptyState('暂无相似作品');
+        document.getElementById('similarGrid').innerHTML = html;
+      }
+
+      function updatePrice() {
+        var usage = document.getElementById('usageSelect').value;
+        var region = document.getElementById('regionSelect').value;
+        var duration = document.getElementById('durationSelect').value;
+        var allowAI = document.getElementById('allowAI').checked;
+        var allowMerch = document.getElementById('allowMerch').checked;
+
+        var breakdown = BP.calculateLicenseBreakdown(work.basePrice, usage, duration, region, allowAI, allowMerch);
+
+        document.getElementById('bpBase').textContent = formatPrice(breakdown.basePrice);
+        document.getElementById('coeffUsage').textContent = '×' + breakdown.usageCoeff;
+        document.getElementById('bpUsage').textContent = breakdown.usageFee > 0 ? '+¥' + breakdown.usageFee.toFixed(2) : '¥0.00';
+        document.getElementById('coeffDuration').textContent = '×' + breakdown.durationCoeff;
+        document.getElementById('bpDuration').textContent = breakdown.durationFee > 0 ? '+¥' + breakdown.durationFee.toFixed(2) : '¥0.00';
+        document.getElementById('coeffRegion').textContent = '×' + breakdown.regionCoeff;
+        document.getElementById('bpRegion').textContent = breakdown.regionFee > 0 ? '+¥' + breakdown.regionFee.toFixed(2) : '¥0.00';
+
+        document.getElementById('rowAI').style.display = allowAI ? '' : 'none';
+        document.getElementById('bpAI').textContent = '+¥' + breakdown.aiFee.toFixed(2);
+        document.getElementById('rowMerch').style.display = allowMerch ? '' : 'none';
+        document.getElementById('bpMerch').textContent = '+¥' + breakdown.merchFee.toFixed(2);
+
+        document.getElementById('bpTotal').textContent = formatPrice(breakdown.total);
+      }
+
+      document.getElementById('usageSelect').addEventListener('change', updatePrice);
+      document.getElementById('regionSelect').addEventListener('change', updatePrice);
+      document.getElementById('durationSelect').addEventListener('change', updatePrice);
+      document.getElementById('allowAI').addEventListener('change', updatePrice);
+      document.getElementById('allowMerch').addEventListener('change', updatePrice);
+
+      updatePrice();
+
+      document.getElementById('addToCartBtn').addEventListener('click', function() {
+        var usage = document.getElementById('usageSelect').value;
+        var region = document.getElementById('regionSelect').value;
+        var duration = document.getElementById('durationSelect').value;
+        var allowAI = document.getElementById('allowAI').checked;
+        var allowMerch = document.getElementById('allowMerch').checked;
+
+        var total = BP.calculateLicensePrice(work.basePrice, usage, duration, region, allowAI, allowMerch);
+
+        var cart = BS.getItem(BS.KEYS.cartItems, []);
+        cart.push({
+          id: work.id,
+          name: work.title,
+          price: total,
+          basePrice: work.basePrice,
+          type: 'license',
+          image: work.image,
+          dataImg: work.dataImg || null,
+          quantity: 1,
+          licenseUsage: usage,
+          licenseRegion: region,
+          licenseDuration: duration,
+          licenseAllowAI: allowAI,
+          licenseAllowMerch: allowMerch,
+          certificateId: work.certificateId,
+          creatorId: work.creatorId
+        });
+        BS.setItem(BS.KEYS.cartItems, cart);
+        BI.updateCartBadge();
+        BI.showToast('已添加到授权清单: ' + work.title, 'success');
+      });
+
+      BI.initLikeButtons();
+      BI.initFavoriteButtons();
+      BI.initFollowButtons();
+      BI.initCartButtons();
+      BI.initNewsletterForm();
+      BI.initThemeToggle();
+      BI.initMobileMenu();
+      BI.initSearchBar();
+      BI.updateCartBadge();
+
+      renderSimilar();
+    });
+  </script>
+</body>
+</html>

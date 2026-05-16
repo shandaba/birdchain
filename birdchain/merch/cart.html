@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>购物车 - 创作周边 - BirdChain鸟链</title>
+  <meta name="description" content="查看和管理你的BirdChain创作周边购物车。">
+  <meta property="og:title" content="购物车 - BirdChain鸟链">
+  <meta property="og:description" content="管理你的购物车。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .cart-layout { display: grid; grid-template-columns: 1fr 380px; gap: 32px; }
+    .cart-items { }
+    .cart-item {
+      display: flex;
+      gap: 16px;
+      padding: 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      margin-bottom: 12px;
+      align-items: center;
+    }
+    .cart-item-img { width: 100px; height: 100px; border-radius: var(--radius-sm); overflow: hidden; flex-shrink: 0; }
+    .cart-item-img img { width: 100%; height: 100%; object-fit: cover; }
+    .cart-item-info { flex: 1; min-width: 0; }
+    .cart-item-info h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 4px; }
+    .cart-item-price { font-weight: 600; color: var(--brand-accent-dark); }
+    .cart-item-qty { display: flex; align-items: center; gap: 6px; margin-top: 8px; }
+    .cart-item-qty button {
+      width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--line-soft);
+      display: flex; align-items: center; justify-content: center; font-size: 0.9rem;
+      cursor: pointer; transition: all var(--transition-fast);
+    }
+    .cart-item-qty button:hover { border-color: var(--brand-accent); color: var(--brand-accent); }
+    .cart-item-qty span { min-width: 28px; text-align: center; font-weight: 600; }
+    .cart-item-subtotal { font-size: 1rem; font-weight: 700; color: var(--brand-accent-dark); text-align: right; min-width: 80px; }
+    .cart-item-remove { color: var(--text-secondary); cursor: pointer; padding: 4px; transition: color var(--transition-fast); font-size: 1.1rem; }
+    .cart-item-remove:hover { color: var(--danger); }
+    .cart-summary { background: var(--bg-card); border: 1px solid var(--line-soft); border-radius: var(--radius-lg); padding: 24px; position: sticky; top: calc(var(--header-height) + 20px); }
+    .cart-summary h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--line-soft); }
+    .cart-summary-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 0.88rem; }
+    .cart-summary-row.total { font-weight: 700; font-size: 1.1rem; padding-top: 14px; border-top: 1px solid var(--line-soft); margin-top: 8px; color: var(--brand-accent-dark); }
+    .cart-summary-shipping { color: var(--success); font-size: 0.82rem; }
+    .cart-summary-actions { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
+    .cart-summary-actions button { width: 100%; padding: 14px; border-radius: var(--radius-md); font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all var(--transition-fast); }
+    .btn-checkout { background: var(--brand-accent); color: #fff; border: none; }
+    .btn-checkout:hover { background: var(--brand-accent-dark); }
+    .btn-continue { background: transparent; color: var(--text-main); border: 1.5px solid var(--line-soft); }
+    .btn-continue:hover { border-color: var(--brand-accent); color: var(--brand-accent); }
+    .cart-empty { text-align: center; padding: 80px 20px; }
+    .cart-empty-icon { font-size: 3rem; margin-bottom: 16px; opacity: 0.3; }
+    @media (max-width:1024px) { .cart-layout { grid-template-columns: 1fr; } .cart-summary { position: static; } }
+    @media (max-width:767px) { .cart-item { flex-wrap: wrap; } .cart-item-img { width: 80px; height: 80px; } }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div class="bc-breadcrumb">
+        <a href="/">首页</a><span class="sep">/</span><a href="/merch/index.html">创作周边</a><span class="sep">/</span><span class="current">购物车</span>
+      </div>
+      <h1 class="section-title">购物车</h1>
+      <div id="cartContent"></div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var app = document.getElementById('app');
+      app.insertAdjacentHTML('afterbegin', BirdChainComponents.renderHeader('merch'));
+      app.insertAdjacentHTML('beforeend', BirdChainComponents.renderFooter());
+      BirdChainInteractions.initAll();
+
+      var BC = window.BirdChainStorage;
+      var container = document.getElementById('cartContent');
+      var FREE_SHIPPING_THRESHOLD = 299;
+
+      var gradients = ['#1B4332,#2D6A4F','#1B4F72,#2980B9','#B8860B,#DAA520','#006D77,#83C5BE','#2D6A4F,#40916C','#3A5A40,#588157','#BC6C25,#DDA15E','#1B4965,#5FA8D3','#386641,#A7C957','#2C3E50,#3498DB'];
+
+      function renderCart() {
+        var cart = BC.getItem(BC.KEYS.cartItems, []);
+        if (cart.length === 0) {
+          container.innerHTML =
+            '<div class="cart-empty">' +
+            '<div class="cart-empty-icon">🛒</div>' +
+            '<h4>购物车是空的</h4>' +
+            '<p style="color:var(--text-secondary);margin-top:8px;">去挑选一些心仪的鸟类周边吧</p>' +
+            '<a href="/merch/index.html" class="btn btn-accent mt-3">继续购物</a>' +
+            '</div>';
+          return;
+        }
+
+        var subtotal = cart.reduce(function(sum, item) { return sum + (item.price || 0) * (item.quantity || 1); }, 0);
+        var shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : 15;
+        var total = subtotal + shipping;
+
+        var itemsHtml = '';
+        cart.forEach(function(item, i) {
+          var grad = gradients[i % gradients.length];
+          var itemTotal = (item.price || 0) * (item.quantity || 1);
+          itemsHtml +=
+            '<div class="cart-item" data-cart-index="' + i + '">' +
+            '<div class="cart-item-img">' +
+            '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background:linear-gradient(135deg,' + grad + ');width:100%;height:100%;object-fit:cover;" alt="' + (item.name||'') + '" loading="lazy">' +
+            '</div>' +
+            '<div class="cart-item-info">' +
+            '<h4>' + (item.name||'') + '</h4>' +
+            '<div class="cart-item-price">' + (typeof formatPrice !== 'undefined' ? formatPrice(item.price) : '¥' + (item.price||0)) + '</div>' +
+            '<div class="cart-item-qty">' +
+            '<button data-action="cart-qty-minus" data-index="' + i + '">-</button>' +
+            '<span>' + (item.quantity||1) + '</span>' +
+            '<button data-action="cart-qty-plus" data-index="' + i + '">+</button>' +
+            '</div>' +
+            '</div>' +
+            '<div class="cart-item-subtotal">' + (typeof formatPrice !== 'undefined' ? formatPrice(itemTotal) : '¥' + itemTotal.toFixed(2)) + '</div>' +
+            '<button class="cart-item-remove" data-action="cart-remove" data-index="' + i + '" aria-label="删除">✕</button>' +
+            '</div>';
+        });
+
+        container.innerHTML =
+          '<div class="cart-layout">' +
+          '<div class="cart-items">' + itemsHtml + '</div>' +
+          '<div class="cart-summary">' +
+          '<h3>价格汇总</h3>' +
+          '<div class="cart-summary-row"><span>商品小计</span><span>' + (typeof formatPrice !== 'undefined' ? formatPrice(subtotal) : '¥' + subtotal.toFixed(2)) + '</span></div>' +
+          '<div class="cart-summary-row"><span>运费</span><span class="cart-summary-shipping">' + (shipping === 0 ? '免运费（满¥299）' : (typeof formatPrice !== 'undefined' ? formatPrice(shipping) : '¥' + shipping.toFixed(2))) + '</span></div>' +
+          '<div class="cart-summary-row total"><span>合计</span><span>' + (typeof formatPrice !== 'undefined' ? formatPrice(total) : '¥' + total.toFixed(2)) + '</span></div>' +
+          '<div class="cart-summary-actions">' +
+          '<button class="btn-checkout" data-action="go-checkout">去结算</button>' +
+          '<a href="/merch/index.html" class="btn btn-continue">继续购物</a>' +
+          '</div>' +
+          '</div>' +
+          '</div>';
+
+        bindCartEvents();
+      }
+
+      function bindCartEvents() {
+        container.addEventListener('click', function(e) {
+          var minusBtn = e.target.closest('[data-action="cart-qty-minus"]');
+          var plusBtn = e.target.closest('[data-action="cart-qty-plus"]');
+          var removeBtn = e.target.closest('[data-action="cart-remove"]');
+          var checkoutBtn = e.target.closest('[data-action="go-checkout"]');
+
+          if (minusBtn) {
+            var idx = parseInt(minusBtn.getAttribute('data-index'));
+            var cart = BC.getItem(BC.KEYS.cartItems, []);
+            if (cart[idx]) {
+              cart[idx].quantity = Math.max(1, (cart[idx].quantity || 1) - 1);
+              BC.setItem(BC.KEYS.cartItems, cart);
+              BirdChainInteractions.updateCartBadge();
+              renderCart();
+            }
+          }
+
+          if (plusBtn) {
+            var idx = parseInt(plusBtn.getAttribute('data-index'));
+            var cart = BC.getItem(BC.KEYS.cartItems, []);
+            if (cart[idx]) {
+              cart[idx].quantity = Math.min(99, (cart[idx].quantity || 1) + 1);
+              BC.setItem(BC.KEYS.cartItems, cart);
+              BirdChainInteractions.updateCartBadge();
+              renderCart();
+            }
+          }
+
+          if (removeBtn) {
+            var idx = parseInt(removeBtn.getAttribute('data-index'));
+            var cart = BC.getItem(BC.KEYS.cartItems, []);
+            var removedName = cart[idx] ? cart[idx].name : '';
+            cart.splice(idx, 1);
+            BC.setItem(BC.KEYS.cartItems, cart);
+            BirdChainInteractions.updateCartBadge();
+            BirdChainInteractions.showToast('已从购物车移除: ' + removedName, 'info');
+            renderCart();
+          }
+
+          if (checkoutBtn) {
+            window.location.href = '/merch/checkout.html';
+          }
+        });
+      }
+
+      renderCart();
+    });
+  </script>
+</body>
+</html>

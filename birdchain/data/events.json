@@ -1,0 +1,132 @@
+[
+  {
+    "id": "event-001",
+    "title": "2024鸟链年度野生鸟类摄影大赛",
+    "type": "摄影比赛",
+    "status": "进行中",
+    "cover": "/assets/images/events/photo-contest-2024.jpg",
+    "description": "鸟链平台年度最大规模的野生鸟类摄影大赛，面向全球摄影师征集优秀野生鸟类摄影作品。设置湿地鸟类、猛禽、林鸟、水鸟四个组别，总奖金池10万元。",
+    "startDate": "2024-06-01",
+    "endDate": "2024-09-30",
+    "prizes": [
+      {"name": "金奖", "reward": "奖金30000元 + 索尼A1相机一台"},
+      {"name": "银奖", "reward": "奖金15000元 + 佳能RF600mm镜头"},
+      {"name": "铜奖", "reward": "奖金5000元 + 鸟链平台年度VIP"},
+      {"name": "优秀奖", "reward": "奖金1000元 + 精美图鉴"}
+    ],
+    "rules": "1.作品必须为原创野生鸟类摄影，禁止诱拍和棚拍。2.每位参赛者最多提交5幅作品。3.后期处理限于基础调色和裁剪，禁止添加或移除画面元素。4.AI生成作品请参加AI创作比赛。",
+    "participants": 1560,
+    "organizer": "鸟链平台组委会"
+  },
+  {
+    "id": "event-002",
+    "title": "AI与自然——鸟类艺术创作大赛",
+    "type": "AI创作比赛",
+    "status": "即将开始",
+    "cover": "/assets/images/events/ai-art-contest.jpg",
+    "description": "探索AI技术在鸟类艺术创作中的无限可能。鼓励创作者使用AI工具创作富有想象力和艺术性的鸟类主题作品。",
+    "startDate": "2024-07-15",
+    "endDate": "2024-10-15",
+    "prizes": [
+      {"name": "最佳创意奖", "reward": "奖金20000元 + AI创作工具年度会员"},
+      {"name": "最佳视觉奖", "reward": "奖金10000元"},
+      {"name": "人气奖", "reward": "奖金5000元"}
+    ],
+    "rules": "1.作品必须使用AI工具辅助创作。2.需在作品说明中注明使用的AI工具和创作过程。3.作品需以鸟类为主题。4.鼓励将AI与传统艺术形式结合。",
+    "participants": 680,
+    "organizer": "鸟链平台 × AI艺术社区"
+  },
+  {
+    "id": "event-003",
+    "title": "鄱阳湖冬季观鸟节",
+    "type": "地方站活动",
+    "status": "即将开始",
+    "cover": "/assets/images/events/poyang-winter-festival.jpg",
+    "description": "一年一度的鄱阳湖冬季观鸟节，由鄱阳湖湿地站主办。活动包括专业观鸟导览、摄影讲座、候鸟环志体验和湿地保护志愿者行动。",
+    "startDate": "2024-12-01",
+    "endDate": "2024-12-15",
+    "prizes": [],
+    "rules": "1.参与者需提前报名，限额200人。2.遵守观鸟伦理准则，不干扰鸟类正常活动。3.建议自备望远镜和相机。",
+    "participants": 0,
+    "organizer": "鄱阳湖湿地站"
+  },
+  {
+    "id": "event-004",
+    "title": "扎龙丹顶鹤摄影创作营",
+    "type": "地方站活动",
+    "status": "已结束",
+    "cover": "/assets/images/events/zhalong-photo-camp.jpg",
+    "description": "在扎龙自然保护区举办的丹顶鹤主题摄影创作营，由资深摄影师王志远担任导师，为期五天的沉浸式拍摄体验。",
+    "startDate": "2024-02-10",
+    "endDate": "2024-02-15",
+    "prizes": [],
+    "rules": "1.限30人，需具备一定摄影基础。2.全程在保护区指定区域活动。3.作品将在平台专题展示。",
+    "participants": 30,
+    "organizer": "扎龙自然保护区站 × 王志远工作室"
+  },
+  {
+    "id": "event-005",
+    "title": "我的观鸟故事——线上征集活动",
+    "type": "线上征集",
+    "status": "进行中",
+    "cover": "/assets/images/events/birding-story-contest.jpg",
+    "description": "分享你与鸟类的故事，可以是第一次观鸟的感动、与某种鸟类的特殊邂逅、或者是参与鸟类保护的经历。文字、图片、视频形式不限。",
+    "startDate": "2024-05-01",
+    "endDate": "2024-08-31",
+    "prizes": [
+      {"name": "最佳故事奖", "reward": "鸟链周边大礼包 + 平台年度VIP"},
+      {"name": "人气故事奖", "reward": "精美鸟类图鉴一套"}
+    ],
+    "rules": "1.内容需为原创真实经历。2.文字不少于300字，图片不少于3张。3.不得包含诱拍、棚拍等内容。",
+    "participants": 890,
+    "organizer": "鸟链社区运营团队"
+  },
+  {
+    "id": "event-006",
+    "title": "秦岭朱鹮生态摄影研习营",
+    "type": "地方站活动",
+    "status": "即将开始",
+    "cover": "/assets/images/events/qinling-ibis-camp.jpg",
+    "description": "深入秦岭洋县朱鹮栖息地，由生态摄影师陈明辉带领学员学习珍稀鸟类摄影与生态保护知识。",
+    "startDate": "2024-08-05",
+    "endDate": "2024-08-10",
+    "prizes": [],
+    "rules": "1.限20人，摄影爱好者优先。2.需遵守朱鹮保护区管理规定。3.禁止使用无人机拍摄。",
+    "participants": 0,
+    "organizer": "秦岭生态站 × 陈明辉工作室"
+  },
+  {
+    "id": "event-007",
+    "title": "候鸟守护者——青少年自然笔记大赛",
+    "type": "线上征集",
+    "status": "已结束",
+    "cover": "/assets/images/events/youth-nature-journal.jpg",
+    "description": "面向全国青少年的自然笔记创作大赛，鼓励青少年用画笔和文字记录身边的鸟类，培养自然观察力和环保意识。",
+    "startDate": "2024-03-01",
+    "endDate": "2024-05-31",
+    "prizes": [
+      {"name": "一等奖", "reward": "专业观鸟望远镜 + 自然教育夏令营名额"},
+      {"name": "二等奖", "reward": "鸟类图鉴套装"},
+      {"name": "三等奖", "reward": "自然笔记工具套装"}
+    ],
+    "rules": "1.参赛者年龄8-18岁。2.自然笔记需包含观察日期、地点、天气和至少一种鸟类的记录。3.鼓励原创手绘。",
+    "participants": 2340,
+    "organizer": "鸟链平台 × 自然教育联盟"
+  },
+  {
+    "id": "event-008",
+    "title": "2024国际候鸟日——线上联动活动",
+    "type": "线上征集",
+    "status": "已结束",
+    "cover": "/assets/images/events/world-migratory-bird-day.jpg",
+    "description": "响应2024年国际候鸟日主题，邀请全球鸟友分享候鸟照片和观察记录，共同关注候鸟保护。",
+    "startDate": "2024-05-11",
+    "endDate": "2024-05-18",
+    "prizes": [
+      {"name": "最佳投稿", "reward": "国际候鸟日纪念勋章 + 平台VIP一个月"}
+    ],
+    "rules": "1.分享内容需与候鸟相关。2.标注拍摄地点和时间。3.使用#鸟链候鸟日#话题标签。",
+    "participants": 4560,
+    "organizer": "鸟链平台组委会"
+  }
+]

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>创建地方站 - BirdChain鸟链</title>
+  <meta name="description" content="在BirdChain创建你的全球地方站，成为鸟类观测网络的一员。">
+  <meta property="og:title" content="创建地方站 - BirdChain鸟链">
+  <meta property="og:description" content="在BirdChain创建你的全球地方站。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .bc-create-header {
+      text-align: center;
+      padding: 40px 0 20px;
+    }
+    .bc-create-header h1 {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+    .bc-create-header p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+    .bc-form-container {
+      max-width: 720px;
+      margin: 0 auto 60px;
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+    }
+    .bc-form-section {
+      margin-bottom: 28px;
+    }
+    .bc-form-section h3 {
+      font-size: 1.1rem;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .bc-form-group {
+      margin-bottom: 18px;
+    }
+    .bc-form-label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-strong);
+      margin-bottom: 6px;
+    }
+    .bc-form-label .required {
+      color: var(--danger);
+      margin-left: 2px;
+    }
+    .bc-form-input {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--line-soft);
+      background: var(--bg-main);
+      color: var(--text-main);
+      font-size: 0.9rem;
+      transition: border-color var(--transition-fast);
+      outline: none;
+    }
+    .bc-form-input:focus {
+      border-color: var(--brand-accent);
+    }
+    .bc-form-select {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--line-soft);
+      background: var(--bg-main);
+      color: var(--text-main);
+      font-size: 0.9rem;
+      cursor: pointer;
+      outline: none;
+      transition: border-color var(--transition-fast);
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236E6A63' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 40px;
+    }
+    .bc-form-select:focus {
+      border-color: var(--brand-accent);
+    }
+    .bc-form-textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--line-soft);
+      background: var(--bg-main);
+      color: var(--text-main);
+      font-size: 0.9rem;
+      resize: vertical;
+      min-height: 120px;
+      outline: none;
+      transition: border-color var(--transition-fast);
+    }
+    .bc-form-textarea:focus {
+      border-color: var(--brand-accent);
+    }
+    .bc-form-hint {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+    .bc-form-error {
+      font-size: 0.78rem;
+      color: var(--danger);
+      margin-top: 4px;
+      display: none;
+    }
+    .bc-form-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    .bc-form-submit {
+      text-align: center;
+      padding-top: 8px;
+    }
+    .bc-form-submit .btn {
+      min-width: 200px;
+      padding: 12px 40px;
+      font-size: 1rem;
+    }
+    @media (max-width: 767px) {
+      .bc-form-container { padding: 20px; }
+      .bc-form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbTarget"></div>
+      <div class="bc-create-header">
+        <h1>创建地方站</h1>
+        <p>加入BirdChain全球鸟类观测网络，创建属于你的地方站</p>
+      </div>
+      <div class="bc-form-container">
+        <form id="createStationForm" data-action="create-station">
+          <div class="bc-form-section">
+            <h3>📌 地方站基本信息</h3>
+            <div class="bc-form-group">
+              <label class="bc-form-label">地方站名称 <span class="required">*</span></label>
+              <input type="text" class="bc-form-input" name="stationName" placeholder="请输入地方站名称" required>
+              <span class="bc-form-error" data-error="stationName">请输入地方站名称</span>
+            </div>
+            <div class="bc-form-row">
+              <div class="bc-form-group">
+                <label class="bc-form-label">所在地区 <span class="required">*</span></label>
+                <select class="bc-form-select" name="region" required>
+                  <option value="">请选择地区</option>
+                  <option value="东亚">东亚</option>
+                  <option value="东南亚">东南亚</option>
+                  <option value="南亚">南亚</option>
+                  <option value="欧洲">欧洲</option>
+                  <option value="非洲">非洲</option>
+                  <option value="北美洲">北美洲</option>
+                  <option value="南美洲">南美洲</option>
+                  <option value="大洋洲">大洋洲</option>
+                </select>
+                <span class="bc-form-error" data-error="region">请选择所在地区</span>
+              </div>
+              <div class="bc-form-group">
+                <label class="bc-form-label">生态类型 <span class="required">*</span></label>
+                <select class="bc-form-select" name="ecoType" required>
+                  <option value="">请选择生态类型</option>
+                  <option value="湿地">湿地</option>
+                  <option value="雨林">雨林</option>
+                  <option value="海岸">海岸</option>
+                  <option value="高原">高原</option>
+                  <option value="城市">城市</option>
+                  <option value="草原">草原</option>
+                  <option value="迁徙走廊">迁徙走廊</option>
+                </select>
+                <span class="bc-form-error" data-error="ecoType">请选择生态类型</span>
+              </div>
+            </div>
+            <div class="bc-form-row">
+              <div class="bc-form-group">
+                <label class="bc-form-label">国家/地区 <span class="required">*</span></label>
+                <input type="text" class="bc-form-input" name="country" placeholder="例如：中国" required>
+                <span class="bc-form-error" data-error="country">请输入国家/地区</span>
+              </div>
+              <div class="bc-form-group">
+                <label class="bc-form-label">具体位置 <span class="required">*</span></label>
+                <input type="text" class="bc-form-input" name="location" placeholder="例如：江西省九江市鄱阳湖" required>
+                <span class="bc-form-error" data-error="location">请输入具体位置</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="bc-form-section">
+            <h3>👤 站长申请信息</h3>
+            <div class="bc-form-row">
+              <div class="bc-form-group">
+                <label class="bc-form-label">姓名 <span class="required">*</span></label>
+                <input type="text" class="bc-form-input" name="applicantName" placeholder="请输入你的姓名" required>
+                <span class="bc-form-error" data-error="applicantName">请输入姓名</span>
+              </div>
+              <div class="bc-form-group">
+                <label class="bc-form-label">邮箱 <span class="required">*</span></label>
+                <input type="email" class="bc-form-input" name="email" placeholder="请输入联系邮箱" required>
+                <span class="bc-form-error" data-error="email">请输入有效的邮箱地址</span>
+              </div>
+            </div>
+            <div class="bc-form-group">
+              <label class="bc-form-label">联系电话</label>
+              <input type="tel" class="bc-form-input" name="phone" placeholder="请输入联系电话（选填）">
+            </div>
+            <div class="bc-form-group">
+              <label class="bc-form-label">个人简介 <span class="required">*</span></label>
+              <textarea class="bc-form-textarea" name="bio" placeholder="请介绍你的鸟类观测经验、相关专业背景或对当地鸟类的了解（200字以内）" required></textarea>
+              <span class="bc-form-error" data-error="bio">请输入个人简介</span>
+            </div>
+          </div>
+
+          <div class="bc-form-section">
+            <h3>📋 资源说明</h3>
+            <div class="bc-form-group">
+              <label class="bc-form-label">当地鸟类资源及观测条件说明 <span class="required">*</span></label>
+              <textarea class="bc-form-textarea" name="resourceDesc" placeholder="请描述当地的鸟类资源情况、主要观测点位置、最佳观测季节、交通住宿条件等（500字以内）" required style="min-height:160px;"></textarea>
+              <span class="bc-form-error" data-error="resourceDesc">请输入资源说明</span>
+              <span class="bc-form-hint">详细的资源说明有助于我们更快审核你的申请</span>
+            </div>
+          </div>
+
+          <div class="bc-form-submit">
+            <button type="submit" class="btn btn-accent btn-lg">提交申请</button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      BirdChainComponents.renderHeader('stations');
+      BirdChainComponents.renderFooter();
+      document.getElementById('breadcrumbTarget').innerHTML = BirdChainComponents.renderBreadcrumb([
+        { label: '全球地方站', href: 'index.html' }, { label: '创建地方站' }
+      ]);
+      BirdChainInteractions.initAll();
+
+      document.getElementById('createStationForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        var form = e.target;
+        var valid = true;
+
+        var requiredFields = ['stationName', 'region', 'ecoType', 'country', 'location', 'applicantName', 'email', 'bio', 'resourceDesc'];
+        requiredFields.forEach(function(field) {
+          var input = form.querySelector('[name="' + field + '"]');
+          var error = form.querySelector('[data-error="' + field + '"]');
+          if (!input || !input.value.trim()) {
+            valid = false;
+            if (error) error.style.display = 'block';
+          } else {
+            if (error) error.style.display = 'none';
+          }
+        });
+
+        var emailInput = form.querySelector('[name="email"]');
+        var emailError = form.querySelector('[data-error="email"]');
+        if (emailInput && emailInput.value.trim()) {
+          if (emailInput.value.indexOf('@') === -1 || emailInput.value.indexOf('.') === -1) {
+            valid = false;
+            if (emailError) { emailError.textContent = '请输入有效的邮箱地址'; emailError.style.display = 'block'; }
+          }
+        }
+
+        if (!valid) {
+          BirdChainInteractions.showToast('请完善必填信息', 'warning');
+          return;
+        }
+
+        var application = {
+          id: 'sta_app_' + Date.now(),
+          stationName: form.querySelector('[name="stationName"]').value.trim(),
+          region: form.querySelector('[name="region"]').value,
+          ecoType: form.querySelector('[name="ecoType"]').value,
+          country: form.querySelector('[name="country"]').value.trim(),
+          location: form.querySelector('[name="location"]').value.trim(),
+          applicantName: form.querySelector('[name="applicantName"]').value.trim(),
+          email: form.querySelector('[name="email"]').value.trim(),
+          phone: form.querySelector('[name="phone"]').value.trim(),
+          bio: form.querySelector('[name="bio"]').value.trim(),
+          resourceDesc: form.querySelector('[name="resourceDesc"]').value.trim(),
+          status: 'pending',
+          submittedAt: new Date().toISOString()
+        };
+
+        var applications = BC.getItem('stationApplications', []);
+        applications.push(application);
+        BC.setItem('stationApplications', applications);
+
+        BirdChainInteractions.showToast('申请已提交，我们将尽快审核', 'success');
+
+        setTimeout(function() {
+          window.location.href = 'index.html';
+        }, 1500);
+      });
+    });
+  </script>
+</body>
+</html>

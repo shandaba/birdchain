@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>写文章 - BirdChain鸟链</title>
+  <meta name="description" content="在BirdChain平台发布您的鸟类观察、研究或摄影故事文章。">
+  <meta property="og:title" content="写文章 - BirdChain鸟链">
+  <meta property="og:description" content="在BirdChain平台发布您的鸟类观察、研究或摄影故事文章。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .bc-write-header {
+      text-align: center;
+      padding: 32px 0 24px;
+    }
+    .bc-write-header h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .bc-write-header p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+    .bc-write-form {
+      max-width: 780px;
+      margin: 0 auto 60px;
+    }
+    .bc-write-form .form-group {
+      margin-bottom: 22px;
+    }
+    .bc-write-form .form-group label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-strong);
+    }
+    .bc-write-form .form-group label .required {
+      color: var(--danger);
+      margin-left: 2px;
+    }
+    .bc-write-form .form-group input[type="text"],
+    .bc-write-form .form-group textarea,
+    .bc-write-form .form-group select {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--line-soft);
+      background: var(--bg-card);
+      color: var(--text-main);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color var(--transition-fast);
+    }
+    .bc-write-form .form-group input[type="text"]:focus,
+    .bc-write-form .form-group textarea:focus,
+    .bc-write-form .form-group select:focus {
+      border-color: var(--brand-accent);
+    }
+    .bc-write-form .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    .bc-write-form .form-group textarea.large {
+      min-height: 200px;
+    }
+    .bc-cover-picker {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+    }
+    .bc-cover-option {
+      aspect-ratio: 16/9;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: all var(--transition-fast);
+      position: relative;
+      overflow: hidden;
+    }
+    .bc-cover-option:hover {
+      transform: scale(1.04);
+    }
+    .bc-cover-option.selected {
+      border-color: var(--brand-accent);
+    }
+    .bc-cover-option.selected::after {
+      content: '✓';
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    }
+    .bc-works-multi-select {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      max-height: 280px;
+      overflow-y: auto;
+      padding: 4px;
+    }
+    .bc-work-select-item {
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all var(--transition-fast);
+      position: relative;
+      background: var(--bg-card);
+    }
+    .bc-work-select-item:hover {
+      transform: scale(1.03);
+    }
+    .bc-work-select-item.selected {
+      border-color: var(--brand-accent);
+    }
+    .bc-work-select-item.selected::after {
+      content: '✓';
+      position: absolute;
+      top: 4px;
+      right: 6px;
+      width: 20px;
+      height: 20px;
+      background: var(--brand-accent);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+    }
+    .bc-work-select-item img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+    }
+    .bc-work-select-item .label {
+      padding: 4px 8px;
+      font-size: 0.7rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--text-secondary);
+    }
+    .bc-write-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      padding-top: 16px;
+      border-top: 1px solid var(--line-soft);
+    }
+    .bc-write-actions .btn-draft {
+      padding: 12px 28px;
+      border-radius: 28px;
+      border: 1px solid var(--line-soft);
+      background: var(--bg-soft);
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all var(--transition-fast);
+    }
+    .bc-write-actions .btn-draft:hover {
+      background: var(--bg-main);
+      border-color: var(--neutral-soft);
+    }
+    .bc-write-actions .btn-publish {
+      padding: 12px 36px;
+      border-radius: 28px;
+      background: var(--brand-accent);
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: background var(--transition-fast);
+    }
+    .bc-write-actions .btn-publish:hover {
+      background: var(--brand-accent-dark);
+    }
+    @media (max-width: 768px) {
+      .bc-cover-picker { grid-template-columns: repeat(3, 1fr); }
+      .bc-works-multi-select { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .bc-cover-picker { grid-template-columns: repeat(2, 1fr); }
+      .bc-works-multi-select { grid-template-columns: repeat(2, 1fr); }
+      .bc-write-actions { flex-direction: column; }
+      .bc-write-actions button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+
+      <div class="bc-write-header">
+        <h1>写文章</h1>
+        <p>分享你的鸟类观察、研究成果或摄影故事</p>
+      </div>
+
+      <form class="bc-write-form" id="writeArticleForm">
+        <div class="form-group">
+          <label for="articleTitle">标题 <span class="required">*</span></label>
+          <input type="text" id="articleTitle" required placeholder="给你的文章起一个吸引人的标题...">
+        </div>
+
+        <div class="form-group">
+          <label for="articleSummary">摘要 <span class="required">*</span></label>
+          <textarea id="articleSummary" rows="3" required placeholder="简要概述文章内容，将显示在文章卡片和搜索结果中..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>封面选择</label>
+          <div class="bc-cover-picker" id="coverPicker"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="articleCategory">分类 <span class="required">*</span></label>
+          <select id="articleCategory" required>
+            <option value="">请选择分类</option>
+            <option value="迁徙研究">迁徙研究</option>
+            <option value="物种深度">物种深度</option>
+            <option value="栖息地保护">栖息地保护</option>
+            <option value="行为观察">行为观察</option>
+            <option value="摄影故事">摄影故事</option>
+            <option value="保育前沿">保育前沿</option>
+            <option value="专家专栏">专家专栏</option>
+            <option value="学校产学研">学校产学研</option>
+            <option value="地方文旅观察">地方文旅观察</option>
+            <option value="儿童自然教育">儿童自然教育</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="articleContent">正文 <span class="required">*</span></label>
+          <textarea id="articleContent" class="large" required placeholder="在这里撰写你的文章正文..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>引用作品选择（可选）</label>
+          <div class="bc-works-multi-select" id="worksMultiSelect"></div>
+        </div>
+
+        <div class="bc-write-actions">
+          <button type="button" class="btn-draft" id="saveDraftBtn">保存草稿</button>
+          <button type="submit" class="btn-publish">发布文章</button>
+        </div>
+      </form>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var BC = window.BirdChainComponents;
+      var BD = window.BirdChainData;
+      var BI = window.BirdChainInteractions;
+      var BS = window.BirdChainStorage;
+
+      var app = document.getElementById('app');
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('topics'));
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+      BI.initAll();
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '专题/深度分析', href: '/topics/' },
+        { label: '写文章' }
+      ]);
+
+      var works = await BD.loadData('works');
+      var selectedCoverIdx = 0;
+      var selectedWorks = [];
+
+      var COVER_GRADIENTS = [
+        'linear-gradient(135deg, #1B4332, #2D6A4F)',
+        'linear-gradient(135deg, #1B4F72, #2980B9)',
+        'linear-gradient(135deg, #B8860B, #DAA520)',
+        'linear-gradient(135deg, #6B4226, #8B6914)',
+        'linear-gradient(135deg, #006D77, #83C5BE)',
+        'linear-gradient(135deg, #457B9D, #A8DADC)',
+        'linear-gradient(135deg, #2D6A4F, #40916C)',
+        'linear-gradient(135deg, #023E8A, #0077B6)',
+        'linear-gradient(135deg, #606C38, #283618)',
+        'linear-gradient(135deg, #52796F, #84A98C)',
+        'linear-gradient(135deg, #3A5A40, #588157)',
+        'linear-gradient(135deg, #BC6C25, #DDA15E)'
+      ];
+
+      function renderCoverPicker() {
+        var html = '';
+        COVER_GRADIENTS.forEach(function(gradient, i) {
+          var cls = 'bc-cover-option' + (i === selectedCoverIdx ? ' selected' : '');
+          html += '<div class="' + cls + '" data-cover-idx="' + i + '" style="background: ' + gradient + ';"></div>';
+        });
+        document.getElementById('coverPicker').innerHTML = html;
+
+        document.getElementById('coverPicker').addEventListener('click', function(e) {
+          var opt = e.target.closest('[data-cover-idx]');
+          if (!opt) return;
+          selectedCoverIdx = parseInt(opt.getAttribute('data-cover-idx'));
+          renderCoverPicker();
+        });
+      }
+
+      function renderWorksMultiSelect() {
+        var html = '';
+        works.forEach(function(w) {
+          var isSelected = selectedWorks.indexOf(w.id) !== -1;
+          var cls = 'bc-work-select-item' + (isSelected ? ' selected' : '');
+          html += '<div class="' + cls + '" data-work-id="' + w.id + '">';
+          html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: linear-gradient(135deg, #BC6C25, #DDA15E);" alt="' + esc(w.title) + '">';
+          html += '<div class="label">' + esc(w.title.substring(0, 12)) + '</div>';
+          html += '</div>';
+        });
+        document.getElementById('worksMultiSelect').innerHTML = html;
+
+        document.getElementById('worksMultiSelect').addEventListener('click', function(e) {
+          var item = e.target.closest('[data-work-id]');
+          if (!item) return;
+          var wid = item.getAttribute('data-work-id');
+          var idx = selectedWorks.indexOf(wid);
+          if (idx !== -1) {
+            selectedWorks.splice(idx, 1);
+          } else {
+            selectedWorks.push(wid);
+          }
+          renderWorksMultiSelect();
+        });
+      }
+
+      function validateForm() {
+        var title = document.getElementById('articleTitle').value.trim();
+        var summary = document.getElementById('articleSummary').value.trim();
+        var category = document.getElementById('articleCategory').value;
+        var content = document.getElementById('articleContent').value.trim();
+
+        if (!title) { BI.showToast('请输入文章标题', 'warning'); return false; }
+        if (!summary) { BI.showToast('请输入文章摘要', 'warning'); return false; }
+        if (!category) { BI.showToast('请选择文章分类', 'warning'); return false; }
+        if (!content) { BI.showToast('请输入文章正文', 'warning'); return false; }
+        if (content.length < 50) { BI.showToast('文章正文至少需要50个字符', 'warning'); return false; }
+        return true;
+      }
+
+      function buildArticleData(status) {
+        return {
+          id: 'user-article-' + Date.now(),
+          topicId: null,
+          title: document.getElementById('articleTitle').value.trim(),
+          authorId: 'current-user',
+          authorName: '当前用户',
+          authorRole: '会员作者',
+          cover: COVER_GRADIENTS[selectedCoverIdx],
+          summary: document.getElementById('articleSummary').value.trim(),
+          content: document.getElementById('articleContent').value.trim(),
+          category: document.getElementById('articleCategory').value,
+          tags: [],
+          views: 0,
+          likes: 0,
+          publishDate: new Date().toISOString().split('T')[0],
+          relatedWorks: selectedWorks.slice(),
+          relatedSpecies: [],
+          status: status,
+          createdAt: Date.now()
+        };
+      }
+
+      document.getElementById('writeArticleForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (!validateForm()) return;
+
+        var article = buildArticleData('published');
+        var published = BS.getItem(BS.KEYS.publishedArticles, []);
+        published.push(article);
+        BS.setItem(BS.KEYS.publishedArticles, published);
+
+        BI.showToast('文章发布成功！', 'success');
+
+        setTimeout(function() {
+          window.location.href = '/topics/';
+        }, 1500);
+      });
+
+      document.getElementById('saveDraftBtn').addEventListener('click', function() {
+        var title = document.getElementById('articleTitle').value.trim();
+        if (!title) { BI.showToast('请至少输入文章标题后再保存草稿', 'warning'); return; }
+
+        var article = buildArticleData('draft');
+        var drafts = BS.getItem(BS.KEYS.draftArticles, []);
+        drafts.push(article);
+        BS.setItem(BS.KEYS.draftArticles, drafts);
+
+        BI.showToast('草稿已保存！', 'success');
+      });
+
+      renderCoverPicker();
+      renderWorksMultiSelect();
+    });
+  </script>
+</body>
+</html>

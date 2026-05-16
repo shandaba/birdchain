@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>课程详情 - BirdChain鸟链</title>
+  <meta name="description" content="查看自然教育课程详情，包括课程介绍、材料包和关联鸟种。">
+  <meta property="og:title" content="课程详情 - BirdChain鸟链">
+  <meta property="og:description" content="查看自然教育课程详情，包括课程介绍、材料包和关联鸟种。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .course-cover {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      aspect-ratio: 16/9;
+      margin: 20px 0 24px;
+    }
+    .course-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .course-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .course-header h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+    .course-meta {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+    .course-section {
+      margin-bottom: 32px;
+    }
+    .course-section h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .course-section p {
+      font-size: 0.92rem;
+      color: var(--text-main);
+      line-height: 1.8;
+    }
+    .material-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .material-item {
+      background: var(--bg-soft);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      border: 1px solid var(--line-soft);
+      font-size: 0.88rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .material-item::before {
+      content: '\2713';
+      color: var(--brand-accent);
+      font-weight: 700;
+    }
+    .species-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .instructor-card {
+      display: flex;
+      gap: 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      align-items: center;
+    }
+    .instructor-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .instructor-avatar img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .instructor-info h5 {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    .instructor-info p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+    @media (max-width: 767px) {
+      .course-header h1 { font-size: 1.25rem; }
+      .material-list { grid-template-columns: 1fr; }
+      .species-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+      <div id="courseContent"></div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BD = window.BirdChainData;
+      var BI = window.BirdChainInteractions;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('education'));
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+
+      var params = new URLSearchParams(window.location.search);
+      var courseId = params.get('id');
+
+      var courses = await BD.loadData('courses');
+      var course = courses.find(function(c) { return c.id === courseId; });
+
+      if (!course) {
+        document.getElementById('courseContent').innerHTML = '<div class="bc-empty"><h4>课程不存在</h4><p>请检查课程ID是否正确</p><a href="/education/index.html" class="btn btn-primary mt-3">返回课程列表</a></div>';
+        return;
+      }
+
+      document.title = course.title + ' - BirdChain鸟链';
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '自然教育', href: '/education/index.html' },
+        { label: course.title }
+      ]);
+
+      var html = '';
+
+      html += '<div class="course-cover">';
+      html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"';
+      html += ' style="background: linear-gradient(135deg, #1B4332, #2D6A4F, #40916C); width:100%; height:100%; object-fit:cover;" alt="' + course.title + '">';
+      html += '</div>';
+
+      html += '<div class="course-header">';
+      html += '<div>';
+      html += '<h1>' + course.title + '</h1>';
+      html += '<div class="course-meta">';
+      html += '<span class="tag tag-accent">' + course.ageRange + '</span>';
+      html += '<span class="tag">' + course.type + '</span>';
+      html += '<span class="tag">' + course.duration + '</span>';
+      html += '<span class="tag">' + course.lessons + '课时</span>';
+      html += '</div>';
+      html += '<div style="margin-top:8px;font-size:1.2rem;font-weight:700;color:var(--brand-accent-dark);">' + formatPrice(course.price) + '</div>';
+      html += '</div>';
+      html += '<div>';
+      if (course.type === '有声读物') {
+        html += '<a href="/education/kids-audio.html" class="btn btn-accent">开始收听</a>';
+      } else {
+        html += '<button class="btn btn-accent" data-action="enroll-course" data-course-id="' + course.id + '" data-course-name="' + course.title + '">购买/申请</button>';
+      }
+      html += '</div>';
+      html += '</div>';
+
+      html += '<div class="course-section">';
+      html += '<h3>课程介绍</h3>';
+      html += '<p>' + course.description + '</p>';
+      html += '</div>';
+
+      if (course.materials && course.materials.length > 0) {
+        html += '<div class="course-section">';
+        html += '<h3>材料包</h3>';
+        html += '<div class="material-list">';
+        course.materials.forEach(function(m) {
+          html += '<div class="material-item">' + m + '</div>';
+        });
+        html += '</div>';
+        html += '</div>';
+      }
+
+      if (course.relatedSpecies && course.relatedSpecies.length > 0) {
+        html += '<div class="course-section">';
+        html += '<h3>关联鸟种</h3>';
+        html += '<div class="species-grid">';
+        var speciesGradients = [
+          'linear-gradient(135deg, #1B4332, #2D6A4F)',
+          'linear-gradient(135deg, #1B4F72, #2980B9)',
+          'linear-gradient(135deg, #B8860B, #DAA520)',
+          'linear-gradient(135deg, #006D77, #83C5BE)'
+        ];
+        course.relatedSpecies.forEach(function(s, i) {
+          html += '<div class="bc-species-card">';
+          html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"';
+          html += ' style="background: ' + speciesGradients[i % speciesGradients.length] + '; width:100%; aspect-ratio:4/3; object-fit:cover;" alt="' + s + '">';
+          html += '<div class="bc-species-card-body">';
+          html += '<h5>' + s + '</h5>';
+          html += '</div>';
+          html += '</div>';
+        });
+        html += '</div>';
+        html += '</div>';
+      }
+
+      if (course.instructor) {
+        html += '<div class="course-section">';
+        html += '<h3>导师介绍</h3>';
+        html += '<div class="instructor-card">';
+        html += '<div class="instructor-avatar">';
+        html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: linear-gradient(135deg, #1B4F72, #2980B9); width:100%; height:100%; border-radius:50%; object-fit:cover;" alt="' + course.instructor + '">';
+        html += '</div>';
+        html += '<div class="instructor-info">';
+        html += '<h5>' + course.instructor + '</h5>';
+        html += '<p>经验丰富的自然教育导师，致力于鸟类科普与生态保护教育。</p>';
+        html += '</div>';
+        html += '</div>';
+        html += '</div>';
+      }
+
+      document.getElementById('courseContent').innerHTML = html;
+
+      document.addEventListener('click', function(e) {
+        var btn = e.target.closest('[data-action="enroll-course"]');
+        if (!btn) return;
+        var courseId = btn.getAttribute('data-course-id');
+        var courseName = btn.getAttribute('data-course-name');
+        BI.showToast('已申请课程：' + courseName + '，我们将在24小时内联系您', 'success');
+      });
+
+      BI.initAll();
+    });
+  </script>
+</body>
+</html>

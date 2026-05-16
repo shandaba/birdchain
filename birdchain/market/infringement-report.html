@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>侵权投诉 - BirdChain鸟链</title>
+  <meta name="description" content="BirdChain版权侵权投诉，保护创作者合法权益，快速处理侵权举报。">
+  <meta property="og:title" content="侵权投诉 - BirdChain鸟链">
+  <meta property="og:description" content="保护创作者合法权益，快速处理侵权举报。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .bc-report-hero {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      height: 180px;
+      margin: 20px 0 32px;
+    }
+    .bc-report-hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .bc-report-hero-content {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(7, 27, 45, 0.85), rgba(7, 27, 45, 0.15));
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 28px;
+      color: #fff;
+    }
+    .bc-report-hero-content h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .bc-report-hero-content p {
+      font-size: 0.9rem;
+      opacity: 0.85;
+    }
+    .bc-report-form {
+      max-width: 720px;
+      margin: 0 auto 60px;
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 32px;
+    }
+    .bc-report-form h4 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .bc-form-group {
+      margin-bottom: 20px;
+    }
+    .bc-form-group label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text-strong);
+      margin-bottom: 6px;
+    }
+    .bc-form-group label .required {
+      color: var(--danger);
+      margin-left: 2px;
+    }
+    .bc-form-group input,
+    .bc-form-group textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--line-soft);
+      background: var(--bg-card);
+      color: var(--text-main);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color var(--transition-fast);
+    }
+    .bc-form-group input:focus,
+    .bc-form-group textarea:focus {
+      border-color: var(--brand-accent);
+    }
+    .bc-form-group textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    .bc-form-group .form-hint {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+    .bc-form-group input.error,
+    .bc-form-group textarea.error {
+      border-color: var(--danger);
+    }
+    .bc-form-error {
+      font-size: 0.75rem;
+      color: var(--danger);
+      margin-top: 4px;
+      display: none;
+    }
+    .bc-form-group input.error + .bc-form-error,
+    .bc-form-group textarea.error + .bc-form-error {
+      display: block;
+    }
+    .bc-upload-zone {
+      border: 2px dashed var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 32px;
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .bc-upload-zone:hover {
+      border-color: var(--brand-accent);
+      background: var(--bg-soft);
+    }
+    .bc-upload-zone svg {
+      margin-bottom: 10px;
+      color: var(--text-secondary);
+    }
+    .bc-upload-zone p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    .bc-upload-zone .bc-upload-note {
+      font-size: 0.75rem;
+      opacity: 0.7;
+      margin-top: 4px;
+    }
+    .bc-upload-files {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    .bc-upload-file-tag {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 16px;
+      font-size: 0.78rem;
+      background: var(--bg-soft);
+      color: var(--text-main);
+    }
+    .bc-upload-file-tag button {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--danger);
+      color: #fff;
+      font-size: 0.65rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .bc-report-submit {
+      width: 100%;
+      padding: 14px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: var(--radius-md);
+      background: var(--brand-primary);
+      color: #fff;
+      margin-top: 8px;
+      cursor: pointer;
+      transition: background var(--transition-fast);
+    }
+    .bc-report-submit:hover {
+      background: var(--brand-primary-dark);
+    }
+    .bc-report-submit:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    @media (max-width: 767px) {
+      .bc-report-hero { height: 130px; border-radius: var(--radius-md); }
+      .bc-report-hero-content { padding: 16px; }
+      .bc-report-hero-content h1 { font-size: 1.25rem; }
+      .bc-report-form { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+
+      <div class="bc-report-hero">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+             style="background: linear-gradient(135deg, #7B2D26, #C44536); width:100%; height:100%; object-fit:cover;" alt="侵权投诉">
+        <div class="bc-report-hero-content">
+          <h1>侵权投诉</h1>
+          <p>保护创作者合法权益，快速处理侵权举报</p>
+        </div>
+      </div>
+
+      <form class="bc-report-form" id="infringementForm" novalidate>
+        <h4>侵权举报表单</h4>
+
+        <div class="bc-form-group">
+          <label>作品ID <span class="required">*</span></label>
+          <input type="text" id="workId" placeholder="请输入被侵权作品的ID，例如 work-001" required>
+          <span class="bc-form-error">请填写作品ID</span>
+        </div>
+
+        <div class="bc-form-group">
+          <label>侵权链接 <span class="required">*</span></label>
+          <input type="url" id="infringementUrl" placeholder="https://example.com/infringing-page" required>
+          <span class="bc-form-error">请填写有效的侵权链接</span>
+        </div>
+
+        <div class="bc-form-group">
+          <label>侵权说明 <span class="required">*</span></label>
+          <textarea id="description" placeholder="请详细描述侵权情况，包括侵权方式、侵权范围、对您造成的影响等..." required></textarea>
+          <span class="bc-form-error">请填写侵权说明（至少20个字符）</span>
+        </div>
+
+        <div class="bc-form-group">
+          <label>联系方式（邮箱/手机） <span class="required">*</span></label>
+          <input type="text" id="contact" placeholder="请输入您的邮箱或手机号码，以便我们与您联系" required>
+          <span class="bc-form-error">请填写有效的联系方式</span>
+        </div>
+
+        <div class="bc-form-group">
+          <label>证明材料上传</label>
+          <div class="bc-upload-zone" id="uploadZone">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <p>点击上传或拖拽文件到此处</p>
+            <p class="bc-upload-note">支持 JPG、PNG、PDF 格式，单个文件不超过 10MB</p>
+          </div>
+          <div class="bc-upload-files" id="uploadFiles"></div>
+          <span class="form-hint">请提供能证明您对作品拥有版权的材料，如原始文件、授权证书截图等</span>
+        </div>
+
+        <button type="submit" class="bc-report-submit">提交投诉</button>
+      </form>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BI = window.BirdChainInteractions;
+      var BS = window.BirdChainStorage;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('market'));
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '版权市场', href: '/market/index.html' },
+        { label: '侵权投诉' }
+      ]);
+
+      var mockFiles = [];
+
+      function addMockFile(name) {
+        mockFiles.push(name);
+        renderMockFiles();
+      }
+
+      function removeMockFile(idx) {
+        mockFiles.splice(idx, 1);
+        renderMockFiles();
+      }
+
+      function renderMockFiles() {
+        var container = document.getElementById('uploadFiles');
+        if (mockFiles.length === 0) {
+          container.innerHTML = '';
+          return;
+        }
+        var html = '';
+        mockFiles.forEach(function(f, i) {
+          html += '<span class="bc-upload-file-tag">' + esc(f) + ' <button type="button" onclick="removeMockFile(' + i + ')">×</button></span>';
+        });
+        container.innerHTML = html;
+      }
+
+      window.removeMockFile = removeMockFile;
+
+      document.getElementById('uploadZone').addEventListener('click', function() {
+        var fakeNames = ['版权证明_原始文件.jpg', '授权证书截图.png', '侵权截图_证据.pdf', '作品创作记录.jpg'];
+        var name = fakeNames[Math.floor(Math.random() * fakeNames.length)];
+        addMockFile(name);
+        BI.showToast('已添加模拟文件: ' + name, 'info');
+      });
+
+      function clearErrors() {
+        document.querySelectorAll('#infringementForm input.error, #infringementForm textarea.error').forEach(function(el) {
+          el.classList.remove('error');
+        });
+      }
+
+      function showFieldError(id) {
+        var el = document.getElementById(id);
+        if (el) el.classList.add('error');
+      }
+
+      document.getElementById('infringementForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        clearErrors();
+
+        var workId = document.getElementById('workId').value.trim();
+        var url = document.getElementById('infringementUrl').value.trim();
+        var desc = document.getElementById('description').value.trim();
+        var contact = document.getElementById('contact').value.trim();
+
+        var valid = true;
+
+        if (!workId) { showFieldError('workId'); valid = false; }
+        if (!url || (url.indexOf('http') !== 0)) { showFieldError('infringementUrl'); valid = false; }
+        if (!desc || desc.length < 10) { showFieldError('description'); valid = false; }
+        if (!contact || contact.length < 3) { showFieldError('contact'); valid = false; }
+
+        if (!valid) {
+          BI.showToast('请完善必填信息', 'warning');
+          return;
+        }
+
+        var reportId = 'IR-' + Date.now();
+
+        var report = {
+          id: reportId,
+          workId: workId,
+          infringementUrl: url,
+          description: desc,
+          contact: contact,
+          files: mockFiles.slice(),
+          status: 'pending',
+          createdAt: new Date().toISOString()
+        };
+
+        var reports = BS.getItem('bc_infringementReports', []);
+        reports.push(report);
+        BS.setItem('bc_infringementReports', reports);
+
+        BI.showToast('投诉提交成功！报告编号: ' + reportId, 'success');
+
+        document.getElementById('infringementForm').reset();
+        mockFiles = [];
+        renderMockFiles();
+      });
+
+      BI.initNewsletterForm();
+      BI.initThemeToggle();
+      BI.initMobileMenu();
+      BI.initSearchBar();
+      BI.initCartButtons();
+      BI.updateCartBadge();
+    });
+  </script>
+</body>
+</html>

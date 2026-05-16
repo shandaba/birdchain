@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>合集详情 - BirdChain鸟链</title>
+  <meta name="description" content="探索BirdChain精选鸟类影像作品合集">
+  <meta property="og:title" content="合集详情 - BirdChain鸟链">
+  <meta property="og:description" content="探索BirdChain精选鸟类影像作品合集">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .bc-collection-cover {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      aspect-ratio: 21/9;
+      margin-bottom: 28px;
+      position: relative;
+    }
+    .bc-collection-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .bc-collection-cover-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(7, 27, 45, 0.8), rgba(7, 27, 45, 0.1));
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 32px;
+      color: #fff;
+    }
+    .bc-collection-cover-overlay h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .bc-collection-cover-overlay p {
+      font-size: 0.95rem;
+      opacity: 0.85;
+      max-width: 600px;
+    }
+    .bc-collection-info-bar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .bc-collection-creator {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+    }
+    .bc-collection-creator img {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .bc-collection-creator-name {
+      font-weight: 600;
+      color: var(--text-strong);
+    }
+    .bc-collection-creator-role {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+    }
+    .bc-collection-stats {
+      display: flex;
+      gap: 24px;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    .bc-collection-stats strong {
+      color: var(--text-strong);
+    }
+    .bc-collection-description {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: var(--text-main);
+      margin-bottom: 28px;
+    }
+    @media (max-width: 767px) {
+      .bc-collection-cover { border-radius: var(--radius-md); aspect-ratio: 16/9; }
+      .bc-collection-cover-overlay { padding: 20px; }
+      .bc-collection-cover-overlay h1 { font-size: 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+
+      <div class="bc-collection-cover" id="collectionCover"></div>
+
+      <div class="bc-collection-info-bar" id="collectionInfo"></div>
+
+      <div class="bc-collection-description" id="collectionDesc"></div>
+
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">合集作品</h2>
+          <p class="section-subtitle" id="worksSubtitle"></p>
+        </div>
+      </div>
+      <div class="grid-4" id="collectionWorks"></div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BD = window.BirdChainData;
+      var BI = window.BirdChainInteractions;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('discover'));
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+
+      var params = new URLSearchParams(window.location.search);
+      var collectionId = params.get('id') || 'col-001';
+
+      var collections = [
+        { id: 'col-001', title: '湿地精灵', description: '探索全球湿地生态中的鸟类多样性。从优雅的丹顶鹤到灵动的翠鸟，每一幅作品都捕捉了湿地鸟类与自然环境之间的和谐共生。湿地是地球上最重要的生态系统之一，也是众多鸟类的家园。', tag: '湿地', creatorId: 'creator-001', coverGradient: 'linear-gradient(135deg, #1B4332, #2D6A4F, #40916C)', secondGradient: 'linear-gradient(135deg, #006D77, #83C5BE)' },
+        { id: 'col-002', title: '猛禽之王', description: '金雕、白头海雕、雕鸮——这些天空的王者以锐利的眼神和强大的力量统治着各自的领域。本合集汇集了全球顶级猛禽摄影师的作品，展现掠食者的威严与力量之美。', tag: '猛禽', creatorId: 'creator-004', coverGradient: 'linear-gradient(135deg, #1B4F72, #2980B9, #023E8A)', secondGradient: 'linear-gradient(135deg, #2C3E50, #3498DB)' },
+        { id: 'col-003', title: 'AI鸟类幻想', description: '人工智能与鸟类艺术的碰撞，创造出超越现实的视觉体验。本合集收录了BirdChain平台上最优秀的AI生成鸟类艺术作品，展现了科技与自然的完美融合。', tag: 'AI创作', creatorId: 'creator-007', coverGradient: 'linear-gradient(135deg, #B8860B, #DAA520, #D4A373)', secondGradient: 'linear-gradient(135deg, #8E6B3E, #C7A56D)' },
+        { id: 'col-004', title: '中国特有鸟类', description: '从朱鹮到红腹锦鸡，从中华秋沙鸭到白腹锦鸡，这些仅在中国境内发现的珍稀鸟类是大自然赐予我们的宝贵遗产。本合集记录了中国特有鸟类的美丽与脆弱。', tag: '中国特有', creatorId: 'creator-003', coverGradient: 'linear-gradient(135deg, #006D77, #83C5BE, #1A535C)', secondGradient: 'linear-gradient(135deg, #52796F, #84A98C)' },
+        { id: 'col-005', title: '热带羽色', description: '从斯里兰卡的蓝孔雀到巴布亚新几内亚的极乐鸟，热带地区的鸟类以鲜艳的羽色和独特的形态令人惊叹。本合集带你领略热带雨林中色彩斑斓的鸟类世界。', tag: '热带', creatorId: 'creator-009', coverGradient: 'linear-gradient(135deg, #D4A373, #FAEDCD, #BC6C25)', secondGradient: 'linear-gradient(135deg, #6C584C, #A98467)' },
+        { id: 'col-006', title: '冬日飞羽', description: '冬季是候鸟迁徙与越冬的季节。成千上万只候鸟飞越千山万水来到温暖的越冬地，构成了一幅幅壮观的生命画卷。本合集记录冬日飞羽的动人故事。', tag: '冬季', creatorId: 'creator-008', coverGradient: 'linear-gradient(135deg, #457B9D, #A8DADC, #1B4965)', secondGradient: 'linear-gradient(135deg, #3A5A40, #588157)' }
+      ];
+
+      var collection = collections.find(function(c) { return c.id === collectionId; }) || collections[0];
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '发现/灵感', href: '/discover/index.html' },
+        { label: collection.title }
+      ]);
+
+      document.title = collection.title + ' - BirdChain鸟链';
+
+      document.getElementById('collectionCover').innerHTML =
+        '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: ' + collection.coverGradient + '; width:100%; height:100%; object-fit:cover;" alt="' + esc(collection.title) + '">' +
+        '<div class="bc-collection-cover-overlay">' +
+        '<h1>' + esc(collection.title) + '</h1>' +
+        '<p>' + esc(collection.description.substring(0, 80)) + '...</p>' +
+        '</div>';
+
+      document.getElementById('collectionDesc').textContent = collection.description;
+
+      var works = await BD.loadData('works');
+      var creators = await BD.loadData('creators');
+
+      var creator = creators.find(function(c) { return c.id === collection.creatorId; }) || {};
+
+      var collectionWorks = works.filter(function(w) {
+        return w.tags && w.tags.some(function(t) { return t.indexOf(collection.tag) !== -1; });
+      });
+
+      var infoHtml = '';
+      infoHtml += '<div class="bc-collection-creator">';
+      infoHtml += imgTag(creator.avatar, creator.dataImg, esc(creator.name), 'width:44px;height:44px;border-radius:50%;');
+      infoHtml += '<div>';
+      infoHtml += '<div class="bc-collection-creator-name">' + esc(creator.name || 'BirdChain编辑');
+      if (creator.verified) infoHtml += ' ' + VERIFIED_SVG;
+      infoHtml += '</div>';
+      infoHtml += '<div class="bc-collection-creator-role">合集策划人</div>';
+      infoHtml += '</div>';
+      infoHtml += '</div>';
+      infoHtml += '<div class="bc-collection-stats">';
+      infoHtml += '<div><strong>' + collectionWorks.length + '</strong> 件作品</div>';
+      var totalViews = collectionWorks.reduce(function(sum, w) { return sum + (w.views || 0); }, 0);
+      infoHtml += '<div><strong>' + formatNumber(totalViews) + '</strong> 总浏览</div>';
+      infoHtml += '</div>';
+      infoHtml += '<button class="btn btn-outline btn-sm" data-action="follow-collection" data-collection-id="' + esc(collection.id) + '" data-collection-name="' + esc(collection.title) + '">关注合集</button>';
+      document.getElementById('collectionInfo').innerHTML = infoHtml;
+
+      document.getElementById('worksSubtitle').textContent = '共 ' + collectionWorks.length + ' 件作品';
+
+      var creatorMap = {};
+      creators.forEach(function(c) { creatorMap[c.id] = c; });
+
+      var worksHtml = '';
+      collectionWorks.forEach(function(w) {
+        var wCreator = creatorMap[w.creatorId] || {};
+        var aspectMap = { '横图': '16/9', '竖图': '3/4', '方图': '1/1' };
+        worksHtml += BC.renderWorkCard({
+          id: w.id,
+          title: w.title,
+          image: w.image,
+          dataImg: w.dataImg || null,
+          aspectRatio: aspectMap[w.orientation] || '4/3',
+          author: wCreator.name || w.creator || '未知创作者',
+          authorAvatar: wCreator.avatar || null,
+          authorDataImg: wCreator.dataImg || null,
+          likes: w.likes || 0,
+          views: w.views || 0,
+          price: w.basePrice || 0
+        });
+      });
+
+      if (worksHtml === '') {
+        worksHtml = BC.renderEmptyState('该合集暂无作品');
+      }
+
+      document.getElementById('collectionWorks').innerHTML = worksHtml;
+
+      document.addEventListener('click', function(e) {
+        var followBtn = e.target.closest('[data-action="follow-collection"]');
+        if (!followBtn) return;
+        e.preventDefault();
+        var colId = followBtn.getAttribute('data-collection-id');
+        var colName = followBtn.getAttribute('data-collection-name');
+        var BS = window.BirdChainStorage;
+
+        var followed = BS.isInArray(BS.KEYS.followedCreators, function(item) { return item.id === colId; });
+        if (followed) {
+          BS.removeFromArray(BS.KEYS.followedCreators, function(item) { return item.id === colId; });
+          followBtn.classList.remove('following');
+          followBtn.textContent = '关注合集';
+          BI.showToast('已取消关注 ' + colName, 'info');
+        } else {
+          BS.addToArray(BS.KEYS.followedCreators, { id: colId, name: colName, time: Date.now() });
+          followBtn.classList.add('following');
+          followBtn.textContent = '已关注';
+          BI.showToast('已关注 ' + colName, 'success');
+        }
+      });
+
+      BI.initLikeButtons();
+      BI.initFavoriteButtons();
+      BI.initFollowButtons();
+      BI.initCartButtons();
+      BI.initNewsletterForm();
+      BI.initThemeToggle();
+      BI.initMobileMenu();
+      BI.initSearchBar();
+      BI.updateCartBadge();
+    });
+  </script>
+</body>
+</html>

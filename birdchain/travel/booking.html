@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>旅行报名 - BirdChain鸟链</title>
+  <meta name="description" content="报名参加鸟链平台的鸟类摄影旅行线路。">
+  <meta property="og:title" content="旅行报名 - BirdChain鸟链">
+  <meta property="og:description" content="报名参加鸟链平台的鸟类摄影旅行线路。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .booking-layout {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 32px;
+      margin-top: 20px;
+    }
+    .booking-form {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+    }
+    .booking-form h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+    .booking-summary {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      position: sticky;
+      top: calc(var(--header-height) + 20px);
+      align-self: start;
+    }
+    .booking-summary h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .summary-route-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+    }
+    .summary-total {
+      display: flex;
+      justify-content: space-between;
+      padding: 16px 0 0;
+      margin-top: 12px;
+      border-top: 1px solid var(--line-soft);
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--brand-accent-dark);
+    }
+    .summary-notice {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-top: 12px;
+      text-align: center;
+    }
+    @media (max-width: 1024px) {
+      .booking-layout { grid-template-columns: 1fr; }
+      .booking-summary { position: static; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+      <div class="booking-layout" id="bookingContent">
+        <div class="booking-form">
+          <h2>旅行报名</h2>
+          <div class="bc-form-group">
+            <label for="name">姓名 <span style="color:var(--danger);">*</span></label>
+            <input type="text" class="bc-form-input" id="name" placeholder="请输入姓名">
+            <div class="bc-form-error" id="nameError" style="display:none;">请输入姓名</div>
+          </div>
+          <div class="bc-form-group">
+            <label for="phone">手机号 <span style="color:var(--danger);">*</span></label>
+            <input type="tel" class="bc-form-input" id="phone" placeholder="请输入手机号">
+            <div class="bc-form-error" id="phoneError" style="display:none;">请输入有效的手机号</div>
+          </div>
+          <div class="bc-form-group">
+            <label for="email">邮箱</label>
+            <input type="email" class="bc-form-input" id="email" placeholder="请输入邮箱">
+          </div>
+          <div class="bc-form-group">
+            <label for="people">报名人数 <span style="color:var(--danger);">*</span></label>
+            <input type="number" class="bc-form-input" id="people" min="1" max="10" value="1">
+            <div class="bc-form-error" id="peopleError" style="display:none;">请输入有效的人数（1-10）</div>
+          </div>
+          <div class="bc-form-group">
+            <label for="requirements">特殊要求</label>
+            <textarea class="bc-form-textarea" id="requirements" placeholder="如有特殊饮食要求、住宿需求或其他要求，请在此留言..."></textarea>
+          </div>
+          <button class="btn btn-accent btn-lg" id="submitBtn" style="width:100%;">提交报名</button>
+          <p style="text-align:center;font-size:0.82rem;color:var(--text-secondary);margin-top:12px;">提交报名后，我们将在24小时内与您联系确认行程详情</p>
+        </div>
+        <div class="booking-summary" id="bookingSummary"></div>
+      </div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BD = window.BirdChainData;
+      var BI = window.BirdChainInteractions;
+      var BStor = window.BirdChainStorage;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('travel'));
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+
+      var params = new URLSearchParams(window.location.search);
+      var routeId = params.get('routeId');
+
+      var routes = await BD.loadData('travelRoutes');
+      var route = routes.find(function(r) { return r.id === routeId; });
+
+      if (!route) {
+        document.getElementById('bookingContent').innerHTML = '<div class="bc-empty"><h4>线路不存在</h4><p>请从旅行列表中选择线路进行报名</p><a href="/travel/index.html" class="btn btn-primary mt-3">返回旅行列表</a></div>';
+        return;
+      }
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '摄影旅行', href: '/travel/index.html' },
+        { label: route.title, href: '/travel/route-detail.html?id=' + route.id },
+        { label: '报名' }
+      ]);
+
+      renderSummary(1);
+
+      var peopleInput = document.getElementById('people');
+      peopleInput.addEventListener('input', function() {
+        var n = parseInt(this.value) || 1;
+        if (n < 1) n = 1;
+        if (n > 10) n = 10;
+        this.value = n;
+        renderSummary(n);
+      });
+
+      function renderSummary(peopleCount) {
+        var total = route.price * peopleCount;
+        var html = '<h3>费用明细</h3>';
+        html += '<div class="summary-route-title">' + route.title + '</div>';
+        html += '<div style="font-size:0.82rem;color:var(--text-secondary);margin-bottom:16px;">' + route.country + ' · ' + route.destination + '</div>';
+        html += '<div class="summary-item"><span>单人价格</span><span>' + formatPrice(route.price) + '</span></div>';
+        html += '<div class="summary-item"><span>报名人数</span><span>' + peopleCount + '人</span></div>';
+        if (route.includes && route.includes.length > 0) {
+          html += '<div style="margin-top:12px;font-size:0.82rem;color:var(--text-secondary);font-weight:500;">费用包含：</div>';
+          html += '<div class="includes-list" style="margin-top:6px;">';
+          route.includes.forEach(function(item) {
+            html += '<span class="includes-tag" style="font-size:0.75rem;padding:3px 10px;">' + item + '</span>';
+          });
+          html += '</div>';
+        }
+        html += '<div class="summary-total"><span>合计</span><span>' + formatPrice(total) + '</span></div>';
+        html += '<div class="summary-notice">报名确认后支付</div>';
+        document.getElementById('bookingSummary').innerHTML = html;
+      }
+
+      document.getElementById('submitBtn').addEventListener('click', function() {
+        var name = document.getElementById('name').value.trim();
+        var phone = document.getElementById('phone').value.trim();
+        var email = document.getElementById('email').value.trim();
+        var people = parseInt(document.getElementById('people').value) || 1;
+        var requirements = document.getElementById('requirements').value.trim();
+
+        var valid = true;
+
+        if (!name) {
+          document.getElementById('nameError').style.display = 'block';
+          document.getElementById('name').classList.add('error');
+          valid = false;
+        } else {
+          document.getElementById('nameError').style.display = 'none';
+          document.getElementById('name').classList.remove('error');
+        }
+
+        if (!phone || phone.length < 11) {
+          document.getElementById('phoneError').style.display = 'block';
+          document.getElementById('phone').classList.add('error');
+          valid = false;
+        } else {
+          document.getElementById('phoneError').style.display = 'none';
+          document.getElementById('phone').classList.remove('error');
+        }
+
+        if (people < 1 || people > route.maxParticipants) {
+          document.getElementById('peopleError').style.display = 'block';
+          document.getElementById('people').classList.add('error');
+          valid = false;
+        } else {
+          document.getElementById('peopleError').style.display = 'none';
+          document.getElementById('people').classList.remove('error');
+        }
+
+        if (!valid) return;
+
+        var bookings = BStor.getItem(BStor.KEYS.travelBookings, []);
+        var bookingId = 'BK' + Date.now().toString(36).toUpperCase();
+        bookings.push({
+          id: bookingId,
+          routeId: routeId,
+          routeTitle: route.title,
+          name: name,
+          phone: phone,
+          email: email,
+          people: people,
+          totalPrice: route.price * people,
+          requirements: requirements,
+          bookedAt: new Date().toISOString()
+        });
+        BStor.setItem(BStor.KEYS.travelBookings, bookings);
+
+        BI.showToast('报名成功！报名编号：' + bookingId, 'success');
+
+        setTimeout(function() {
+          window.location.href = '/travel/route-detail.html?id=' + routeId;
+        }, 2000);
+      });
+
+      document.getElementById('name').addEventListener('input', function() {
+        document.getElementById('nameError').style.display = 'none';
+        this.classList.remove('error');
+      });
+      document.getElementById('phone').addEventListener('input', function() {
+        document.getElementById('phoneError').style.display = 'none';
+        this.classList.remove('error');
+      });
+      document.getElementById('people').addEventListener('input', function() {
+        document.getElementById('peopleError').style.display = 'none';
+        this.classList.remove('error');
+      });
+
+      BI.initAll();
+    });
+
+    var includesListStyle = document.createElement('style');
+    includesListStyle.textContent = '.includes-list { display: flex; flex-wrap: wrap; gap: 6px; } .includes-tag { padding: 4px 12px; background: var(--brand-accent-soft); color: var(--brand-accent-dark); border-radius: 20px; font-size: 0.78rem; font-weight: 500; }';
+    document.head.appendChild(includesListStyle);
+  </script>
+</body>
+</html>

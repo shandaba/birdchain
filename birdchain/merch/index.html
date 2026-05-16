@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>创作周边 - BirdChain鸟链</title>
+  <meta name="description" content="BirdChain创作周边，以鸟类影像为灵感的生活好物。包袋、雨伞、图书、版画、家居装饰等精美周边商品。">
+  <meta property="og:title" content="创作周边 - BirdChain鸟链">
+  <meta property="og:description" content="以鸟类影像为灵感的生活好物。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .merch-hero {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      height: 300px;
+      margin: 20px 0 32px;
+    }
+    .merch-hero img { width: 100%; height: 100%; object-fit: cover; }
+    .merch-hero-content {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(7,27,45,0.85), rgba(7,27,45,0.15));
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 40px;
+      color: #fff;
+    }
+    .merch-hero-content h1 { font-size: 2.2rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
+    .merch-hero-content p { font-size: 1rem; opacity: 0.85; max-width: 560px; }
+    .merch-series-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 16px; margin-bottom: 40px; }
+    .merch-series-card {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      transition: all var(--transition-normal);
+      cursor: pointer;
+    }
+    .merch-series-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .merch-series-card-img { aspect-ratio: 4/3; overflow: hidden; }
+    .merch-series-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform var(--transition-slow); }
+    .merch-series-card:hover .merch-series-card-img img { transform: scale(1.04); }
+    .merch-series-card-body { padding: 14px; }
+    .merch-series-card-body h4 { font-size: 0.92rem; font-weight: 600; margin-bottom: 4px; }
+    .merch-series-card-body p { font-size: 0.78rem; color: var(--text-secondary); }
+    .merch-featured-banner {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--brand-primary-deep), var(--brand-primary));
+      color: #fff;
+      padding: 32px;
+      margin-bottom: 40px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .merch-featured-banner-text { flex: 1; }
+    .merch-featured-banner-text h3 { font-size: 1.3rem; color: #fff; margin-bottom: 8px; }
+    .merch-featured-banner-text p { opacity: 0.85; font-size: 0.9rem; margin-bottom: 16px; }
+    .merch-featured-banner .btn-accent { padding: 12px 28px; font-size: 0.95rem; }
+    .merch-category-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
+    .merch-category-chip {
+      padding: 8px 18px;
+      border-radius: 24px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .merch-category-chip:hover, .merch-category-chip.active { background: var(--brand-primary); color: #fff; border-color: var(--brand-primary); }
+    .merch-product-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
+    @media (max-width:1199px) { .merch-product-grid { grid-template-columns: repeat(3,1fr); } .merch-series-grid { grid-template-columns: repeat(3,1fr); } }
+    @media (max-width:767px) {
+      .merch-hero { height: 220px; }
+      .merch-hero-content { padding: 24px; }
+      .merch-hero-content h1 { font-size: 1.5rem; }
+      .merch-product-grid { grid-template-columns: repeat(2,1fr); }
+      .merch-series-grid { grid-template-columns: repeat(2,1fr); }
+      .merch-featured-banner { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div class="bc-breadcrumb">
+        <a href="/">首页</a><span class="sep">/</span><span class="current">创作周边</span>
+      </div>
+      <div class="merch-hero">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+             style="background:linear-gradient(135deg,#B8860B,#DAA520,#C7A56D);width:100%;aspect-ratio:auto;object-fit:cover;" alt="创作周边">
+        <div class="merch-hero-content">
+          <h1>创作周边</h1>
+          <p>以鸟类影像为灵感的生活好物。每一件周边商品都源自创作者的精美作品，将自然之美融入日常。</p>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><h2 class="section-title">商品分类</h2></div>
+        <div class="merch-category-chips" id="categoryChips">
+          <span class="merch-category-chip active" data-category="all">全部</span>
+          <span class="merch-category-chip" data-category="包袋">包袋</span>
+          <span class="merch-category-chip" data-category="雨伞">雨伞</span>
+          <span class="merch-category-chip" data-category="图书">图书</span>
+          <span class="merch-category-chip" data-category="儿童有声读物">儿童有声读物</span>
+          <span class="merch-category-chip" data-category="艺术版画">艺术版画</span>
+          <span class="merch-category-chip" data-category="家居装饰">家居装饰</span>
+          <span class="merch-category-chip" data-category="数字周边">数字周边</span>
+          <span class="merch-category-chip" data-category="摄影装备">摄影装备</span>
+          <span class="merch-category-chip" data-category="软饮联名">软饮联名</span>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><h2 class="section-title">主题系列</h2></div>
+        <div class="merch-series-grid">
+          <div class="merch-series-card" data-series="热带之歌">
+            <div class="merch-series-card-img">
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background:linear-gradient(135deg,#BC6C25,#DDA15E);width:100%;height:100%;object-fit:cover;" alt="热带之歌" loading="lazy">
+            </div>
+            <div class="merch-series-card-body"><h4>热带之歌</h4><p>热带雨林的斑斓色彩</p></div>
+          </div>
+          <div class="merch-series-card" data-series="迁徙之旅">
+            <div class="merch-series-card-img">
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background:linear-gradient(135deg,#1B4965,#5FA8D3);width:100%;height:100%;object-fit:cover;" alt="迁徙之旅" loading="lazy">
+            </div>
+            <div class="merch-series-card-body"><h4>迁徙之旅</h4><p>候鸟的壮丽征途</p></div>
+          </div>
+          <div class="merch-series-card" data-series="夜的守望者">
+            <div class="merch-series-card-img">
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background:linear-gradient(135deg,#2C3E50,#3498DB);width:100%;height:100%;object-fit:cover;" alt="夜的守望者" loading="lazy">
+            </div>
+            <div class="merch-series-card-body"><h4>夜的守望者</h4><p>夜间猛禽的神秘世界</p></div>
+          </div>
+          <div class="merch-series-card" data-series="海岸线">
+            <div class="merch-series-card-img">
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background:linear-gradient(135deg,#006D77,#83C5BE);width:100%;height:100%;object-fit:cover;" alt="海岸线" loading="lazy">
+            </div>
+            <div class="merch-series-card-body"><h4>海岸线</h4><p>滨海滩涂的生命律动</p></div>
+          </div>
+          <div class="merch-series-card" data-series="湿地之翼">
+            <div class="merch-series-card-img">
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background:linear-gradient(135deg,#386641,#A7C957);width:100%;height:100%;object-fit:cover;" alt="湿地之翼" loading="lazy">
+            </div>
+            <div class="merch-series-card-body"><h4>湿地之翼</h4><p>湿地鸟类的优雅生活</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><h2 class="section-title">全部商品</h2></div>
+        <div class="merch-product-grid" id="productGrid"></div>
+      </div>
+      <div class="merch-featured-banner">
+        <div class="merch-featured-banner-text">
+          <h3>精选企划：热带之歌系列</h3>
+          <p>从翠鸟到火烈鸟，从蜂鸟到极乐鸟——热带雨林的斑斓色彩化作生活中的每一件好物。每购买一件热带之歌系列商品，即捐赠3%用于热带雨林鸟类栖息地保护。</p>
+          <a href="/merch/drop-detail.html?id=tropical-song" class="btn btn-accent">探索系列</a>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header"><h2 class="section-title">创作者之选</h2></div>
+        <div class="merch-product-grid" id="featuredGrid"></div>
+      </div>
+      <div class="section">
+        <div class="section-header">
+          <h2 class="section-title">灵感阅读</h2>
+        </div>
+        <div class="grid-3" id="readingGrid"></div>
+      </div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      app.insertAdjacentHTML('afterbegin', BirdChainComponents.renderHeader('merch'));
+      app.insertAdjacentHTML('beforeend', BirdChainComponents.renderFooter());
+      BirdChainInteractions.initAll();
+
+      var BC = window.BirdChainStorage;
+      var BCD = window.BirdChainData;
+      var BCC = window.BirdChainComponents;
+
+      var products = await BCD.loadData('products');
+      var articles = await BCD.loadData('articles');
+      var currentCategory = 'all';
+
+      var gradients = ['#1B4332,#2D6A4F','#1B4F72,#2980B9','#B8860B,#DAA520','#006D77,#83C5BE','#2D6A4F,#40916C','#3A5A40,#588157','#BC6C25,#DDA15E','#1B4965,#5FA8D3','#386641,#A7C957','#2C3E50,#3498DB','#7B2D26,#C44536','#8E6B3E,#C7A56D','#1A535C,#4ECDC4','#606C38,#283618','#6C584C,#A98467','#52796F,#84A98C','#023E8A,#0077B6','#D4A373,#FAEDCD','#457B9D,#A8DADC','#6B4226,#8B6914'];
+
+      function renderProducts(filterCategory) {
+        var filtered = filterCategory === 'all' ? products : products.filter(function(p) { return p.category === filterCategory; });
+        var grid = document.getElementById('productGrid');
+        grid.innerHTML = '';
+        if (filtered.length === 0) {
+          grid.innerHTML = '<div class="bc-empty"><div class="bc-empty-icon">🛍️</div><h4>暂无该分类商品</h4></div>';
+          return;
+        }
+        filtered.forEach(function(p, i) {
+          var card = document.createElement('div');
+          card.className = 'bc-product-card';
+          var grad = gradients[i % gradients.length];
+          card.innerHTML =
+            '<div class="bc-product-card-img">' +
+            '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background:linear-gradient(135deg,' + grad + ');width:100%;height:100%;object-fit:cover;" alt="' + (p.name||'') + '" loading="lazy">' +
+            '</div>' +
+            '<div class="bc-product-card-body">' +
+            '<div class="bc-product-card-title">' + (p.name||'') + '</div>' +
+            '<div class="bc-product-card-category">' + (p.category||'') + '</div>' +
+            '<div class="bc-product-card-price">' + (typeof formatPrice !== 'undefined' ? formatPrice(p.price) : '¥' + p.price) + '</div>' +
+            '</div>';
+          card.addEventListener('click', function() { window.location.href = '/merch/product-detail.html?id=' + p.id; });
+          grid.appendChild(card);
+        });
+      }
+
+      function renderFeatured() {
+        var featured = products.filter(function(p) { return p.stock <= 100 && p.stock > 0; }).slice(0, 4);
+        var grid = document.getElementById('featuredGrid');
+        grid.innerHTML = '';
+        if (featured.length === 0) {
+          grid.innerHTML = '<div class="bc-empty"><div class="bc-empty-icon">⭐</div><h4>暂无推荐商品</h4></div>';
+          return;
+        }
+        featured.forEach(function(p, i) {
+          var card = document.createElement('div');
+          card.className = 'bc-product-card';
+          var grad = gradients[(i + 5) % gradients.length];
+          card.innerHTML =
+            '<div class="bc-product-card-img">' +
+            '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background:linear-gradient(135deg,' + grad + ');width:100%;height:100%;object-fit:cover;" alt="' + (p.name||'') + '" loading="lazy">' +
+            '</div>' +
+            '<div class="bc-product-card-body">' +
+            '<div class="bc-product-card-title">' + (p.name||'') + ' <span class="badge badge-premium">限量</span></div>' +
+            '<div class="bc-product-card-category">' + (p.category||'') + '</div>' +
+            '<div class="bc-product-card-price">' + (typeof formatPrice !== 'undefined' ? formatPrice(p.price) : '¥' + p.price) + '</div>' +
+            '</div>';
+          card.addEventListener('click', function() { window.location.href = '/merch/product-detail.html?id=' + p.id; });
+          grid.appendChild(card);
+        });
+      }
+
+      function renderReading() {
+        var grid = document.getElementById('readingGrid');
+        if (!articles || articles.length === 0) {
+          grid.innerHTML = '<div class="bc-empty"><div class="bc-empty-icon">📚</div><h4>暂无推荐文章</h4></div>';
+          return;
+        }
+        articles.slice(0, 3).forEach(function(a, i) {
+          var card = document.createElement('div');
+          card.className = 'bc-article-card';
+          var grad = gradients[(i + 10) % gradients.length];
+          card.innerHTML =
+            '<div class="bc-article-card-img">' +
+            '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background:linear-gradient(135deg,' + grad + ');width:100%;height:100%;object-fit:cover;" alt="' + (a.title||'') + '" loading="lazy">' +
+            '</div>' +
+            '<div class="bc-article-card-body">' +
+            '<div class="bc-article-card-title">' + (a.title||'') + '</div>' +
+            '<div class="bc-article-card-excerpt">' + (a.excerpt||a.description||'') + '</div>' +
+            '<div class="bc-article-card-meta">' +
+            '<span>' + (typeof CLOCK_ICON_SVG !== 'undefined' ? CLOCK_ICON_SVG : '') + ' ' + (a.readTime||'') + '</span>' +
+            '<span>' + (typeof CALENDAR_ICON_SVG !== 'undefined' ? CALENDAR_ICON_SVG : '') + ' ' + (a.date||'') + '</span>' +
+            '</div></div>';
+          grid.appendChild(card);
+        });
+      }
+
+      renderProducts('all');
+      renderFeatured();
+      renderReading();
+
+      document.getElementById('categoryChips').addEventListener('click', function(e) {
+        var chip = e.target.closest('.merch-category-chip');
+        if (!chip) return;
+        document.querySelectorAll('.merch-category-chip').forEach(function(c) { c.classList.remove('active'); });
+        chip.classList.add('active');
+        currentCategory = chip.getAttribute('data-category');
+        renderProducts(currentCategory);
+      });
+
+      document.querySelectorAll('.merch-series-card').forEach(function(card) {
+        card.addEventListener('click', function() {
+          var series = card.getAttribute('data-series');
+          window.location.href = '/merch/drop-detail.html?id=' + encodeURIComponent(series);
+        });
+      });
+    });
+  </script>
+</body>
+</html>

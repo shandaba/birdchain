@@ -1,0 +1,119 @@
+[
+  {
+    "id": "project-001",
+    "title": "守护朱鹮——秦岭栖息地修复计划",
+    "location": "陕西洋县",
+    "species": ["朱鹮"],
+    "cover": "/assets/images/projects/crested-ibis-habitat.jpg",
+    "description": "本项目旨在修复和扩大朱鹮在秦岭地区的觅食栖息地，通过恢复传统水稻田、投放泥鳅苗、种植栖息林木等措施，为朱鹮种群持续增长创造更好的生存条件。",
+    "goal": 500000,
+    "raised": 356000,
+    "progress": 71,
+    "status": "进行中",
+    "organizer": "秦岭生态站 × 中国野生动物保护协会",
+    "relatedWorks": ["work-004"],
+    "donationTiers": [
+      {"amount": 50, "description": "赠送朱鹮电子感谢卡"},
+      {"amount": 200, "description": "赠送朱鹮主题明信片套装 + 电子感谢卡"},
+      {"amount": 500, "description": "赠送朱鹮保护纪念徽章 + 项目年度报告"},
+      {"amount": 2000, "description": "受邀参加年度保护成果发布会 + 以上所有回馈"}
+    ]
+  },
+  {
+    "id": "project-002",
+    "title": "黑脸琵鹭迁徙走廊保护行动",
+    "location": "福建闽江口至江苏盐城",
+    "species": ["黑脸琵鹭"],
+    "cover": "/assets/images/projects/spoonbill-corridor.jpg",
+    "description": "黑脸琵鹭的迁徙路线面临围垦、污染和过度捕捞等多重威胁。本项目将联合沿海多个保护区，建立黑脸琵鹭迁徙停歇地保护网络，开展栖息地监测和社区共管。",
+    "goal": 800000,
+    "raised": 234000,
+    "progress": 29,
+    "status": "进行中",
+    "organizer": "闽江河口湿地站 × 国际鸟盟",
+    "relatedWorks": ["work-005"],
+    "donationTiers": [
+      {"amount": 100, "description": "获得黑脸琵鹭电子监测报告"},
+      {"amount": 300, "description": "赠送黑脸琵鹭摄影集 + 电子证书"},
+      {"amount": 1000, "description": "参与线上迁徙追踪 + 实地保护体验名额"}
+    ]
+  },
+  {
+    "id": "project-003",
+    "title": "中华秋沙鸭溪流栖息地保护",
+    "location": "江西婺源",
+    "species": ["中华秋沙鸭"],
+    "cover": "/assets/images/projects/merganser-stream.jpg",
+    "description": "中华秋沙鸭对水质要求极高，被称为水中生态指示物种。本项目将在婺源星江河流域开展水质监测、河道垃圾清理、人工巢箱安装和社区环保教育活动。",
+    "goal": 300000,
+    "raised": 189000,
+    "progress": 63,
+    "status": "进行中",
+    "organizer": "婺源观鸟协会 × 鸟链平台",
+    "relatedWorks": ["work-011"],
+    "donationTiers": [
+      {"amount": 50, "description": "赠送秋沙鸭数字徽章"},
+      {"amount": 150, "description": "赠送秋沙鸭主题环保袋 + 感谢证书"},
+      {"amount": 500, "description": "获邀参加婺源溪流清理志愿者活动"}
+    ]
+  },
+  {
+    "id": "project-004",
+    "title": "鄱阳湖白鹤越冬食物保障计划",
+    "location": "江西鄱阳湖",
+    "species": ["白鹤", "大天鹅", "东方白鹳"],
+    "cover": "/assets/images/projects/siberian-crane-food.jpg",
+    "description": "受水位变化影响，鄱阳湖沉水植被面积逐年萎缩，威胁白鹤等越冬候鸟的食物安全。本项目将通过人工种植苦草、建设应急食物补给站和生态补水协调等措施，保障候鸟越冬食物供应。",
+    "goal": 1000000,
+    "raised": 678000,
+    "progress": 68,
+    "status": "进行中",
+    "organizer": "鄱阳湖湿地站 × 江西省林业局",
+    "relatedWorks": ["work-013", "work-009", "work-012"],
+    "donationTiers": [
+      {"amount": 100, "description": "获得候鸟食物保障电子月报"},
+      {"amount": 300, "description": "赠送白鹤主题文创礼盒"},
+      {"amount": 1000, "description": "受邀参加鄱阳湖候鸟环志体验活动"},
+      {"amount": 5000, "description": "命名一株苦草种植区 + 年度保护伙伴证书"}
+    ]
+  },
+  {
+    "id": "project-005",
+    "title": "丹顶鹤繁殖地电网安全改造",
+    "location": "黑龙江扎龙",
+    "species": ["丹顶鹤", "东方白鹳"],
+    "cover": "/assets/images/projects/crane-power-safety.jpg",
+    "description": "扎龙保护区内的高压线路对丹顶鹤和东方白鹳的飞行安全构成威胁。本项目将在关键区域安装航空警示球和绝缘保护装置，同时增设人工巢架，实现鸟类保护与电力安全的双赢。",
+    "goal": 400000,
+    "raised": 312000,
+    "progress": 78,
+    "status": "进行中",
+    "organizer": "扎龙自然保护区站 × 国家电网",
+    "relatedWorks": ["work-002", "work-012"],
+    "donationTiers": [
+      {"amount": 80, "description": "获得丹顶鹤保护电子证书"},
+      {"amount": 200, "description": "赠送丹顶鹤摄影明信片 + 保护区徽章"},
+      {"amount": 800, "description": "获得人工巢架命名权 + 实地探访机会"}
+    ]
+  },
+  {
+    "id": "project-006",
+    "title": "热带雨林犀鸟巢穴保护项目",
+    "location": "泰国考艾国家公园",
+    "species": ["双角犀鸟"],
+    "cover": "/assets/images/projects/hornbill-nest.jpg",
+    "description": "犀鸟依赖大树天然树洞繁殖，但非法伐木导致适宜巢穴日益减少。本项目将在考艾国家公园安装人工巢箱，同时开展反盗伐巡护和社区替代生计项目，从根源上保护犀鸟的繁殖栖息地。",
+    "goal": 600000,
+    "raised": 145000,
+    "progress": 24,
+    "status": "进行中",
+    "organizer": "考艾雨林站 × 泰国鸟类保护协会",
+    "relatedWorks": ["work-024"],
+    "donationTiers": [
+      {"amount": 100, "description": "获得犀鸟保护数字徽章"},
+      {"amount": 300, "description": "赠送犀鸟主题艺术版画"},
+      {"amount": 1000, "description": "获得人工巢箱命名权 + 项目实地探访"},
+      {"amount": 5000, "description": "成为项目联合保护人 + 专属年度报告"}
+    ]
+  }
+]

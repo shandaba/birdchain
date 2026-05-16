@@ -1,0 +1,41 @@
+[
+  {
+    "id": "hero-001",
+    "title": "湿地精灵——丹顶鹤的越冬之旅",
+    "subtitle": {
+      "author": "王志远",
+      "country": "中国"
+    },
+    "image": "/assets/images/works/red-crowned-crane-dance.jpg",
+    "link": "/works/red-crowned-crane-dance",
+    "stats": {
+      "views": 128560
+    }
+  },
+  {
+    "id": "hero-002",
+    "title": "翠鸟入水——千分之一秒的完美瞬间",
+    "subtitle": {
+      "author": "林雨晴",
+      "country": "中国"
+    },
+    "image": "/assets/images/works/kingfisher-dive.jpg",
+    "link": "/works/kingfisher-dive",
+    "stats": {
+      "views": 98730
+    }
+  },
+  {
+    "id": "hero-003",
+    "title": "黑脸琵鹭——从东亚到东南亚的迁徙之路",
+    "subtitle": {
+      "author": "陈明辉",
+      "country": "中国"
+    },
+    "image": "/assets/images/works/black-faced-spoonbill.jpg",
+    "link": "/works/black-faced-spoonbill-migration",
+    "stats": {
+      "views": 76215
+    }
+  }
+]

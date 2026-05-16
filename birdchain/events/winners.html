@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>获奖作品 - BirdChain鸟链</title>
+  <meta name="description" content="浏览鸟链平台各大赛事的获奖作品，欣赏最优秀的鸟类影像创作。">
+  <meta property="og:title" content="获奖作品 - BirdChain鸟链">
+  <meta property="og:description" content="浏览鸟链平台各大赛事的获奖作品，欣赏最优秀的鸟类影像创作。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .winners-hero {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      height: 240px;
+      margin: 20px 0 32px;
+    }
+    .winners-hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .winners-hero-content {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(7, 27, 45, 0.8), rgba(7, 27, 45, 0.15));
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 32px;
+      color: #fff;
+    }
+    .winners-hero-content h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .winners-hero-content p {
+      font-size: 0.95rem;
+      opacity: 0.85;
+      max-width: 560px;
+    }
+    .winner-card {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      margin-bottom: 24px;
+    }
+    .winner-card-img {
+      aspect-ratio: 16/9;
+      overflow: hidden;
+    }
+    .winner-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .winner-card-body {
+      padding: 24px;
+    }
+    .winner-card-body h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .winner-card-rank {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      margin-bottom: 12px;
+    }
+    .winner-card-rank.gold {
+      background: linear-gradient(135deg, #B8860B, #DAA520);
+      color: #fff;
+    }
+    .winner-card-rank.silver {
+      background: linear-gradient(135deg, #808080, #C0C0C0);
+      color: #fff;
+    }
+    .winner-card-rank.bronze {
+      background: linear-gradient(135deg, #8B4513, #CD853F);
+      color: #fff;
+    }
+    .winner-card-rank.honorable {
+      background: var(--bg-soft);
+      color: var(--text-main);
+    }
+    .winner-meta {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+    .winner-review {
+      background: var(--bg-soft);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      font-size: 0.88rem;
+      color: var(--text-main);
+      line-height: 1.7;
+      margin-top: 12px;
+    }
+    .winner-review h5 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .winners-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    .honorable-card {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+    }
+    .honorable-card-img {
+      aspect-ratio: 4/3;
+      overflow: hidden;
+    }
+    .honorable-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .honorable-card-body {
+      padding: 12px;
+    }
+    .honorable-card-body h5 {
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+    .honorable-card-body p {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+    }
+    @media (max-width: 767px) {
+      .winners-hero { height: 160px; margin: 12px 0 20px; border-radius: var(--radius-md); }
+      .winners-hero-content { padding: 20px; }
+      .winners-hero-content h1 { font-size: 1.35rem; }
+      .winners-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+      <div class="winners-hero">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+             style="background: linear-gradient(135deg, #B8860B, #DAA520, #8B6914); width:100%; height:100%; object-fit:cover;" alt="获奖作品">
+        <div class="winners-hero-content">
+          <h1>获奖作品</h1>
+          <p>欣赏各大赛事的优秀获奖作品</p>
+        </div>
+      </div>
+
+      <div class="bc-tabs" id="eventTabs">
+        <button class="bc-tab active" data-event="all">全部赛事</button>
+        <button class="bc-tab" data-event="event-001">2024摄影大赛</button>
+        <button class="bc-tab" data-event="event-002">AI创作大赛</button>
+        <button class="bc-tab" data-event="event-007">青少年自然笔记</button>
+      </div>
+
+      <div id="winnersContent"></div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BD = window.BirdChainData;
+      var BI = window.BirdChainInteractions;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('events'));
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '赛事/活动', href: '/events/index.html' },
+        { label: '获奖作品' }
+      ]);
+
+      var winnerData = {
+        'event-001': {
+          title: '2024年度野生鸟类摄影大赛',
+          winners: [
+            { rank: 'gold', rankText: '金奖', title: '鄱阳湖晨曦', author: '王志远', description: '捕捉了鄱阳湖冬日清晨白鹤群飞的震撼瞬间，光影层次丰富，构图精准。', review: '评委一致认为这幅作品在光线运用和画面叙事上都达到了极高的水准。晨曦中的白鹤群飞不仅展现了候鸟迁徙的壮美，也传递了人与自然和谐共生的深刻主题。', gradient: 'linear-gradient(135deg, #B8860B, #DAA520)' },
+            { rank: 'silver', rankText: '银奖', title: '丹顶鹤之舞', author: '李思雨', description: '记录了扎龙自然保护区丹顶鹤求偶舞蹈的优雅姿态。', review: '以极具诗意的方式捕捉了丹顶鹤的求偶行为。背景的冰雪与鹤的优雅姿态形成强烈对比，画面如中国水墨画般韵味十足。', gradient: 'linear-gradient(135deg, #1B4332, #2D6A4F)' },
+            { rank: 'bronze', rankText: '铜奖', title: '候鸟归来', author: '陈明辉', description: '展示了秦岭地区中华秋沙鸭归来的珍贵画面。', review: '作品兼具科学记录价值和艺术美感。中华秋沙鸭作为濒危物种，其影像资料本身就具有重要的保护意义。', gradient: 'linear-gradient(135deg, #1B4F72, #2980B9)' }
+          ],
+          honorable: [
+            { title: '湿地晨雾', author: '张伟', gradient: 'linear-gradient(135deg, #2D6A4F, #40916C)' },
+            { title: '猛禽猎影', author: '刘芳', gradient: 'linear-gradient(135deg, #006D77, #83C5BE)' },
+            { title: '翠鸟捕鱼', author: '赵刚', gradient: 'linear-gradient(135deg, #D4A373, #FAEDCD)' },
+            { title: '高原鹤影', author: '王丽', gradient: 'linear-gradient(135deg, #457B9D, #A8DADC)' }
+          ]
+        },
+        'event-002': {
+          title: 'AI与自然——鸟类艺术创作大赛',
+          winners: [
+            { rank: 'gold', rankText: '最佳创意奖', title: '机械羽翼', author: 'AI艺术家·星尘', description: '用AI技术创造出融合机械美学与鸟类形态的视觉作品。', review: '作品展现了AI技术在鸟类艺术创作中的无限可能。机械与有机生命的融合令人耳目一新，展现了创作者对鸟类形态的深刻理解与大胆想象。', gradient: 'linear-gradient(135deg, #6B4226, #8B6914)' },
+            { rank: 'silver', rankText: '最佳视觉奖', title: '幻境鸟林', author: 'AI艺术家·沐光', description: '超现实主义的鸟类栖息场景，色彩绚烂如梦。', review: '画面色彩运用大胆而和谐，AI生成的细节丰富而自然，营造出一个令人沉醉的鸟类梦幻世界。', gradient: 'linear-gradient(135deg, #2D6A4F, #40916C)' },
+            { rank: 'bronze', rankText: '人气奖', title: '千年之翼', author: 'AI艺术家·天工', description: '将中国传统工笔画风格与AI技术结合，描绘仙鹤的优雅。', review: '成功将传统文化元素与AI技术融合，为鸟类艺术创作开辟了新的方向。作品在网络投票中获得了最高人气。', gradient: 'linear-gradient(135deg, #1B4F72, #2980B9)' }
+          ],
+          honorable: [
+            { title: '赛博飞羽', author: 'AI艺术家·翎羽', gradient: 'linear-gradient(135deg, #006D77, #83C5BE)' },
+            { title: '像素鸟鸣', author: 'AI艺术家·画影', gradient: 'linear-gradient(135deg, #D4A373, #FAEDCD)' }
+          ]
+        },
+        'event-007': {
+          title: '候鸟守护者——青少年自然笔记大赛',
+          winners: [
+            { rank: 'gold', rankText: '一等奖', title: '我家窗外的麻雀', author: '小明（12岁）', description: '记录了窗外麻雀一家的日常生活，充满童真与观察力。', review: '作品展现了青少年对身边鸟类的细致观察。笔触稚嫩但充满真诚，体现了自然教育的核心价值——让孩子学会观察和关爱身边的自然。', gradient: 'linear-gradient(135deg, #B8860B, #DAA520)' },
+            { rank: 'silver', rankText: '二等奖', title: '校园里的喜鹊', author: '小红（14岁）', description: '用画笔记录了校园中喜鹊筑巢的全过程。', review: '观察记录完整，绘画技法可圈可点。通过持续一个月的观察，展现了喜鹊筑巢的完整过程。', gradient: 'linear-gradient(135deg, #1B4332, #2D6A4F)' },
+            { rank: 'bronze', rankText: '三等奖', title: '爷爷养的鸽子', author: '小华（10岁）', description: '用蜡笔画出了爷爷家鸽子的各种姿态。', review: '充满童趣的作品，色彩运用大胆，展现了孩子对家鸽的独特视角和情感连接。', gradient: 'linear-gradient(135deg, #1B4F72, #2980B9)' }
+          ],
+          honorable: [
+            { title: '公园的白鹭', author: '小芳（11岁）', gradient: 'linear-gradient(135deg, #006D77, #83C5BE)' },
+            { title: '迁徙的燕子', author: '小杰（13岁）', gradient: 'linear-gradient(135deg, #457B9D, #A8DADC)' }
+          ]
+        }
+      };
+
+      var currentEvent = 'all';
+
+      function renderWinners(eventId) {
+        var container = document.getElementById('winnersContent');
+        var html = '';
+
+        var eventsToShow = eventId === 'all'
+          ? Object.keys(winnerData)
+          : [eventId];
+
+        eventsToShow.forEach(function(eid) {
+          var data = winnerData[eid];
+          if (!data) return;
+
+          html += '<div class="section-header mt-4"><div><h2 class="section-title">' + data.title + '</h2></div></div>';
+
+          data.winners.forEach(function(w) {
+            html += '<div class="winner-card">';
+            html += '<div class="winner-card-img">';
+            html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: ' + w.gradient + '; width:100%; height:100%; object-fit:cover;" alt="' + w.title + '">';
+            html += '</div>';
+            html += '<div class="winner-card-body">';
+            html += '<span class="winner-card-rank ' + w.rank + '">';
+            if (w.rank === 'gold') html += '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="8" r="6"/><path d="M15.5 14l-3.5 7-3.5-7"/></svg>';
+            else if (w.rank === 'silver') html += '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="8 12 11 15 16 9"/></svg>';
+            else if (w.rank === 'bronze') html += '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>';
+            html += w.rankText + '</span>';
+            html += '<h3>' + w.title + '</h3>';
+            html += '<div class="winner-meta">';
+            html += '<span>作者：' + w.author + '</span>';
+            html += '</div>';
+            html += '<p style="font-size:0.9rem;color:var(--text-main);line-height:1.7;">' + w.description + '</p>';
+            html += '<div class="winner-review"><h5>评审说明</h5><p>' + w.review + '</p></div>';
+            html += '</div>';
+            html += '</div>';
+          });
+
+          if (data.honorable && data.honorable.length > 0) {
+            html += '<div class="section-header mt-4"><div><h3 style="font-size:1.05rem;font-weight:600;">优秀奖 / 入围作品</h3></div></div>';
+            html += '<div class="winners-grid">';
+            data.honorable.forEach(function(h) {
+              html += '<div class="honorable-card">';
+              html += '<div class="honorable-card-img">';
+              html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: ' + h.gradient + '; width:100%; height:100%; object-fit:cover;" alt="' + h.title + '">';
+              html += '</div>';
+              html += '<div class="honorable-card-body">';
+              html += '<span class="winner-card-rank honorable" style="margin-bottom:6px;display:inline-block;">优秀奖</span>';
+              html += '<h5>' + h.title + '</h5>';
+              html += '<p>' + h.author + '</p>';
+              html += '</div>';
+              html += '</div>';
+            });
+            html += '</div>';
+          }
+        });
+
+        container.innerHTML = html || '<div class="bc-empty"><h4>暂无获奖作品</h4></div>';
+      }
+
+      document.getElementById('eventTabs').addEventListener('click', function(e) {
+        var tab = e.target.closest('.bc-tab');
+        if (!tab) return;
+        this.querySelectorAll('.bc-tab').forEach(function(t) { t.classList.remove('active'); });
+        tab.classList.add('active');
+        currentEvent = tab.getAttribute('data-event');
+        renderWinners(currentEvent);
+      });
+
+      BI.initAll();
+      renderWinners('all');
+    });
+  </script>
+</body>
+</html>

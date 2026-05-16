@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>投稿 - BirdChain鸟链</title>
+  <meta name="description" content="向鸟链平台赛事投稿你的作品。">
+  <meta property="og:title" content="投稿 - BirdChain鸟链">
+  <meta property="og:description" content="向鸟链平台赛事投稿你的作品。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .submit-form {
+      max-width: 680px;
+      margin: 0 auto;
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+    }
+    .submit-form h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+    .submit-info-card {
+      background: var(--bg-soft);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 24px;
+    }
+    .submit-info-card h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .submit-info-card p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    @media (max-width: 767px) {
+      .submit-form { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+      <div class="submit-form" id="submitForm">
+        <h2>作品投稿</h2>
+        <div class="submit-info-card" id="eventInfoCard" style="display:none;"></div>
+
+        <div class="bc-form-group">
+          <label for="eventSelect">选择赛事</label>
+          <select class="bc-form-select" id="eventSelect">
+            <option value="">请选择赛事</option>
+          </select>
+        </div>
+
+        <div class="bc-form-group">
+          <label for="workTitle">作品标题</label>
+          <input type="text" class="bc-form-input" id="workTitle" placeholder="请输入作品标题">
+          <div class="bc-form-error" id="workTitleError" style="display:none;">请输入作品标题</div>
+        </div>
+
+        <div class="bc-form-group">
+          <label for="workDescription">作品说明</label>
+          <textarea class="bc-form-textarea" id="workDescription" placeholder="请描述你的创作理念、拍摄地点、使用的设备等信息..."></textarea>
+        </div>
+
+        <div class="bc-form-group">
+          <label for="workAuthor">作者署名</label>
+          <input type="text" class="bc-form-input" id="workAuthor" placeholder="请输入你的署名">
+        </div>
+
+        <button class="btn btn-accent btn-lg" id="submitBtn" style="width:100%;">提交投稿</button>
+      </div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BD = window.BirdChainData;
+      var BI = window.BirdChainInteractions;
+      var BStor = window.BirdChainStorage;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('events'));
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '赛事/活动', href: '/events/index.html' },
+        { label: '投稿' }
+      ]);
+
+      var params = new URLSearchParams(window.location.search);
+      var preselectedEventId = params.get('eventId');
+
+      var events = await BD.loadData('events');
+      var activeEvents = events.filter(function(e) { return e.status === '进行中' || e.status === '即将开始'; });
+
+      var select = document.getElementById('eventSelect');
+      activeEvents.forEach(function(e) {
+        var option = document.createElement('option');
+        option.value = e.id;
+        option.textContent = e.title + ' (' + e.status + ')';
+        select.appendChild(option);
+      });
+
+      if (preselectedEventId) {
+        select.value = preselectedEventId;
+        showEventInfo(preselectedEventId);
+      }
+
+      select.addEventListener('change', function() {
+        showEventInfo(this.value);
+      });
+
+      function showEventInfo(eventId) {
+        var card = document.getElementById('eventInfoCard');
+        if (!eventId) {
+          card.style.display = 'none';
+          return;
+        }
+        var event = events.find(function(e) { return e.id === eventId; });
+        if (!event) {
+          card.style.display = 'none';
+          return;
+        }
+        card.style.display = 'block';
+        card.innerHTML = '<h4>' + event.title + '</h4>' +
+          '<p>' + event.type + ' · ' + event.startDate + ' ~ ' + event.endDate + '</p>' +
+          '<p style="margin-top:4px;font-size:0.82rem;">' + event.rules + '</p>';
+      }
+
+      document.getElementById('submitBtn').addEventListener('click', function() {
+        var eventId = document.getElementById('eventSelect').value;
+        var workTitle = document.getElementById('workTitle').value.trim();
+        var workDescription = document.getElementById('workDescription').value.trim();
+        var workAuthor = document.getElementById('workAuthor').value.trim();
+
+        var valid = true;
+        if (!eventId) {
+          BI.showToast('请选择赛事', 'warning');
+          valid = false;
+        }
+        if (!workTitle) {
+          document.getElementById('workTitleError').style.display = 'block';
+          document.getElementById('workTitle').classList.add('error');
+          valid = false;
+        } else {
+          document.getElementById('workTitleError').style.display = 'none';
+          document.getElementById('workTitle').classList.remove('error');
+        }
+        if (!valid) return;
+
+        var submissions = BStor.getItem(BStor.KEYS.eventSubmissions, []);
+        submissions.push({
+          id: 'sub_' + Date.now(),
+          eventId: eventId,
+          workTitle: workTitle,
+          description: workDescription,
+          author: workAuthor || '匿名',
+          submittedAt: new Date().toISOString()
+        });
+        BStor.setItem(BStor.KEYS.eventSubmissions, submissions);
+
+        BI.showToast('投稿成功！', 'success');
+
+        setTimeout(function() {
+          window.location.href = '/events/event-detail.html?id=' + eventId;
+        }, 1500);
+      });
+
+      document.getElementById('workTitle').addEventListener('input', function() {
+        document.getElementById('workTitleError').style.display = 'none';
+        this.classList.remove('error');
+      });
+
+      BI.initAll();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+[
+  {
+    "id": "user-001",
+    "name": "王志远",
+    "avatar": "/assets/images/creators/wang-zhiyuan.jpg",
+    "email": "wang.zhiyuan@birdchain.cn",
+    "country": "中国",
+    "bio": "资深野生动物摄影师，专注拍摄中国湿地鸟类超过十五年。作品多次入选国际野生动物摄影大赛，现为中国鸟类学会会员。",
+    "joinDate": "2018-03-15",
+    "level": 7,
+    "badges": ["金牌摄影师", "湿地守护者", "年度贡献之星", "认证创作者"],
+    "stats": {
+      "works": 48,
+      "followers": 25680,
+      "following": 128,
+      "likes": 45670,
+      "favorites": 12340
+    }
+  },
+  {
+    "id": "user-002",
+    "name": "林雨晴",
+    "avatar": "/assets/images/creators/lin-yuqing.jpg",
+    "email": "lin.yuqing@birdchain.cn",
+    "country": "中国",
+    "bio": "女性野生动物摄影师，以独特的女性视角记录鸟类与自然的和谐之美。擅长高速摄影，作品以捕捉鸟类动态瞬间见长。",
+    "joinDate": "2019-06-20",
+    "level": 6,
+    "badges": ["动态捕捉大师", "女性力量", "认证创作者"],
+    "stats": {
+      "works": 36,
+      "followers": 18930,
+      "following": 215,
+      "likes": 32100,
+      "favorites": 8760
+    }
+  },
+  {
+    "id": "user-003",
+    "name": "观鸟达人李明",
+    "avatar": "/assets/images/avatars/default-01.jpg",
+    "email": "liming@birdchain.cn",
+    "country": "中国",
+    "bio": "业余观鸟爱好者，热爱自然与旅行。已在鸟链平台记录了超过200种鸟类观察记录，希望与更多鸟友交流分享。",
+    "joinDate": "2022-05-10",
+    "level": 3,
+    "badges": ["观鸟达人", "活跃用户"],
+    "stats": {
+      "works": 12,
+      "followers": 860,
+      "following": 345,
+      "likes": 5670,
+      "favorites": 2340
+    }
+  }
+]

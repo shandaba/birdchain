@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>社区 - BirdChain鸟链</title>
+  <meta name="description" content="鸟类爱好者社区，讨论鸟类摄影、观鸟活动、生态保护，分享作品与经验。">
+  <meta property="og:title" content="社区 - BirdChain鸟链">
+  <meta property="og:description" content="加入鸟类爱好者社区，与全球鸟友交流分享。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .community-hero {
+      background: linear-gradient(135deg, #3A5A40, #588157);
+      border-radius: var(--radius-lg);
+      padding: 48px;
+      margin: 20px 0 32px;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    .community-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 70% 30%, rgba(199, 165, 109, 0.15), transparent 60%);
+      pointer-events: none;
+    }
+    .community-hero h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 1;
+    }
+    .community-hero p {
+      font-size: 0.95rem;
+      opacity: 0.88;
+      position: relative;
+      z-index: 1;
+      margin-bottom: 20px;
+    }
+    .community-hero .btn {
+      position: relative;
+      z-index: 1;
+    }
+    .community-category-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+    .community-category-tab {
+      padding: 7px 18px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      background: var(--bg-soft);
+      color: var(--text-secondary);
+      border: 1.5px solid transparent;
+      transition: all var(--transition-fast);
+      white-space: nowrap;
+    }
+    .community-category-tab:hover,
+    .community-category-tab.active {
+      background: var(--brand-accent-soft);
+      color: var(--brand-accent-dark);
+      border-color: var(--brand-accent);
+    }
+    .post-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .post-card {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 20px 24px;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .post-card:hover {
+      border-color: var(--brand-accent);
+      box-shadow: var(--shadow-sm);
+    }
+    .post-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .post-card-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--bg-soft);
+      flex-shrink: 0;
+    }
+    .post-card-author {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .post-card-time {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+    }
+    .post-card-category {
+      margin-left: auto;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      background: var(--brand-accent-soft);
+      color: var(--brand-accent-dark);
+      white-space: nowrap;
+    }
+    .post-card-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-strong);
+    }
+    .post-card-excerpt {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .post-card-stats {
+      display: flex;
+      gap: 18px;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+    .post-card-stats span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .community-sidebar {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 32px;
+    }
+    .community-sidebar-panel {
+      background: var(--bg-soft);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .community-sidebar-panel h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .community-hot-tag {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 16px;
+      font-size: 0.8rem;
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      margin: 0 6px 8px 0;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .community-hot-tag:hover {
+      background: var(--brand-accent-soft);
+      color: var(--brand-accent-dark);
+    }
+    @media (max-width: 767px) {
+      .community-sidebar { grid-template-columns: 1fr; }
+      .community-hero { padding: 32px 20px; }
+      .community-hero h1 { font-size: 1.5rem; }
+      .post-card { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+
+      <div class="community-hero">
+        <h1>鸟类爱好者社区</h1>
+        <p>与全球鸟友交流分享——讨论摄影技巧、分享观鸟心得、探讨保护伦理、组织线下活动。这里是每一位鸟类爱好者的精神家园。</p>
+        <a href="/community/post-detail.html?id=new" class="btn btn-accent">发布新帖</a>
+      </div>
+
+      <div class="community-sidebar">
+        <div>
+          <div class="community-category-tabs" id="communityCategoryTabs">
+            <button class="community-category-tab active" data-category="all">全部帖子</button>
+            <button class="community-category-tab" data-category="讨论区">讨论区</button>
+            <button class="community-category-tab" data-category="问答">问答</button>
+            <button class="community-category-tab" data-category="作品求评">作品求评</button>
+            <button class="community-category-tab" data-category="地方站交流">地方站交流</button>
+            <button class="community-category-tab" data-category="摄影伦理">摄影伦理</button>
+            <button class="community-category-tab" data-category="观鸟活动">观鸟活动</button>
+          </div>
+
+          <div class="post-list" id="postList"></div>
+        </div>
+
+        <div>
+          <div class="community-sidebar-panel">
+            <h4>热门标签</h4>
+            <div>
+              <span class="community-hot-tag">鸟类摄影</span>
+              <span class="community-hot-tag">观鸟技巧</span>
+              <span class="community-hot-tag">器材推荐</span>
+              <span class="community-hot-tag">物种鉴定</span>
+              <span class="community-hot-tag">生态保护</span>
+              <span class="community-hot-tag">摄影伦理</span>
+              <span class="community-hot-tag">线下活动</span>
+              <span class="community-hot-tag">候鸟迁徙</span>
+            </div>
+          </div>
+
+          <div class="community-sidebar-panel">
+            <h4>社区规范</h4>
+            <p style="font-size:0.85rem;color:var(--text-secondary);line-height:1.65;">
+              1. 尊重每一位社区成员<br>
+              2. 禁止诱拍、干扰野生鸟类<br>
+              3. 发布作品请标注拍摄信息<br>
+              4. AI作品请明确标注<br>
+              5. 友善交流，共同进步
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BI = window.BirdChainInteractions;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('community'));
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '社区', href: '/community/index.html' }
+      ]);
+
+      var posts = await loadData('communityPosts');
+      var currentCategory = 'all';
+
+      function renderPosts(category) {
+        var filtered = category === 'all' ? posts : posts.filter(function(p) { return p.category === category; });
+        var sorted = filtered.slice().sort(function(a, b) { return (b.likes || 0) - (a.likes || 0); });
+
+        var html = '';
+        sorted.forEach(function(post) {
+          html += '<a href="/community/post-detail.html?id=' + post.id + '" class="post-card">';
+          html += '<div class="post-card-header">';
+          html += '<div class="post-card-avatar"></div>';
+          html += '<div>';
+          html += '<div class="post-card-author">' + esc(post.authorName) + '</div>';
+          html += '<div class="post-card-time">' + esc(post.publishDate) + '</div>';
+          html += '</div>';
+          html += '<span class="post-card-category">' + esc(post.category) + '</span>';
+          html += '</div>';
+          html += '<div class="post-card-title">' + esc(post.title) + '</div>';
+          html += '<div class="post-card-excerpt">' + esc(post.content) + '</div>';
+          html += '<div class="post-card-stats">';
+          html += '<span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> ' + formatNumber(post.likes || 0) + '</span>';
+          html += '<span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg> ' + formatNumber(post.comments || 0) + '</span>';
+          html += '</div>';
+          html += '</a>';
+        });
+        document.getElementById('postList').innerHTML = html;
+      }
+
+      renderPosts('all');
+
+      document.getElementById('communityCategoryTabs').addEventListener('click', function(e) {
+        var tab = e.target.closest('.community-category-tab');
+        if (!tab) return;
+        var category = tab.getAttribute('data-category');
+        currentCategory = category;
+        var tabs = document.querySelectorAll('.community-category-tab');
+        tabs.forEach(function(t) { t.classList.remove('active'); });
+        tab.classList.add('active');
+        renderPosts(category);
+      });
+
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+      BI.initAll();
+    });
+  </script>
+</body>
+</html>

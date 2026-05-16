@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>鸟类视觉实验室 - BirdChain鸟链</title>
+  <meta name="description" content="BirdChain鸟类视觉实验室，使用AI技术进行鸟类视觉创作，探索无限创意可能。">
+  <meta property="og:title" content="鸟类视觉实验室 - BirdChain鸟链">
+  <meta property="og:description" content="使用AI技术进行鸟类视觉创作，探索无限创意可能。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .lab-hero {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      height: 320px;
+      margin: 20px 0 32px;
+    }
+    .lab-hero img { width: 100%; height: 100%; object-fit: cover; }
+    .lab-hero-content {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(7,27,45,0.85), rgba(7,27,45,0.15));
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 40px;
+      color: #fff;
+    }
+    .lab-hero-content h1 { font-size: 2.2rem; font-weight: 700; color: #fff; margin-bottom: 8px; }
+    .lab-hero-content p { font-size: 1rem; opacity: 0.85; max-width: 600px; margin-bottom: 20px; }
+    .lab-cta { display: inline-flex; align-items: center; gap: 8px; padding: 14px 32px; border-radius: var(--radius-lg); background: var(--brand-accent); color: #fff; font-size: 1.05rem; font-weight: 600; transition: all var(--transition-fast); }
+    .lab-cta:hover { background: var(--brand-accent-dark); color: #fff; transform: translateY(-2px); }
+    .lab-create-types { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 48px; }
+    .lab-create-type-card {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--transition-normal);
+    }
+    .lab-create-type-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--brand-accent); }
+    .lab-create-type-icon { font-size: 2.2rem; margin-bottom: 12px; }
+    .lab-create-type-card h4 { font-size: 1rem; font-weight: 600; margin-bottom: 4px; }
+    .lab-create-type-card p { font-size: 0.82rem; color: var(--text-secondary); }
+    .lab-style-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 40px; }
+    .lab-style-chip {
+      padding: 10px 20px;
+      border-radius: 24px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .lab-style-chip:hover, .lab-style-chip.active { background: var(--brand-accent-soft); color: var(--brand-accent-dark); border-color: var(--brand-accent); }
+    .lab-history-link { display: inline-flex; align-items: center; gap: 6px; color: var(--brand-accent); font-weight: 500; font-size: 0.9rem; }
+    .lab-history-link:hover { text-decoration: underline; }
+    .lab-inspo-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+    .lab-inspo-card {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      transition: all var(--transition-normal);
+      cursor: pointer;
+    }
+    .lab-inspo-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .lab-inspo-card-img { aspect-ratio: 4/3; overflow: hidden; }
+    .lab-inspo-card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform var(--transition-slow); }
+    .lab-inspo-card:hover .lab-inspo-card-img img { transform: scale(1.04); }
+    .lab-inspo-card-body { padding: 14px; }
+    .lab-inspo-card-body h5 { font-size: 0.9rem; font-weight: 600; margin-bottom: 4px; }
+    .lab-inspo-card-body .meta { font-size: 0.78rem; color: var(--text-secondary); }
+    @media (max-width:767px) {
+      .lab-hero { height: 240px; }
+      .lab-hero-content { padding: 24px; }
+      .lab-hero-content h1 { font-size: 1.5rem; }
+      .lab-create-types { grid-template-columns: repeat(2,1fr); }
+      .lab-inspo-grid { grid-template-columns: repeat(2,1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div class="bc-breadcrumb">
+        <a href="/">首页</a><span class="sep">/</span><span class="current">鸟类视觉实验室</span>
+      </div>
+      <div class="lab-hero">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+             style="background:linear-gradient(135deg,#1B4332,#2D6A4F,#40916C);width:100%;aspect-ratio:auto;object-fit:cover;" alt="鸟类视觉实验室">
+        <div class="lab-hero-content">
+          <h1>鸟类视觉实验室</h1>
+          <p>融合AI技术与鸟类影像艺术，探索视觉创作的无限可能。从海报到插画，从科普卡片到视觉素材，让每一只鸟都焕发新的生命力。</p>
+          <a href="/lab/create.html" class="lab-cta">开始创作</a>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header">
+          <h2 class="section-title">创作类型</h2>
+        </div>
+        <div class="lab-create-types">
+          <a href="/lab/create.html" class="lab-create-type-card">
+            <div class="lab-create-type-icon">🎨</div>
+            <h4>海报设计</h4>
+            <p>鸟类主题艺术海报</p>
+          </a>
+          <a href="/lab/create.html" class="lab-create-type-card">
+            <div class="lab-create-type-icon">🖌️</div>
+            <h4>鸟类插画</h4>
+            <p>精美鸟类艺术插画</p>
+          </a>
+          <a href="/lab/create.html" class="lab-create-type-card">
+            <div class="lab-create-type-icon">📖</div>
+            <h4>科普卡片</h4>
+            <p>鸟类知识科普卡片</p>
+          </a>
+          <a href="/lab/create.html" class="lab-create-type-card">
+            <div class="lab-create-type-icon">📔</div>
+            <h4>封面设计</h4>
+            <p>书籍杂志封面设计</p>
+          </a>
+          <a href="/lab/create.html" class="lab-create-type-card">
+            <div class="lab-create-type-icon">🖼️</div>
+            <h4>视觉素材</h4>
+            <p>数字视觉素材生成</p>
+          </a>
+          <a href="/lab/create.html" class="lab-create-type-card">
+            <div class="lab-create-type-icon">🛍️</div>
+            <h4>创作周边</h4>
+            <p>周边商品图案设计</p>
+          </a>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header">
+          <h2 class="section-title">风格模板</h2>
+        </div>
+        <div class="lab-style-chips">
+          <span class="lab-style-chip">水彩插画</span>
+          <span class="lab-style-chip">自然写实</span>
+          <span class="lab-style-chip">复古图鉴</span>
+          <span class="lab-style-chip">扁平设计</span>
+          <span class="lab-style-chip">国风水墨</span>
+          <span class="lab-style-chip">手绘素描</span>
+          <span class="lab-style-chip">极简线稿</span>
+        </div>
+      </div>
+      <div class="section">
+        <div class="section-header">
+          <h2 class="section-title">AI作品展示</h2>
+          <a href="/lab/gallery.html" class="btn btn-outline btn-sm">浏览全部</a>
+        </div>
+        <div class="grid-3" id="aiWorksGrid"></div>
+      </div>
+      <div class="section">
+        <div class="section-header">
+          <h2 class="section-title">灵感示例</h2>
+        </div>
+        <div class="lab-inspo-grid" id="inspoGrid"></div>
+      </div>
+      <div style="text-align:center;padding:24px 0 48px;">
+        <a href="/lab/history.html" class="lab-history-link">📋 查看我的创作历史</a>
+      </div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      app.insertAdjacentHTML('afterbegin', BirdChainComponents.renderHeader('lab'));
+      app.insertAdjacentHTML('beforeend', BirdChainComponents.renderFooter());
+      BirdChainInteractions.initAll();
+
+      var BC = window.BirdChainStorage;
+      var BCD = window.BirdChainData;
+      var BCC = window.BirdChainComponents;
+
+      var works = await BCD.loadData('works');
+      var aiWorks = works.filter(function(w) { return w.category === 'AI创作'; });
+
+      var aiGrid = document.getElementById('aiWorksGrid');
+      if (aiWorks.length > 0) {
+        aiWorks.slice(0, 6).forEach(function(w) {
+          var card = document.createElement('div');
+          card.className = 'bc-work-card';
+          card.innerHTML =
+            '<div class="bc-work-card-img" style="aspect-ratio:4/3">' +
+            '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background:linear-gradient(135deg,' +
+            ['#1B4332,#2D6A4F','#1B4F72,#2980B9','#B8860B,#DAA520','#006D77,#83C5BE','#2D6A4F,#40916C','#023E8A,#0077B6'][Math.floor(Math.random()*6)] +
+            ');width:100%;height:100%;object-fit:cover;" alt="' + (w.title||'') + '" loading="lazy">' +
+            '<div class="bc-work-card-overlay"><div class="bc-work-card-actions">' +
+            '<button data-action="favorite" data-work-id="' + w.id + '">' + (typeof STAR_ICON_SVG !== 'undefined' ? STAR_ICON_SVG : '☆') + '</button>' +
+            '<button data-action="like" data-work-id="' + w.id + '">' + (typeof HEART_ICON_SVG !== 'undefined' ? HEART_ICON_SVG : '♥') + '</button>' +
+            '</div></div></div>' +
+            '<div class="bc-work-card-body"><div class="bc-work-card-title">' + (w.title||'') + '</div>' +
+            '<div class="bc-work-card-meta"><span class="tag tag-accent">' + (w.category||'') + '</span>' +
+            '<span style="font-size:0.78rem;color:var(--text-secondary)">' + (typeof EYE_ICON_SVG !== 'undefined' ? EYE_ICON_SVG : '') + ' ' + (typeof formatNumber !== 'undefined' ? formatNumber(w.views||0) : w.views||0) + '</span></div></div>';
+          aiGrid.appendChild(card);
+        });
+      } else {
+        aiGrid.innerHTML = '<div class="bc-empty"><div class="bc-empty-icon">🎨</div><h4>暂无AI作品</h4></div>';
+      }
+
+      var inspoGrid = document.getElementById('inspoGrid');
+      var featuredWorks = works.filter(function(w) { return w.isPremium; }).slice(0, 3);
+      if (featuredWorks.length > 0) {
+        featuredWorks.forEach(function(w) {
+          var card = document.createElement('div');
+          card.className = 'lab-inspo-card';
+          card.innerHTML =
+            '<div class="lab-inspo-card-img">' +
+            '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background:linear-gradient(135deg,#3A5A40,#588157);width:100%;height:100%;object-fit:cover;" alt="' + (w.title||'') + '" loading="lazy">' +
+            '</div>' +
+            '<div class="lab-inspo-card-body"><h5>' + (w.title||'') + '</h5>' +
+            '<div class="meta">' + (w.species||'') + ' · ' + (w.category||'') + '</div></div>';
+          card.addEventListener('click', function() { window.location.href = '/lab/work-detail.html?id=' + w.id; });
+          inspoGrid.appendChild(card);
+        });
+      } else {
+        inspoGrid.innerHTML = '<div class="bc-empty"><div class="bc-empty-icon">✨</div><h4>暂无灵感示例</h4></div>';
+      }
+    });
+  </script>
+</body>
+</html>

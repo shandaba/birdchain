@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>观测点详情 - BirdChain鸟链</title>
+  <meta name="description" content="查看观测点详细信息，包括最佳观测季节、可见鸟种、交通信息和注意事项。">
+  <meta property="og:title" content="观测点详情 - BirdChain鸟链">
+  <meta property="og:description" content="查看观测点详细信息。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .bc-obs-point-hero {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin: 16px 0 28px;
+    }
+    .bc-obs-point-hero img {
+      width: 100%;
+      aspect-ratio: 21/9;
+      object-fit: cover;
+    }
+    .bc-obs-point-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(7,27,45,0.85), rgba(7,27,45,0.1));
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 36px;
+      color: #fff;
+    }
+    .bc-obs-point-hero-overlay h1 {
+      color: #fff;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .bc-obs-point-location {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    .bc-gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .bc-gallery-item {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      aspect-ratio: 4/3;
+    }
+    .bc-gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform var(--transition-slow);
+    }
+    .bc-gallery-item:hover img {
+      transform: scale(1.05);
+    }
+    .bc-season-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .bc-season-card {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      text-align: center;
+    }
+    .bc-season-card.best {
+      border-color: var(--brand-accent);
+      background: var(--brand-accent-soft);
+    }
+    .bc-season-icon {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+    .bc-season-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text-strong);
+      margin-bottom: 4px;
+    }
+    .bc-season-desc {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+    }
+    .bc-season-badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      margin-top: 6px;
+      background: var(--brand-accent);
+      color: #fff;
+    }
+    .bc-species-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .bc-species-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .bc-species-item:hover {
+      border-color: var(--brand-accent);
+      box-shadow: var(--shadow-sm);
+    }
+    .bc-species-item-img {
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+    .bc-species-item-info h5 {
+      font-size: 0.9rem;
+    }
+    .bc-species-item-info span {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+    .bc-transport-card {
+      background: var(--bg-soft);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+    .bc-transport-card h4 {
+      margin-bottom: 12px;
+    }
+    .bc-transport-card p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+    .bc-warning-box {
+      background: #FFF3E0;
+      border: 1px solid #FFB74D;
+      border-left: 4px solid #F57C00;
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin-bottom: 32px;
+    }
+    [data-theme="dark"] .bc-warning-box {
+      background: #3D3020;
+      border-color: #8B6914;
+      border-left-color: #DAA520;
+    }
+    .bc-warning-box h4 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #E65100;
+      margin-bottom: 8px;
+    }
+    [data-theme="dark"] .bc-warning-box h4 {
+      color: #FFB74D;
+    }
+    .bc-warning-box p {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+    .bc-notice-list {
+      list-style: disc;
+      padding-left: 20px;
+      margin-bottom: 32px;
+    }
+    .bc-notice-list li {
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+    @media (max-width: 767px) {
+      .bc-gallery-grid { grid-template-columns: 1fr; }
+      .bc-season-grid { grid-template-columns: repeat(2, 1fr); }
+      .bc-species-list { grid-template-columns: 1fr; }
+      .bc-obs-point-hero-overlay { padding: 20px; }
+      .bc-obs-point-hero-overlay h1 { font-size: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbTarget"></div>
+      <div id="pageContent"></div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      BirdChainComponents.renderHeader('stations');
+      BirdChainComponents.renderFooter();
+      BirdChainInteractions.initAll();
+
+      var params = new URLSearchParams(window.location.search);
+      var pointId = params.get('id') || 'obs-001';
+
+      var observationPoints = {
+        'obs-001': {
+          name: '鄱阳湖大湖池观鸟台',
+          location: '江西省九江市鄱阳湖国家级自然保护区',
+          description: '鄱阳湖大湖池观鸟台是观赏越冬候鸟的最佳位置，每年冬季有数十万只候鸟在此栖息，包括白鹤、大天鹅、白鹭等珍稀鸟类。',
+          bestSeasons: ['11月', '12月', '1月', '2月', '3月'],
+          visibleSpecies: ['白鹤', '大天鹅', '白鹭', '东方白鹳', '紫水鸡', '鸳鸯'],
+          transport: '从南昌昌北机场出发，驾车约2小时可达。也可乘坐高铁至九江站，转乘景区专线巴士。保护区内有停车场，观鸟台步行可达。',
+          notices: [
+            '请保持安静，避免大声喧哗惊扰鸟类',
+            '禁止使用无人机，避免干扰候鸟正常活动',
+            '请勿投喂鸟类，保持自然生态平衡',
+            '建议携带望远镜和长焦镜头（400mm以上）',
+            '冬季气温较低，请做好防寒保暖准备',
+            '请将垃圾随身带走，保护湿地环境'
+          ],
+          protection: '鄱阳湖湿地是国际重要湿地，请严格遵守保护区管理规定。白鹤为极危物种，全球几乎全部种群在此越冬，请保持安全距离（建议200米以上），不要追逐或惊吓鸟类。发现受伤鸟类请及时联系保护区工作人员。'
+        },
+        'obs-002': {
+          name: '扎龙湿地观鸟长廊',
+          location: '黑龙江省齐齐哈尔市扎龙国家级自然保护区',
+          description: '扎龙湿地观鸟长廊是世界著名的丹顶鹤观赏地，芦苇沼泽广阔，冬季银装素裹，丹顶鹤在雪地中翩翩起舞的场景令人难忘。',
+          bestSeasons: ['12月', '1月', '2月', '5月', '6月'],
+          visibleSpecies: ['丹顶鹤', '东方白鹳', '白鹭', '大天鹅'],
+          transport: '从齐齐哈尔机场出发，驾车约1小时可达。也可乘坐高铁至齐齐哈尔站，转乘保护区专线。冬季道路可能结冰，建议乘坐四驱车辆。',
+          notices: [
+            '冬季温度极低（-20℃至-30℃），务必做好防寒保暖',
+            '雪地行走注意防滑，建议穿着防滑雪地靴',
+            '拍摄丹顶鹤请使用静音快门模式',
+            '观鸟长廊内请勿吸烟',
+            '清晨是最佳观赏时间，建议6:00前到达'
+          ],
+          protection: '扎龙自然保护区是丹顶鹤最重要的繁殖地之一。丹顶鹤为濒危物种，请严格遵守观鸟规范，不要跨越保护区划定的界线。禁止使用闪光灯拍摄，避免对丹顶鹤造成视觉伤害。'
+        },
+        'obs-003': {
+          name: '秦岭洋县朱鹮观测点',
+          location: '陕西省汉中市洋县朱鹮自然保护区',
+          description: '洋县是朱鹮在全球唯一的野生种群栖息地，这里山清水秀，溪流潺潺，朱鹮在稻田和溪流间觅食的场景令人感动。',
+          bestSeasons: ['4月', '5月', '6月', '10月', '11月'],
+          visibleSpecies: ['朱鹮', '中华秋沙鸭', '红腹锦鸡', '雕鸮'],
+          transport: '从汉中城固机场出发，驾车约1.5小时可达洋县。也可乘坐高铁至汉中站，转乘前往洋县的班车。观测点附近有民宿可供住宿。',
+          notices: [
+            '朱鹮为极度濒危物种，请保持安静和安全距离',
+            '请勿穿着鲜艳服装，建议穿迷彩或暗色衣物',
+            '稻田区域注意脚下，不要踩踏农作物',
+            '拍摄时请使用长焦镜头（500mm以上）',
+            '尊重当地村民的生活，不要擅自进入私人领地'
+          ],
+          protection: '朱鹮曾一度被认为野外灭绝，1981年在洋县重新发现仅存的7只野生个体。经过数十年保护，种群已恢复到数千只。请在观测时严格遵守保护区规定，朱鹮的持续繁衍需要每个人的守护。'
+        }
+      };
+
+      var point = observationPoints[pointId] || observationPoints['obs-001'];
+
+      document.title = point.name + ' - BirdChain鸟链';
+      document.getElementById('breadcrumbTarget').innerHTML = BirdChainComponents.renderBreadcrumb([
+        { label: '全球地方站', href: 'index.html' }, { label: '观测点' }, { label: point.name }
+      ]);
+
+      var speciesData = [];
+      try { speciesData = await loadData('species'); } catch(e) { console.error(e); }
+
+      var visibleSpeciesObjs = [];
+      if (point.visibleSpecies && point.visibleSpecies.length > 0) {
+        point.visibleSpecies.forEach(function(name) {
+          var found = speciesData.find(function(s) { return s.nameCn === name; });
+          if (found) visibleSpeciesObjs.push(found);
+        });
+      }
+
+      var seasons = [
+        { name: '春季', months: '3-5月', icon: '🌸', isBest: point.bestSeasons.some(function(s) { return ['3月','4月','5月'].indexOf(s) !== -1; }) },
+        { name: '夏季', months: '6-8月', icon: '☀️', isBest: point.bestSeasons.some(function(s) { return ['6月','7月','8月'].indexOf(s) !== -1; }) },
+        { name: '秋季', months: '9-11月', icon: '🍂', isBest: point.bestSeasons.some(function(s) { return ['9月','10月','11月'].indexOf(s) !== -1; }) },
+        { name: '冬季', months: '12-2月', icon: '❄️', isBest: point.bestSeasons.some(function(s) { return ['12月','1月','2月'].indexOf(s) !== -1; }) }
+      ];
+
+      var html = '';
+
+      html += '<div class="bc-obs-point-hero">';
+      html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: linear-gradient(135deg, #2a5c4a, #1a3a2a); width:100%; aspect-ratio:21/9; object-fit:cover;" alt="' + esc(point.name) + '">';
+      html += '<div class="bc-obs-point-hero-overlay">';
+      html += '<h1>' + esc(point.name) + '</h1>';
+      html += '<div class="bc-obs-point-location">' + LOCATION_ICON_SVG + ' ' + esc(point.location) + '</div>';
+      html += '</div></div>';
+
+      html += '<p style="font-size:0.95rem;color:var(--text-secondary);line-height:1.8;margin-bottom:28px;">' + esc(point.description) + '</p>';
+
+      html += '<div class="section-header"><h3 class="section-title">📸 观测点图集</h3></div>';
+      html += '<div class="bc-gallery-grid">';
+      html += '<div class="bc-gallery-item"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: linear-gradient(135deg, #1B4332, #2D6A4F); width:100%; height:100%; object-fit:cover;" alt="观测点全景"></div>';
+      html += '<div class="bc-gallery-item"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: linear-gradient(135deg, #457B9D, #A8DADC); width:100%; height:100%; object-fit:cover;" alt="观测设施"></div>';
+      html += '<div class="bc-gallery-item"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: linear-gradient(135deg, #D4A373, #FAEDCD); width:100%; height:100%; object-fit:cover;" alt="周边环境"></div>';
+      html += '</div>';
+
+      html += '<div class="section-header"><h3 class="section-title">📅 推荐季节</h3></div>';
+      html += '<div class="bc-season-grid">';
+      seasons.forEach(function(s) {
+        html += '<div class="bc-season-card' + (s.isBest ? ' best' : '') + '">';
+        html += '<div class="bc-season-icon">' + s.icon + '</div>';
+        html += '<div class="bc-season-name">' + s.name + '</div>';
+        html += '<div class="bc-season-desc">' + s.months + '</div>';
+        if (s.isBest) html += '<span class="bc-season-badge">最佳季节</span>';
+        html += '</div>';
+      });
+      html += '</div>';
+
+      html += '<div class="section-header"><h3 class="section-title">🦜 可见鸟种</h3></div>';
+      if (visibleSpeciesObjs.length > 0) {
+        html += '<div class="bc-species-list">';
+        visibleSpeciesObjs.forEach(function(sp) {
+          html += '<a href="species-detail.html?id=' + esc(sp.id) + '" class="bc-species-item">';
+          html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="bc-species-item-img" style="background: linear-gradient(135deg, #457B9D, #A8DADC);" alt="' + esc(sp.nameCn) + '">';
+          html += '<div class="bc-species-item-info"><h5>' + esc(sp.nameCn) + '</h5><span>' + esc(sp.conservation || '') + '</span></div>';
+          html += '</a>';
+        });
+        html += '</div>';
+      } else {
+        html += '<p class="text-secondary">暂无鸟种数据</p>';
+      }
+
+      html += '<div class="section-header"><h3 class="section-title">🚗 交通信息</h3></div>';
+      html += '<div class="bc-transport-card">';
+      html += '<p>' + esc(point.transport) + '</p>';
+      html += '</div>';
+
+      html += '<div class="section-header"><h3 class="section-title">⚠️ 注意事项</h3></div>';
+      html += '<ul class="bc-notice-list">';
+      point.notices.forEach(function(n) {
+        html += '<li>' + esc(n) + '</li>';
+      });
+      html += '</ul>';
+
+      html += '<div class="bc-warning-box">';
+      html += '<h4>🛡️ 保护提醒</h4>';
+      html += '<p>' + esc(point.protection) + '</p>';
+      html += '</div>';
+
+      document.getElementById('pageContent').innerHTML = html;
+    });
+  </script>
+</body>
+</html>

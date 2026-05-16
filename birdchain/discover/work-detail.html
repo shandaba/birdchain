@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>作品详情 - BirdChain鸟链</title>
+  <meta name="description" content="查看鸟类影像作品详情">
+  <meta property="og:title" content="作品详情 - BirdChain鸟链">
+  <meta property="og:description" content="查看鸟类影像作品详情">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .bc-work-hero-img {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      aspect-ratio: 16/10;
+      margin-bottom: 24px;
+    }
+    .bc-work-hero-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .bc-work-header {
+      margin-bottom: 24px;
+    }
+    .bc-work-header h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .bc-work-header-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+    }
+    .bc-work-author-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .bc-work-author-row img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .bc-work-author-name {
+      font-weight: 600;
+      color: var(--text-strong);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .bc-work-stats-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin: 16px 0;
+      flex-wrap: wrap;
+    }
+    .bc-work-stat {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+    .bc-work-stat strong {
+      color: var(--text-strong);
+    }
+    .bc-work-actions-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .bc-work-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 20px;
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      font-weight: 500;
+      border: 1.5px solid var(--line-soft);
+      background: var(--bg-card);
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .bc-work-action-btn:hover {
+      border-color: var(--brand-accent);
+      color: var(--brand-accent);
+    }
+    .bc-work-action-btn.liked,
+    .bc-work-action-btn.favorited {
+      background: var(--danger);
+      color: #fff;
+      border-color: var(--danger);
+    }
+    .bc-work-action-btn.btn-primary-action {
+      background: var(--brand-primary);
+      color: #fff;
+      border-color: var(--brand-primary);
+    }
+    .bc-work-action-btn.btn-primary-action:hover {
+      background: var(--brand-primary-dark);
+    }
+    .bc-license-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: var(--brand-accent-soft);
+      color: var(--brand-accent-dark);
+    }
+    .bc-tags-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .bc-exif-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+    }
+    .bc-exif-table td {
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .bc-exif-table td:first-child {
+      color: var(--text-secondary);
+      width: 120px;
+      font-weight: 500;
+    }
+    .bc-author-sidebar-card {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .bc-author-sidebar-card img {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 0 auto 12px;
+    }
+    .bc-author-sidebar-card h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .bc-author-sidebar-card .bio {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      margin: 8px 0 12px;
+      line-height: 1.5;
+    }
+    .bc-author-sidebar-stats {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 14px;
+      font-size: 0.82rem;
+    }
+    .bc-author-sidebar-stats span {
+      font-weight: 600;
+      color: var(--text-strong);
+    }
+    .bc-related-works {
+      margin-top: 20px;
+    }
+    .bc-related-works h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .bc-description-block {
+      font-size: 0.92rem;
+      line-height: 1.8;
+      color: var(--text-main);
+      margin-bottom: 20px;
+    }
+    @media (max-width: 767px) {
+      .bc-work-header h1 { font-size: 1.25rem; }
+      .bc-work-hero-img { border-radius: var(--radius-md); }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+
+      <div class="bc-detail-layout">
+        <div class="bc-detail-main">
+          <div class="bc-work-hero-img" id="workHeroImg"></div>
+          <div id="workContent"></div>
+
+          <div class="bc-comments" id="commentsSection">
+            <h4>评论 (<span id="commentsCount">0</span>)</h4>
+            <form class="bc-comment-form" data-action="comment-form" data-target-type="work" id="commentForm">
+              <input type="text" placeholder="写下你的评论..." required />
+              <button type="submit" class="btn btn-primary btn-sm">发布</button>
+            </form>
+            <div id="commentsList"></div>
+          </div>
+        </div>
+
+        <aside class="bc-detail-sidebar">
+          <div id="authorSidebar"></div>
+          <div class="bc-related-works">
+            <h4>相关作品</h4>
+            <div id="relatedWorks"></div>
+          </div>
+        </aside>
+      </div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BD = window.BirdChainData;
+      var BI = window.BirdChainInteractions;
+      var BS = window.BirdChainStorage;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('discover'));
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+
+      var params = new URLSearchParams(window.location.search);
+      var workId = params.get('id') || 'work-001';
+
+      var works = await BD.loadData('works');
+      var creators = await BD.loadData('creators');
+
+      var work = works.find(function(w) { return w.id === workId; });
+      if (!work) work = works[0];
+
+      var creator = creators.find(function(c) { return c.id === work.creatorId; }) || {};
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '发现/灵感', href: '/discover/index.html' },
+        { label: work.title }
+      ]);
+
+      document.title = work.title + ' - BirdChain鸟链';
+      var ogTitle = document.querySelector('meta[property="og:title"]');
+      if (ogTitle) ogTitle.setAttribute('content', work.title + ' - BirdChain鸟链');
+
+      document.getElementById('workHeroImg').innerHTML = imgTag(work.image, work.dataImg, esc(work.title));
+
+      var contentHtml = '';
+      contentHtml += '<div class="bc-work-header">';
+      contentHtml += '<h1>' + esc(work.title) + '</h1>';
+      contentHtml += '<div class="bc-work-header-meta">';
+      contentHtml += '<div class="bc-work-author-row">';
+      contentHtml += imgTag(creator.avatar, creator.dataImg, esc(creator.name), 'width:40px;height:40px;border-radius:50%;');
+      contentHtml += '<div>';
+      contentHtml += '<div class="bc-work-author-name">' + esc(creator.name || '未知创作者');
+      if (creator.verified) contentHtml += VERIFIED_SVG;
+      contentHtml += '</div>';
+      contentHtml += '<div class="text-xs text-secondary">' + esc(creator.specialties ? creator.specialties.join(' / ') : '') + '</div>';
+      contentHtml += '</div>';
+      contentHtml += '</div>';
+      contentHtml += '<span>' + LOCATION_ICON_SVG + ' ' + esc(work.country || '') + '</span>';
+      contentHtml += '</div>';
+      contentHtml += '</div>';
+
+      contentHtml += '<div class="bc-tags-row">';
+      if (work.species) contentHtml += '<span class="tag tag-accent">' + esc(work.species) + '</span>';
+      if (work.habitat) contentHtml += '<span class="tag">' + esc(work.habitat) + '</span>';
+      if (work.tags) {
+        work.tags.forEach(function(t) {
+          contentHtml += '<span class="tag">' + esc(t) + '</span>';
+        });
+      }
+      contentHtml += '</div>';
+
+      contentHtml += '<div class="bc-work-stats-row">';
+      contentHtml += '<div class="bc-work-stat">' + EYE_ICON_SVG + ' <strong>' + formatNumber(work.views || 0) + '</strong> 浏览</div>';
+      contentHtml += '<div class="bc-work-stat">' + HEART_ICON_SVG + ' <strong id="likeCount">' + formatNumber(work.likes || 0) + '</strong> 喜欢</div>';
+      contentHtml += '<div class="bc-work-stat">' + STAR_ICON_SVG + ' <strong id="favCount">' + formatNumber(work.favorites || 0) + '</strong> 收藏</div>';
+      contentHtml += '<div class="bc-work-stat">' + COMMENT_ICON_SVG + ' <strong id="cmtCount">0</strong> 评论</div>';
+      contentHtml += '</div>';
+
+      contentHtml += '<span class="bc-license-badge">' + esc(work.licenseType || '标准授权') + '</span>';
+
+      contentHtml += '<div class="bc-work-actions-row mt-3">';
+      contentHtml += '<button class="bc-work-action-btn" data-action="like" data-work-id="' + esc(work.id) + '">' + HEART_ICON_SVG + ' 喜欢</button>';
+      contentHtml += '<button class="bc-work-action-btn" data-action="favorite" data-work-id="' + esc(work.id) + '">' + STAR_ICON_SVG + ' 收藏</button>';
+      contentHtml += '<button class="bc-work-action-btn" data-action="share-work" data-work-id="' + esc(work.id) + '" data-work-title="' + esc(work.title) + '">' + SHARE_ICON_SVG + ' 分享</button>';
+      contentHtml += '<a href="/market.html?work=' + esc(work.id) + '" class="bc-work-action-btn btn-primary-action">下载/获取授权</a>';
+      contentHtml += '</div>';
+
+      if (work.description) {
+        contentHtml += '<div class="bc-description-block">' + esc(work.description) + '</div>';
+      }
+
+      if (work.exif && work.exif.camera !== '数字创作' && work.exif.camera !== 'AI生成') {
+        contentHtml += '<h4 class="mb-2">拍摄参数</h4>';
+        contentHtml += '<table class="bc-exif-table">';
+        contentHtml += '<tr><td>相机</td><td>' + esc(work.exif.camera) + '</td></tr>';
+        contentHtml += '<tr><td>镜头</td><td>' + esc(work.exif.lens) + '</td></tr>';
+        contentHtml += '<tr><td>光圈</td><td>' + esc(work.exif.aperture) + '</td></tr>';
+        contentHtml += '<tr><td>快门</td><td>' + esc(work.exif.shutter) + '</td></tr>';
+        contentHtml += '<tr><td>ISO</td><td>' + esc(work.exif.iso) + '</td></tr>';
+        contentHtml += '</table>';
+      }
+
+      document.getElementById('workContent').innerHTML = contentHtml;
+
+      var authorHtml = '';
+      authorHtml += '<div class="bc-author-sidebar-card">';
+      authorHtml += imgTag(creator.avatar, creator.dataImg, esc(creator.name), 'width:64px;height:64px;border-radius:50%;');
+      authorHtml += '<h4>' + esc(creator.name || '未知创作者');
+      if (creator.verified) authorHtml += VERIFIED_SVG;
+      authorHtml += '</h4>';
+      if (creator.bio) authorHtml += '<div class="bio">' + esc(creator.bio) + '</div>';
+      authorHtml += '<div class="bc-author-sidebar-stats">';
+      authorHtml += '<div><span>' + formatNumber(creator.works || 0) + '</span><br><small>作品</small></div>';
+      authorHtml += '<div><span>' + formatNumber(creator.followers || 0) + '</span><br><small>粉丝</small></div>';
+      authorHtml += '</div>';
+      authorHtml += '<button class="btn btn-outline btn-sm" data-action="follow" data-creator-id="' + esc(creator.id) + '" data-creator-name="' + esc(creator.name) + '" style="width:100%;">关注</button>';
+      authorHtml += '</div>';
+      document.getElementById('authorSidebar').innerHTML = authorHtml;
+
+      var relatedWorks = works.filter(function(w) {
+        return w.id !== work.id && (w.species === work.species || w.category === work.category || (creator.id && w.creatorId === creator.id));
+      }).slice(0, 3);
+
+      var relatedHtml = '';
+      if (relatedWorks.length === 0) {
+        relatedHtml = '<p class="text-sm text-secondary">暂无相关作品</p>';
+      } else {
+        relatedWorks.forEach(function(rw) {
+          var rCreator = creators.find(function(c) { return c.id === rw.creatorId; }) || {};
+          var aspectMap = { '横图': '16/9', '竖图': '3/4', '方图': '1/1' };
+          relatedHtml += BC.renderWorkCard({
+            id: rw.id,
+            title: rw.title,
+            image: rw.image,
+            dataImg: rw.dataImg || null,
+            aspectRatio: aspectMap[rw.orientation] || '4/3',
+            author: rCreator.name || rw.creator || '未知创作者',
+            authorAvatar: rCreator.avatar || null,
+            authorDataImg: rCreator.dataImg || null,
+            likes: rw.likes || 0,
+            views: rw.views || 0,
+            price: rw.basePrice || 0
+          });
+        });
+      }
+      document.getElementById('relatedWorks').innerHTML = relatedHtml;
+
+      function renderComments() {
+        var comments = BS.getItem(BS.KEYS.comments_data, {});
+        var key = 'work_' + work.id;
+        var workComments = comments[key] || [];
+        document.getElementById('commentsCount').textContent = workComments.length;
+        document.getElementById('cmtCount').textContent = workComments.length;
+
+        var html = '';
+        workComments.slice().reverse().forEach(function(cmt) {
+          html += '<div class="bc-comment-item">';
+          html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: linear-gradient(135deg, #457B9D, #A8DADC); width:36px; height:36px; border-radius:50%; object-fit:cover;" alt="avatar">';
+          html += '<div class="bc-comment-content">';
+          html += '<div class="bc-comment-author">' + esc(cmt.author || '用户') + '</div>';
+          html += '<div class="bc-comment-text">' + esc(cmt.content) + '</div>';
+          html += '<div class="bc-comment-time">' + new Date(cmt.time).toLocaleString('zh-CN') + '</div>';
+          html += '</div>';
+          html += '</div>';
+        });
+        if (html === '') {
+          html = '<p class="text-sm text-secondary" style="padding:20px 0;">暂无评论，来说两句吧</p>';
+        }
+        document.getElementById('commentsList').innerHTML = html;
+      }
+
+      renderComments();
+
+      document.getElementById('commentForm').setAttribute('data-target-id', work.id);
+
+      document.addEventListener('bc:comment-added', function(e) {
+        if (e.detail.targetId === work.id && e.detail.targetType === 'work') {
+          renderComments();
+        }
+      });
+
+      document.addEventListener('click', function(e) {
+        var shareBtn = e.target.closest('[data-action="share-work"]');
+        if (!shareBtn) return;
+        e.preventDefault();
+        var shareUrl = window.location.href;
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(shareUrl).then(function() {
+            BI.showToast('链接已复制到剪贴板', 'success');
+          }).catch(function() {
+            BI.showToast('分享链接: ' + shareUrl, 'info');
+          });
+        } else {
+          BI.showToast('分享链接: ' + shareUrl, 'info');
+        }
+      });
+
+      BI.initLikeButtons();
+      BI.initFavoriteButtons();
+      BI.initFollowButtons();
+      BI.initCartButtons();
+      BI.initCommentForms();
+      BI.initNewsletterForm();
+      BI.initThemeToggle();
+      BI.initMobileMenu();
+      BI.initSearchBar();
+      BI.updateCartBadge();
+    });
+  </script>
+</body>
+</html>

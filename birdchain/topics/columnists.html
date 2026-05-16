@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>专栏作者 - BirdChain鸟链</title>
+  <meta name="description" content="BirdChain专栏作者，汇聚全球鸟类观察者、摄影师、研究者和自然教育工作者。">
+  <meta property="og:title" content="专栏作者 - BirdChain鸟链">
+  <meta property="og:description" content="汇聚全球鸟类观察者、摄影师、研究者和自然教育工作者。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .bc-columnists-header {
+      text-align: center;
+      padding: 40px 0 28px;
+    }
+    .bc-columnists-header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .bc-columnists-header p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      max-width: 560px;
+      margin: 0 auto;
+    }
+    .bc-columnists-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 48px;
+    }
+    .bc-columnist-card {
+      padding: 24px 20px;
+      border-radius: var(--radius-md);
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      text-align: center;
+      transition: all var(--transition-normal);
+      cursor: pointer;
+    }
+    .bc-columnist-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+    .bc-columnist-card .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin: 0 auto 14px;
+      overflow: hidden;
+    }
+    .bc-columnist-card .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .bc-columnist-card .name {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+    .bc-columnist-card .specialty {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+    .bc-columnist-card .bio-line {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin-bottom: 12px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .bc-columnist-card .stats-row {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      margin-bottom: 14px;
+    }
+    .bc-columnist-card .stats-row span strong {
+      color: var(--text-strong);
+      font-weight: 600;
+    }
+    .bc-apply-cta {
+      text-align: center;
+      padding: 48px 32px;
+      background: linear-gradient(135deg, #16395C, #1B4F72);
+      border-radius: var(--radius-lg);
+      color: #fff;
+      margin-bottom: 60px;
+      position: relative;
+      overflow: hidden;
+    }
+    .bc-apply-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(199, 165, 109, 0.12), transparent 60%);
+      pointer-events: none;
+    }
+    .bc-apply-cta h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 10px;
+      position: relative;
+    }
+    .bc-apply-cta p {
+      font-size: 0.95rem;
+      opacity: 0.85;
+      max-width: 500px;
+      margin: 0 auto 24px;
+      position: relative;
+    }
+    .bc-apply-cta .btn-accent {
+      padding: 12px 32px;
+      border-radius: 28px;
+      background: var(--brand-accent);
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.95rem;
+      position: relative;
+      transition: background var(--transition-fast);
+    }
+    .bc-apply-cta .btn-accent:hover {
+      background: var(--brand-accent-dark);
+    }
+    .bc-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 27, 45, 0.6);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all var(--transition-normal);
+    }
+    .bc-modal-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+    .bc-modal {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      max-width: 520px;
+      width: 90%;
+      max-height: 85vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-xl);
+    }
+    .bc-modal h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .bc-modal p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+    .bc-modal .form-group {
+      margin-bottom: 16px;
+    }
+    .bc-modal .form-group label {
+      display: block;
+      font-size: 0.84rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text-strong);
+    }
+    .bc-modal .form-group input,
+    .bc-modal .form-group textarea,
+    .bc-modal .form-group select {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--line-soft);
+      background: var(--bg-soft);
+      color: var(--text-main);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color var(--transition-fast);
+    }
+    .bc-modal .form-group input:focus,
+    .bc-modal .form-group textarea:focus,
+    .bc-modal .form-group select:focus {
+      border-color: var(--brand-accent);
+    }
+    .bc-modal .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    .bc-modal .btn-row {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+    .bc-modal .btn-cancel {
+      padding: 10px 22px;
+      border-radius: 24px;
+      border: 1px solid var(--line-soft);
+      background: var(--bg-soft);
+      color: var(--text-secondary);
+      font-weight: 500;
+      transition: all var(--transition-fast);
+    }
+    .bc-modal .btn-cancel:hover {
+      background: var(--bg-main);
+    }
+    .bc-modal .btn-submit {
+      padding: 10px 28px;
+      border-radius: 24px;
+      background: var(--brand-accent);
+      color: #fff;
+      font-weight: 600;
+      transition: background var(--transition-fast);
+    }
+    .bc-modal .btn-submit:hover {
+      background: var(--brand-accent-dark);
+    }
+    @media (max-width: 900px) {
+      .bc-columnists-grid-4 { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 560px) {
+      .bc-columnists-grid-4 { grid-template-columns: 1fr; }
+      .bc-columnists-header h1 { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+
+      <div class="bc-columnists-header">
+        <h1>专栏作者</h1>
+        <p>汇聚全球鸟类观察者、摄影师、研究者和自然教育工作者，分享他们的深度洞察与独特视角。</p>
+      </div>
+
+      <div class="bc-columnists-grid-4" id="columnistsGrid"></div>
+
+      <div class="bc-apply-cta">
+        <h2>申请成为专栏作者</h2>
+        <p>如果你有独特的鸟类观察经验、研究成果或摄影故事，欢迎加入BirdChain专栏作者计划。</p>
+        <button class="btn-accent" id="openApplyModal">申请成为专栏作者</button>
+      </div>
+    </main>
+  </div>
+
+  <div class="bc-modal-overlay" id="applyModalOverlay">
+    <div class="bc-modal" id="applyModal">
+      <h3>申请成为专栏作者</h3>
+      <p>填写以下信息，我们的编辑团队将尽快审核您的申请。</p>
+      <form id="applyForm">
+        <div class="form-group">
+          <label for="applyName">姓名</label>
+          <input type="text" id="applyName" required placeholder="请输入您的姓名">
+        </div>
+        <div class="form-group">
+          <label for="applyArea">专长领域</label>
+          <input type="text" id="applyArea" required placeholder="例如：湿地鸟类摄影、迁徙研究、自然教育">
+        </div>
+        <div class="form-group">
+          <label for="applySamples">写作样例/作品链接</label>
+          <textarea id="applySamples" required placeholder="请提供您的写作样例或作品链接"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="applyBio">个人简介</label>
+          <textarea id="applyBio" required placeholder="介绍一下您自己，您的观鸟/研究经历..."></textarea>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn-cancel" id="closeApplyModal">取消</button>
+          <button type="submit" class="btn-submit">提交申请</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var BC = window.BirdChainComponents;
+      var BD = window.BirdChainData;
+      var BI = window.BirdChainInteractions;
+      var BS = window.BirdChainStorage;
+
+      var app = document.getElementById('app');
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('topics'));
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+      BI.initAll();
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '专题/深度分析', href: '/topics/' },
+        { label: '专栏作者' }
+      ]);
+
+      var creators = await BD.loadData('creators');
+      var articles = await BD.loadData('articles');
+
+      var writerSpecialties = ['珍稀鸟类', '湿地鸟类', '高原鸟类', '摄影', '鸟类', '数字艺术', '插画', '生态', 'AI创作', '教育'];
+
+      var columnists = creators.filter(function(c) {
+        return c.specialties && c.specialties.some(function(s) {
+          return writerSpecialties.some(function(ws) { return s.indexOf(ws) !== -1; });
+        });
+      });
+
+      if (columnists.length === 0) {
+        columnists = creators.slice(0, 8);
+      }
+
+      var html = '';
+      columnists.forEach(function(c) {
+        var articleCount = articles.filter(function(a) { return a.authorId === c.id; }).length;
+        html += '<div class="bc-columnist-card">';
+        html += '<div class="avatar">';
+        html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: linear-gradient(135deg, #6B4226, #8B6914);" alt="' + esc(c.name) + '">';
+        html += '</div>';
+        html += '<div class="name">' + esc(c.name);
+        if (c.verified) html += ' <svg width="15" height="15" viewBox="0 0 24 24" fill="#C7A56D" style="display:inline;vertical-align:-3px;flex-shrink:0"><circle cx="12" cy="12" r="10" fill="#C7A56D"/><polyline points="7 12 10 15 17 8" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        html += '</div>';
+        html += '<div class="specialty">' + esc((c.specialties || []).slice(0, 2).join(' · ')) + '</div>';
+        html += '<div class="bio-line">' + esc((c.bio || '').substring(0, 60)) + '</div>';
+        html += '<div class="stats-row">';
+        html += '<span><strong>' + articleCount + '</strong> 篇文章</span>';
+        html += '<span><strong>' + ((c.followers || 0) / 10000).toFixed(1) + '万</strong> 粉丝</span>';
+        html += '</div>';
+        html += '<button class="btn btn-outline btn-sm" data-action="follow" data-creator-id="' + c.id + '" data-creator-name="' + esc(c.name) + '" data-follow-text="关注" data-following-text="已关注">关注</button>';
+        html += '</div>';
+      });
+      document.getElementById('columnistsGrid').innerHTML = html;
+
+      var modalOverlay = document.getElementById('applyModalOverlay');
+      var applyModal = document.getElementById('applyModal');
+
+      document.getElementById('openApplyModal').addEventListener('click', function() {
+        modalOverlay.classList.add('open');
+      });
+
+      document.getElementById('closeApplyModal').addEventListener('click', function() {
+        modalOverlay.classList.remove('open');
+      });
+
+      modalOverlay.addEventListener('click', function(e) {
+        if (e.target === modalOverlay) {
+          modalOverlay.classList.remove('open');
+        }
+      });
+
+      document.getElementById('applyForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var name = document.getElementById('applyName').value.trim();
+        var area = document.getElementById('applyArea').value.trim();
+        var samples = document.getElementById('applySamples').value.trim();
+        var bio = document.getElementById('applyBio').value.trim();
+
+        if (!name || !area || !samples || !bio) {
+          BI.showToast('请填写所有必填字段', 'warning');
+          return;
+        }
+
+        var applications = BS.getItem(BS.KEYS.stationApplications, []);
+        applications.push({
+          type: 'columnist',
+          name: name,
+          area: area,
+          samples: samples,
+          bio: bio,
+          time: Date.now()
+        });
+        BS.setItem(BS.KEYS.stationApplications, applications);
+
+        modalOverlay.classList.remove('open');
+        document.getElementById('applyForm').reset();
+        BI.showToast('申请已提交！我们的编辑团队将在3个工作日内与您联系。', 'success');
+      });
+    });
+  </script>
+</body>
+</html>
