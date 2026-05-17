@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>赛事详情 - BirdChain鸟链</title>
+  <meta name="description" content="查看赛事详情、规则说明、奖项设置和投稿信息。">
+  <meta property="og:title" content="赛事详情 - BirdChain鸟链">
+  <meta property="og:description" content="查看赛事详情、规则说明、奖项设置和投稿信息。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .event-cover {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      aspect-ratio: 16/9;
+      margin: 20px 0 24px;
+    }
+    .event-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .event-header-info {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .event-header-info h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+    .event-meta-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      margin-top: 8px;
+    }
+    .event-meta-row span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .event-section {
+      margin-bottom: 32px;
+    }
+    .event-section h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .event-section p {
+      font-size: 0.92rem;
+      color: var(--text-main);
+      line-height: 1.8;
+    }
+    .prize-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .prize-item {
+      background: var(--bg-soft);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      border: 1px solid var(--line-soft);
+    }
+    .prize-item .prize-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--brand-accent-dark);
+    }
+    .prize-item .prize-reward {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+    .timeline-item {
+      display: flex;
+      gap: 16px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .timeline-item:last-child { border-bottom: none; }
+    .timeline-date {
+      font-weight: 600;
+      font-size: 0.88rem;
+      color: var(--brand-accent-dark);
+      min-width: 100px;
+      flex-shrink: 0;
+    }
+    .timeline-desc {
+      font-size: 0.88rem;
+      color: var(--text-main);
+    }
+    .submission-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .submission-item {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+    }
+    .submission-item-img {
+      aspect-ratio: 4/3;
+      overflow: hidden;
+    }
+    .submission-item-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .submission-item-body {
+      padding: 10px;
+    }
+    .submission-item-body h5 {
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .submission-item-body p {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+    }
+    @media (max-width: 767px) {
+      .event-header-info h1 { font-size: 1.25rem; }
+      .prize-list { grid-template-columns: 1fr; }
+      .submission-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+      <div class="event-cover" id="eventCover"></div>
+      <div class="event-header-info" id="eventHeader"></div>
+
+      <div class="event-section" id="descriptionSection">
+        <h3>赛事介绍</h3>
+        <p id="eventDescription"></p>
+      </div>
+
+      <div class="event-section" id="timelineSection">
+        <h3>时间安排</h3>
+        <div id="eventTimeline"></div>
+      </div>
+
+      <div class="event-section" id="rulesSection">
+        <h3>规则说明</h3>
+        <p id="eventRules"></p>
+      </div>
+
+      <div class="event-section" id="prizesSection">
+        <h3>奖项设置</h3>
+        <div class="prize-list" id="eventPrizes"></div>
+      </div>
+
+      <div class="event-section" id="submissionsSection">
+        <h3>投稿作品</h3>
+        <div class="submission-grid" id="submissionsGrid"></div>
+      </div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BD = window.BirdChainData;
+      var BI = window.BirdChainInteractions;
+      var BStor = window.BirdChainStorage;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('events'));
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+
+      var params = new URLSearchParams(window.location.search);
+      var eventId = params.get('id');
+
+      var events = await BD.loadData('events');
+      var event = events.find(function(e) { return e.id === eventId; });
+
+      if (!event) {
+        document.querySelector('main').innerHTML = '<div class="container"><div class="bc-empty"><h4>赛事不存在</h4><p>请检查赛事ID是否正确</p><a href="/events/index.html" class="btn btn-primary mt-3">返回赛事列表</a></div></div>';
+        return;
+      }
+
+      document.title = event.title + ' - BirdChain鸟链';
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '赛事/活动', href: '/events/index.html' },
+        { label: event.title }
+      ]);
+
+      var statusClass = '';
+      var statusText = event.status;
+      switch (event.status) {
+        case '进行中': statusClass = 'live'; break;
+        case '即将开始': statusClass = 'upcoming'; break;
+        case '已结束': statusClass = 'ended'; break;
+        default: statusClass = 'upcoming';
+      }
+
+      document.getElementById('eventCover').innerHTML = '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: linear-gradient(135deg, #1B4332, #2D6A4F, #40916C); width:100%; height:100%; object-fit:cover;" alt="' + event.title + '">';
+
+      document.getElementById('eventHeader').innerHTML =
+        '<div>' +
+        '<span class="bc-event-status ' + statusClass + '" style="margin-bottom:8px;">' + statusText + '</span>' +
+        '<h1>' + event.title + '</h1>' +
+        '<div class="event-meta-row">' +
+        '<span>' + CALENDAR_ICON_SVG + ' ' + event.startDate + ' ~ ' + event.endDate + '</span>' +
+        '<span>' + USERS_ICON_SVG + ' ' + formatNumber(event.participants || 0) + ' 参与</span>' +
+        '<span>' + event.type + '</span>' +
+        '<span>' + event.organizer + '</span>' +
+        '</div>' +
+        '</div>' +
+        '<div>' +
+        (event.status === '进行中' ? '<a href="/events/submit.html?eventId=' + event.id + '" class="btn btn-accent">立即投稿</a>' :
+         event.status === '即将开始' ? '<button class="btn btn-outline" disabled>即将开始报名</button>' :
+         '<button class="btn btn-outline" disabled>赛事已结束</button>') +
+        '</div>';
+
+      document.getElementById('eventDescription').textContent = event.description;
+
+      var timelineHtml = '';
+      timelineHtml += '<div class="timeline-item"><div class="timeline-date">开始日期</div><div class="timeline-desc">' + event.startDate + '</div></div>';
+      timelineHtml += '<div class="timeline-item"><div class="timeline-date">截止日期</div><div class="timeline-desc">' + event.endDate + '</div></div>';
+      if (event.status === '已结束') {
+        timelineHtml += '<div class="timeline-item"><div class="timeline-date">评审阶段</div><div class="timeline-desc">评审中，请关注后续通知</div></div>';
+      }
+      document.getElementById('eventTimeline').innerHTML = timelineHtml;
+
+      document.getElementById('eventRules').innerHTML = event.rules.replace(/\n/g, '<br>');
+
+      if (event.prizes && event.prizes.length > 0) {
+        var prizesHtml = '';
+        event.prizes.forEach(function(p) {
+          prizesHtml += '<div class="prize-item">';
+          prizesHtml += '<div class="prize-name">' + p.name + '</div>';
+          prizesHtml += '<div class="prize-reward">' + p.reward + '</div>';
+          prizesHtml += '</div>';
+        });
+        document.getElementById('eventPrizes').innerHTML = prizesHtml;
+      } else {
+        document.getElementById('prizesSection').style.display = 'none';
+      }
+
+      var submissions = BStor.getItem(BStor.KEYS.eventSubmissions, []);
+      var eventSubmissions = submissions.filter(function(s) { return s.eventId === eventId; });
+
+      if (eventSubmissions.length > 0) {
+        var subHtml = '';
+        var gradients = ['linear-gradient(135deg, #1B4332, #2D6A4F)', 'linear-gradient(135deg, #1B4F72, #2980B9)', 'linear-gradient(135deg, #B8860B, #DAA520)', 'linear-gradient(135deg, #006D77, #83C5BE)', 'linear-gradient(135deg, #457B9D, #A8DADC)', 'linear-gradient(135deg, #D4A373, #FAEDCD)'];
+        eventSubmissions.forEach(function(s, i) {
+          subHtml += '<div class="submission-item">';
+          subHtml += '<div class="submission-item-img">';
+          subHtml += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: ' + gradients[i % gradients.length] + '; width:100%; height:100%; object-fit:cover;" alt="' + s.workTitle + '">';
+          subHtml += '</div>';
+          subHtml += '<div class="submission-item-body">';
+          subHtml += '<h5>' + s.workTitle + '</h5>';
+          subHtml += '<p>' + (s.description || '') + '</p>';
+          subHtml += '</div>';
+          subHtml += '</div>';
+        });
+        document.getElementById('submissionsGrid').innerHTML = subHtml;
+      } else {
+        document.getElementById('submissionsGrid').innerHTML = '<div style="grid-column:1/-1" class="bc-empty"><h4>暂无投稿作品</h4><p>快来成为第一个投稿的创作者吧</p></div>';
+      }
+
+      BI.initAll();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>地方站详情 - BirdChain鸟链</title>
+  <meta name="description" content="BirdChain全球地方站详情，查看地方站鸟类观测记录、特色鸟种、当地作品和摄影旅行路线。">
+  <meta property="og:title" content="地方站详情 - BirdChain鸟链">
+  <meta property="og:description" content="查看地方站鸟类观测记录、特色鸟种和当地作品。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .bc-station-cover {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin: 16px 0 28px;
+    }
+    .bc-station-cover img {
+      width: 100%;
+      aspect-ratio: 21/9;
+      object-fit: cover;
+    }
+    .bc-station-cover-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(7,27,45,0.85), rgba(7,27,45,0.1));
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 40px;
+      color: #fff;
+    }
+    .bc-station-cover-overlay h1 {
+      color: #fff;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .bc-station-cover-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.9rem;
+      opacity: 0.9;
+      flex-wrap: wrap;
+    }
+    .bc-station-cover-badges {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .bc-station-cover-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(4px);
+    }
+    .bc-detail-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .bc-detail-stat {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      text-align: center;
+    }
+    .bc-detail-stat-num {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--brand-accent);
+    }
+    .bc-detail-stat-label {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+    .bc-creator-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: var(--bg-soft);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin-bottom: 32px;
+    }
+    .bc-creator-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--brand-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.5rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .bc-creator-detail h4 {
+      font-size: 1rem;
+      color: var(--text-strong);
+    }
+    .bc-creator-detail p {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+    .bc-species-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .bc-species-mini-card {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      cursor: pointer;
+      transition: all var(--transition-normal);
+    }
+    .bc-species-mini-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+    .bc-species-mini-card-img {
+      aspect-ratio: 4/3;
+      overflow: hidden;
+    }
+    .bc-species-mini-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .bc-species-mini-card-body {
+      padding: 12px;
+    }
+    .bc-species-mini-card-body h5 {
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+    .bc-species-mini-card-body span {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+    .bc-obs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .bc-obs-card {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 16px;
+    }
+    .bc-obs-card h5 {
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+    }
+    .bc-obs-card p {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+    .bc-resource-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .bc-resource-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg-soft);
+      border-radius: var(--radius-md);
+      padding: 16px;
+    }
+    .bc-resource-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: var(--brand-accent-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .bc-resource-text h5 {
+      font-size: 0.9rem;
+    }
+    .bc-resource-text p {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+    }
+    .bc-masonry-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .bc-masonry-item {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      cursor: pointer;
+      transition: all var(--transition-normal);
+    }
+    .bc-masonry-item:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .bc-masonry-item-img {
+      overflow: hidden;
+    }
+    .bc-masonry-item-img img {
+      width: 100%;
+      display: block;
+      transition: transform var(--transition-slow);
+    }
+    .bc-masonry-item:hover .bc-masonry-item-img img {
+      transform: scale(1.04);
+    }
+    .bc-masonry-item-body {
+      padding: 10px;
+    }
+    .bc-masonry-item-title {
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .bc-masonry-item-meta {
+      font-size: 0.72rem;
+      color: var(--text-secondary);
+    }
+    .bc-section-divider {
+      margin: 40px 0;
+    }
+    .bc-section-block {
+      margin-bottom: 36px;
+    }
+    .bc-event-mini {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      background: var(--bg-soft);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .bc-event-date-box {
+      width: 56px;
+      height: 56px;
+      border-radius: 10px;
+      background: var(--brand-primary);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-weight: 600;
+    }
+    .bc-event-date-box .month {
+      font-size: 0.7rem;
+      opacity: 0.85;
+    }
+    .bc-event-date-box .day {
+      font-size: 1.1rem;
+    }
+    .bc-event-info h5 {
+      font-size: 0.9rem;
+    }
+    .bc-event-info p {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+    }
+    .bc-travel-entry {
+      background: linear-gradient(135deg, #1B4332, #2D6A4F);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .bc-travel-entry h4 {
+      color: #fff;
+      font-size: 1.1rem;
+    }
+    .bc-travel-entry p {
+      opacity: 0.85;
+      font-size: 0.85rem;
+    }
+    @media (max-width: 767px) {
+      .bc-detail-stats { grid-template-columns: repeat(2, 1fr); }
+      .bc-species-grid { grid-template-columns: repeat(2, 1fr); }
+      .bc-obs-grid { grid-template-columns: 1fr; }
+      .bc-resource-list { grid-template-columns: 1fr; }
+      .bc-masonry-grid { grid-template-columns: repeat(2, 1fr); }
+      .bc-station-cover-overlay { padding: 20px; }
+      .bc-station-cover-overlay h1 { font-size: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbTarget"></div>
+      <div id="pageContent"></div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      BirdChainComponents.renderHeader('stations');
+      BirdChainComponents.renderFooter();
+      BirdChainInteractions.initAll();
+
+      var params = new URLSearchParams(window.location.search);
+      var stationId = params.get('id') || 'station-001';
+
+      var station = null;
+      try { station = await getStationById(stationId); } catch(e) { console.error(e); }
+
+      if (!station) {
+        document.getElementById('pageContent').innerHTML = '<div class="bc-empty-state" style="padding:80px 20px;"><h3>地方站未找到</h3><p>请检查链接是否正确</p></div>';
+        document.getElementById('breadcrumbTarget').innerHTML = BirdChainComponents.renderBreadcrumb([
+          { label: '全球地方站', href: 'index.html' }, { label: '未知地方站' }
+        ]);
+        return;
+      }
+
+      document.title = station.name + ' - BirdChain鸟链';
+      document.getElementById('breadcrumbTarget').innerHTML = BirdChainComponents.renderBreadcrumb([
+        { label: '全球地方站', href: 'index.html' }, { label: station.name }
+      ]);
+
+      var works = [];
+      var speciesData = [];
+      try {
+        works = await loadData('works');
+        speciesData = await loadData('species');
+      } catch(e) { console.error(e); }
+
+      var stationWorks = works.filter(function(w) { return w.stationId === station.id; });
+      var featuredSpeciesObjs = [];
+      if (station.featuredSpecies && station.featuredSpecies.length > 0) {
+        station.featuredSpecies.forEach(function(name) {
+          var found = speciesData.find(function(s) { return s.nameCn === name; });
+          if (found) featuredSpeciesObjs.push(found);
+        });
+      }
+
+      var html = '';
+
+      html += '<div class="bc-station-cover">';
+      html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: linear-gradient(135deg, #2a5c4a, #1a3a2a); width:100%; aspect-ratio:21/9; object-fit:cover;" alt="' + esc(station.name) + '">';
+      html += '<div class="bc-station-cover-overlay">';
+      html += '<h1>' + esc(station.name) + '</h1>';
+      html += '<div class="bc-station-cover-meta">';
+      html += '<span>' + LOCATION_ICON_SVG + ' ' + esc(station.country) + ' · ' + esc(station.location) + '</span>';
+      html += '<span>' + esc(station.region) + '</span>';
+      html += '</div>';
+      html += '<div class="bc-station-cover-badges">';
+      html += '<span class="bc-station-cover-badge">' + esc(station.type || '综合') + '</span>';
+      html += '<span class="bc-station-cover-badge">' + esc(station.ecoType || '') + '</span>';
+      html += '</div>';
+      html += '</div></div>';
+
+      html += '<div class="bc-detail-stats">';
+      html += '<div class="bc-detail-stat"><div class="bc-detail-stat-num">' + formatNumber(station.speciesCount || 0) + '</div><div class="bc-detail-stat-label">物种数量</div></div>';
+      html += '<div class="bc-detail-stat"><div class="bc-detail-stat-num">' + formatNumber(station.workCount || 0) + '</div><div class="bc-detail-stat-label">作品数量</div></div>';
+      html += '<div class="bc-detail-stat"><div class="bc-detail-stat-num">' + formatNumber(station.creatorCount || 0) + '</div><div class="bc-detail-stat-label">摄影师数量</div></div>';
+      html += '<div class="bc-detail-stat"><div class="bc-detail-stat-num">' + formatNumber(stationWorks.length) + '</div><div class="bc-detail-stat-label">当地作品</div></div>';
+      html += '</div>';
+
+      html += '<div class="bc-creator-info">';
+      html += '<div class="bc-creator-avatar">' + esc((station.creator || '站')[0]) + '</div>';
+      html += '<div class="bc-creator-detail">';
+      html += '<h4>地方站长：' + esc(station.creator || '待定') + '</h4>';
+      html += '<p>' + esc(station.description || '') + '</p>';
+      html += '</div>';
+      html += '<button class="btn btn-outline btn-sm" data-action="follow" data-creator-id="' + esc(station.id) + '" data-creator-name="' + esc(station.name) + '" data-follow-text="关注本站" data-following-text="已关注">关注本站</button>';
+      html += '</div>';
+
+      html += '<div class="bc-section-block">';
+      html += '<div class="section-header"><h3 class="section-title">特色鸟种</h3></div>';
+      if (featuredSpeciesObjs.length > 0) {
+        html += '<div class="bc-species-grid">';
+        featuredSpeciesObjs.forEach(function(sp) {
+          html += '<a href="species-detail.html?id=' + esc(sp.id) + '" class="bc-species-mini-card">';
+          html += '<div class="bc-species-mini-card-img">';
+          html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: linear-gradient(135deg, #457B9D, #A8DADC); width:100%; aspect-ratio:4/3; object-fit:cover;" alt="' + esc(sp.nameCn) + '">';
+          html += '</div>';
+          html += '<div class="bc-species-mini-card-body">';
+          html += '<h5>' + esc(sp.nameCn) + '</h5>';
+          html += '<span>' + esc(sp.conservation || '') + '</span>';
+          html += '</div></a>';
+        });
+        html += '</div>';
+      } else {
+        html += '<p class="text-secondary">暂无特色鸟种记录</p>';
+      }
+      html += '</div>';
+
+      html += '<div class="bc-section-block">';
+      html += '<div class="section-header"><h3 class="section-title">推荐摄影点</h3></div>';
+      html += '<div class="bc-obs-grid">';
+      html += '<div class="bc-obs-card"><h5>主观测平台</h5><p>最佳观测位置，视野开阔，适合日出/日落拍摄</p><span class="tag">★★★★★</span></div>';
+      html += '<div class="bc-obs-card"><h5>湿地边缘步道</h5><p>近距离观察水鸟，适合长焦拍摄</p><span class="tag">★★★★☆</span></div>';
+      html += '<div class="bc-obs-card"><h5>森林观鸟塔</h5><p>俯瞰林冠层，适合拍摄树栖鸟类</p><span class="tag">★★★★☆</span></div>';
+      html += '</div>';
+      html += '</div>';
+
+      html += '<div class="bc-section-block">';
+      html += '<div class="section-header"><h3 class="section-title">文旅资源</h3></div>';
+      html += '<div class="bc-resource-list">';
+      html += '<div class="bc-resource-item"><div class="bc-resource-icon">🏨</div><div class="bc-resource-text"><h5>观鸟民宿</h5><p>当地特色住宿，提供鸟类图鉴和望远镜</p></div></div>';
+      html += '<div class="bc-resource-item"><div class="bc-resource-icon">🍜</div><div class="bc-resource-text"><h5>地方美食</h5><p>品尝当地特色菜肴和野生食材</p></div></div>';
+      html += '<div class="bc-resource-item"><div class="bc-resource-icon">🏛️</div><div class="bc-resource-text"><h5>文化遗址</h5><p>探访当地历史文化景点</p></div></div>';
+      html += '<div class="bc-resource-item"><div class="bc-resource-icon">🎁</div><div class="bc-resource-text"><h5>特产纪念品</h5><p>当地手工艺品和鸟类主题纪念品</p></div></div>';
+      html += '</div>';
+      html += '</div>';
+
+      html += '<div class="bc-section-block">';
+      html += '<div class="section-header"><h3 class="section-title">研学路线</h3></div>';
+      html += '<div class="bc-obs-grid">';
+      html += '<div class="bc-obs-card"><h5>初级观鸟体验（1日）</h5><p>适合家庭和初学者，学习使用望远镜和识别常见鸟种</p><span class="tag tag-accent">¥298/人</span></div>';
+      html += '<div class="bc-obs-card"><h5>深度观鸟研学（3日）</h5><p>包含鸟类环志体验、栖息地调研和摄影指导</p><span class="tag tag-accent">¥1,280/人</span></div>';
+      html += '<div class="bc-obs-card"><h5>青少年自然课堂</h5><p>面向中小学生，鸟类知识科普与自然笔记创作</p><span class="tag tag-accent">¥198/人</span></div>';
+      html += '</div>';
+      html += '</div>';
+
+      html += '<div class="bc-section-block">';
+      html += '<div class="section-header"><h3 class="section-title">当地作品流</h3></div>';
+      if (stationWorks.length > 0) {
+        html += '<div class="bc-masonry-grid">';
+        stationWorks.forEach(function(w) {
+          html += '<div class="bc-masonry-item">';
+          html += '<div class="bc-masonry-item-img">';
+          html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: linear-gradient(135deg, #' + (Math.floor(Math.random()*16777215).toString(16)) + '); width:100%; aspect-ratio:' + (w.orientation === '竖图' ? '3/4' : w.orientation === '方图' ? '1/1' : '4/3') + '; object-fit:cover;" alt="' + esc(w.title) + '">';
+          html += '</div>';
+          html += '<div class="bc-masonry-item-body">';
+          html += '<div class="bc-masonry-item-title">' + esc(w.title) + '</div>';
+          html += '<div class="bc-masonry-item-meta">';
+          html += '<span>' + EYE_ICON_SVG + ' ' + formatNumber(w.views || 0) + '</span>';
+          html += '</div>';
+          html += '<div class="bc-masonry-item-meta" style="margin-top:4px;display:flex;gap:8px;">';
+          html += '<button data-action="like" data-work-id="' + esc(w.id) + '" style="font-size:0.72rem;display:inline-flex;align-items:center;gap:3px;cursor:pointer;">' + HEART_ICON_SVG + ' <span data-like-count>' + formatNumber(w.likes || 0) + '</span></button>';
+          html += '<button data-action="favorite" data-work-id="' + esc(w.id) + '" style="font-size:0.72rem;display:inline-flex;align-items:center;gap:3px;cursor:pointer;">' + STAR_ICON_SVG + ' <span>' + formatNumber(w.favorites || 0) + '</span></button>';
+          html += '</div>';
+          html += '</div></div>';
+        });
+        html += '</div>';
+      } else {
+        html += '<p class="text-secondary">暂无当地作品</p>';
+      }
+      html += '</div>';
+
+      html += '<div class="bc-section-block">';
+      html += '<div class="section-header"><h3 class="section-title">地方站活动</h3></div>';
+      html += '<div class="bc-event-mini"><div class="bc-event-date-box"><span class="month">6月</span><span class="day">15</span></div><div class="bc-event-info"><h5>夏季候鸟观测日</h5><p>全天候鸟观测活动，由站长带队讲解</p></div><button class="btn btn-sm btn-outline">报名</button></div>';
+      html += '<div class="bc-event-mini"><div class="bc-event-date-box"><span class="month">7月</span><span class="day">20</span></div><div class="bc-event-info"><h5>青少年观鸟夏令营</h5><p>为期一周的青少年自然教育活动</p></div><button class="btn btn-sm btn-outline">报名</button></div>';
+      html += '<div class="bc-event-mini"><div class="bc-event-date-box"><span class="month">10月</span><span class="day">05</span></div><div class="bc-event-info"><h5>秋季迁徙季观测周</h5><p>候鸟迁徙高峰观测，记录迁徙数据</p></div><button class="btn btn-sm btn-outline">报名</button></div>';
+      html += '</div>';
+
+      html += '<div class="bc-section-block">';
+      html += '<div class="bc-travel-entry">';
+      html += '<div><h4>想去' + esc(station.name) + '观鸟吗？</h4><p>查看从本站出发的摄影旅行路线，与专业向导同行</p></div>';
+      html += '<a href="/travel.html" class="btn btn-accent">查看摄影旅行</a>';
+      html += '</div>';
+      html += '</div>';
+
+      document.getElementById('pageContent').innerHTML = html;
+
+      BirdChainInteractions.initLikeButtons();
+      BirdChainInteractions.initFavoriteButtons();
+      BirdChainInteractions.initFollowButtons();
+    });
+  </script>
+</body>
+</html>

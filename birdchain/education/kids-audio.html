@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>儿童有声读物 - BirdChain鸟链</title>
+  <meta name="description" content="专为儿童打造的鸟类有声读物，通过故事和声音认识鸟类世界。">
+  <meta property="og:title" content="儿童有声读物 - BirdChain鸟链">
+  <meta property="og:description" content="专为儿童打造的鸟类有声读物，通过故事和声音认识鸟类世界。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .audio-hero {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      height: 240px;
+      margin: 20px 0 32px;
+    }
+    .audio-hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .audio-hero-content {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(7, 27, 45, 0.8), rgba(7, 27, 45, 0.15));
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 32px;
+      color: #fff;
+    }
+    .audio-hero-content h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .audio-hero-content p {
+      font-size: 0.95rem;
+      opacity: 0.85;
+      max-width: 560px;
+    }
+    .audio-book-card {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: 24px;
+      display: flex;
+      transition: all var(--transition-normal);
+    }
+    .audio-book-card:hover {
+      box-shadow: var(--shadow-md);
+    }
+    .audio-book-cover {
+      width: 240px;
+      flex-shrink: 0;
+      aspect-ratio: 1/1;
+      overflow: hidden;
+    }
+    .audio-book-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .audio-book-body {
+      flex: 1;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .audio-book-body h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .audio-book-meta {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .audio-book-desc {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .chapter-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .chapter-item {
+      padding: 6px 14px;
+      background: var(--bg-soft);
+      border-radius: 20px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .chapter-item:hover {
+      background: var(--brand-accent-soft);
+      color: var(--brand-accent-dark);
+    }
+    .chapter-item.playing {
+      background: var(--brand-primary);
+      color: #fff;
+    }
+    .bc-audio-player {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      background: var(--bg-soft);
+      border-radius: var(--radius-md);
+    }
+    .bc-audio-play-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--brand-primary);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .bc-audio-play-btn:hover {
+      background: var(--brand-primary-dark);
+    }
+    .bc-audio-play-btn.playing {
+      background: var(--brand-accent);
+    }
+    .bc-audio-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .bc-audio-info h6 {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .bc-audio-info p {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+    }
+    .bc-audio-progress {
+      height: 5px;
+      background: var(--line-soft);
+      border-radius: 3px;
+      margin-top: 10px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .bc-audio-progress-bar {
+      height: 100%;
+      background: var(--brand-accent);
+      border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+    .audio-time {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+      min-width: 80px;
+      text-align: right;
+    }
+    .audio-link {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 0.82rem;
+      color: var(--brand-accent);
+    }
+    @media (max-width: 767px) {
+      .audio-hero { height: 160px; margin: 12px 0 20px; border-radius: var(--radius-md); }
+      .audio-hero-content { padding: 20px; }
+      .audio-hero-content h1 { font-size: 1.35rem; }
+      .audio-book-card { flex-direction: column; }
+      .audio-book-cover { width: 100%; aspect-ratio: 16/9; }
+      .audio-book-body { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+      <div class="audio-hero">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+             style="background: linear-gradient(135deg, #006D77, #83C5BE, #4ECDC4); width:100%; height:100%; object-fit:cover;" alt="儿童有声读物">
+        <div class="audio-hero-content">
+          <h1>儿童有声读物</h1>
+          <p>用声音打开鸟类世界的大门，让每个孩子都能爱上自然</p>
+        </div>
+      </div>
+
+      <div id="audioBooks"></div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BI = window.BirdChainInteractions;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('education'));
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '自然教育', href: '/education/index.html' },
+        { label: '儿童有声读物' }
+      ]);
+
+      var audioBooks = [
+        {
+          id: 'course-005',
+          title: '丹顶鹤的旅程',
+          species: '丹顶鹤',
+          ageRange: '3-6岁',
+          duration: '1小时',
+          description: '一个温暖的有声绘本故事，跟随小丹顶鹤从扎龙飞往盐城的第一次迁徙旅程，感受成长与勇气。',
+          chapters: ['第一章：扎龙的清晨', '第二章：第一次飞行', '第三章：迁徙路上', '第四章：盐城的新家', '第五章：春天的约定'],
+          gradient: 'linear-gradient(135deg, #1B4332, #40916C)',
+          price: 39
+        },
+        {
+          id: 'course-006',
+          title: '湿地精灵——水鸟观察指南',
+          species: '白鹭、东方白鹳、黑脸琵鹭、紫水鸡',
+          ageRange: '8岁以上',
+          duration: '3小时',
+          description: '通过专业配音和野外实录音效，带领听众认识中国湿地常见水鸟，学习水鸟识别技巧和观察方法。',
+          chapters: ['第1集：走进湿地', '第2集：白鹭的优雅', '第3集：东方白鹳的威严', '第4集：黑脸琵鹭的奇特', '第5集：紫水鸡的秘密', '第6集：水鸟识别技巧', '第7集：湿地保护行动'],
+          gradient: 'linear-gradient(135deg, #1B4F72, #2980B9)',
+          price: 69
+        },
+        {
+          id: 'audio-003',
+          title: '翠鸟的故事——小小捕鱼高手',
+          species: '翠鸟',
+          ageRange: '3-6岁',
+          duration: '45分钟',
+          description: '跟随小翠鸟学习捕鱼技巧的成长故事。通过生动的配音和自然环境音效，让孩子感受溪流边的奇妙世界。',
+          chapters: ['第一章：树洞里的家', '第二章：第一次捕鱼', '第三章：暴风雨来了', '第四章：新朋友'],
+          gradient: 'linear-gradient(135deg, #D4A373, #FAEDCD)',
+          price: 29
+        },
+        {
+          id: 'audio-004',
+          title: '夜莺之歌——鸟类声音图鉴',
+          species: '夜莺、黄鹂、百灵',
+          ageRange: '6-12岁',
+          duration: '2小时',
+          description: '收录了中国常见鸟类的鸣叫声，配以趣味科普解说，让孩子学会通过声音识别不同的鸟类。',
+          chapters: ['第1集：清晨的合唱', '第2集：林间的歌者', '第3集：水边的音乐家', '第4集：草原上的歌手', '第5集：夜间的独唱者', '第6集：听懂鸟语'],
+          gradient: 'linear-gradient(135deg, #457B9D, #A8DADC)',
+          price: 49
+        }
+      ];
+
+      var currentPlayingId = null;
+
+      function renderAudioBooks() {
+        var html = '';
+        audioBooks.forEach(function(book) {
+          html += '<div class="audio-book-card">';
+          html += '<div class="audio-book-cover">';
+          html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"';
+          html += ' style="background: ' + book.gradient + '; width:100%; height:100%; object-fit:cover;" alt="' + book.title + '">';
+          html += '</div>';
+          html += '<div class="audio-book-body">';
+          html += '<div>';
+          html += '<h3>' + book.title + '</h3>';
+          html += '<div class="audio-book-meta">';
+          html += '<span class="tag tag-accent">' + book.ageRange + '</span>';
+          html += '<span class="tag">' + book.species + '</span>';
+          html += '<span class="tag">' + book.duration + '</span>';
+          html += '<span style="font-weight:700;color:var(--brand-accent-dark);">' + formatPrice(book.price) + '</span>';
+          html += '</div>';
+          html += '<p class="audio-book-desc">' + book.description + '</p>';
+          html += '<div class="chapter-list">';
+          book.chapters.forEach(function(ch, idx) {
+            html += '<span class="chapter-item" data-book-id="' + book.id + '" data-chapter="' + idx + '">' + ch + '</span>';
+          });
+          html += '</div>';
+          html += '</div>';
+          html += '<div class="bc-audio-player" id="player-' + book.id + '">';
+          html += '<button class="bc-audio-play-btn" data-book-id="' + book.id + '" data-action="audio-play">';
+          html += '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>';
+          html += '</button>';
+          html += '<div class="bc-audio-info">';
+          html += '<h6 id="chapter-title-' + book.id + '">点击章节开始播放</h6>';
+          html += '<p id="chapter-desc-' + book.id + '">共' + book.chapters.length + '集</p>';
+          html += '<div class="bc-audio-progress" data-book-id="' + book.id + '">';
+          html += '<div class="bc-audio-progress-bar" id="progress-' + book.id + '" style="width:0%;"></div>';
+          html += '</div>';
+          html += '</div>';
+          html += '<div class="audio-time" id="time-' + book.id + '">00:00 / 00:00</div>';
+          html += '</div>';
+          html += '<a href="/merch/audio-book-detail.html?id=' + book.id + '" class="audio-link">查看详情 &rarr;</a>';
+          html += '</div>';
+          html += '</div>';
+        });
+        document.getElementById('audioBooks').innerHTML = html;
+      }
+
+      function simulateProgress(bookId, chapterIdx, book) {
+        if (currentPlayingId) {
+          var prevBtn = document.querySelector('.bc-audio-play-btn[data-book-id="' + currentPlayingId + '"]');
+          if (prevBtn) prevBtn.classList.remove('playing');
+          var prevProgress = document.getElementById('progress-' + currentPlayingId);
+          if (prevProgress) prevProgress.style.width = '0%';
+        }
+        currentPlayingId = bookId;
+
+        var btn = document.querySelector('.bc-audio-play-btn[data-book-id="' + bookId + '"]');
+        if (btn) btn.classList.add('playing');
+
+        var titleEl = document.getElementById('chapter-title-' + bookId);
+        var descEl = document.getElementById('chapter-desc-' + bookId);
+        var progressEl = document.getElementById('progress-' + bookId);
+        var timeEl = document.getElementById('time-' + bookId);
+
+        if (titleEl) titleEl.textContent = book.chapters[chapterIdx];
+        if (descEl) descEl.textContent = '正在播放 · 第' + (chapterIdx + 1) + '/' + book.chapters.length + '集';
+        if (timeEl) timeEl.textContent = '00:00 / 02:30';
+
+        document.querySelectorAll('.chapter-item[data-book-id="' + bookId + '"]').forEach(function(item) {
+          item.classList.remove('playing');
+        });
+        var activeChapter = document.querySelector('.chapter-item[data-book-id="' + bookId + '"][data-chapter="' + chapterIdx + '"]');
+        if (activeChapter) activeChapter.classList.add('playing');
+
+        var progress = 0;
+        var interval = setInterval(function() {
+          progress += 2;
+          if (progress >= 100) {
+            progress = 100;
+            clearInterval(interval);
+          }
+          if (progressEl) progressEl.style.width = progress + '%';
+          var mins = Math.floor(progress * 0.025);
+          var secs = Math.floor((progress * 1.5) % 60);
+          if (timeEl) timeEl.textContent = (mins < 10 ? '0' : '') + mins + ':' + (secs < 10 ? '0' : '') + secs + ' / 02:30';
+        }, 300);
+      }
+
+      renderAudioBooks();
+
+      document.getElementById('audioBooks').addEventListener('click', function(e) {
+        var chapterEl = e.target.closest('.chapter-item');
+        if (chapterEl) {
+          var bookId = chapterEl.getAttribute('data-book-id');
+          var chapterIdx = parseInt(chapterEl.getAttribute('data-chapter'));
+          var book = audioBooks.find(function(b) { return b.id === bookId; });
+          if (book) simulateProgress(bookId, chapterIdx, book);
+          return;
+        }
+
+        var playBtn = e.target.closest('[data-action="audio-play"]');
+        if (playBtn) {
+          var bookId = playBtn.getAttribute('data-book-id');
+          var book = audioBooks.find(function(b) { return b.id === bookId; });
+          if (book) {
+            if (currentPlayingId === bookId) {
+              playBtn.classList.remove('playing');
+              currentPlayingId = null;
+              var progressEl = document.getElementById('progress-' + bookId);
+              if (progressEl) progressEl.style.width = '0%';
+              var titleEl = document.getElementById('chapter-title-' + bookId);
+              if (titleEl) titleEl.textContent = '点击章节开始播放';
+              var descEl = document.getElementById('chapter-desc-' + bookId);
+              if (descEl) descEl.textContent = '共' + book.chapters.length + '集';
+              var timeEl = document.getElementById('time-' + bookId);
+              if (timeEl) timeEl.textContent = '00:00 / 00:00';
+              document.querySelectorAll('.chapter-item[data-book-id="' + bookId + '"]').forEach(function(item) {
+                item.classList.remove('playing');
+              });
+            } else {
+              simulateProgress(bookId, 0, book);
+            }
+          }
+        }
+
+        var progressBar = e.target.closest('.bc-audio-progress');
+        if (progressBar) {
+          var bookId = progressBar.getAttribute('data-book-id');
+          var progressEl = document.getElementById('progress-' + bookId);
+          if (progressEl) {
+            var rect = progressBar.getBoundingClientRect();
+            var pct = ((e.clientX - rect.left) / rect.width) * 100;
+            progressEl.style.width = pct + '%';
+          }
+        }
+      });
+
+      BI.initAll();
+    });
+  </script>
+</body>
+</html>

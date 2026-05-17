@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>编辑资料 - 创作者中心 - BirdChain鸟链</title>
+  <meta name="description" content="编辑你的BirdChain创作者资料。">
+  <meta property="og:title" content="编辑资料 - 创作者中心 - BirdChain鸟链">
+  <meta property="og:description" content="编辑你的BirdChain创作者资料。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .profile-form {
+      max-width: 680px;
+      margin: 0 auto;
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+    }
+    .profile-form h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .avatar-upload {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .avatar-upload img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--line-soft);
+    }
+    .avatar-upload-btn {
+      padding: 6px 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--line-soft);
+      font-size: 0.85rem;
+      cursor: pointer;
+      color: var(--text-secondary);
+      background: var(--bg-soft);
+      transition: all var(--transition-fast);
+    }
+    .avatar-upload-btn:hover {
+      border-color: var(--brand-accent);
+      color: var(--brand-accent);
+    }
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    @media (max-width: 767px) {
+      .profile-form { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+      <div id="profileFormContainer"></div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BD = window.BirdChainData;
+      var BI = window.BirdChainInteractions;
+      var BStor = window.BirdChainStorage;
+      var TP = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('creator'));
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '创作者中心', href: '/creator/index.html' },
+        { label: '编辑资料' }
+      ]);
+
+      BI.initAll();
+
+      var users = await BD.loadData('users');
+      var user = users.find(function(u) { return u.id === 'user-001'; });
+      if (!user) user = users[0];
+
+      var savedProfile = BStor.getItem('bc_userProfile', null);
+      if (savedProfile) {
+        user.name = savedProfile.name || user.name;
+        user.bio = savedProfile.bio || user.bio;
+        user.country = savedProfile.country || user.country;
+        user.website = savedProfile.website || '';
+        user.weibo = savedProfile.weibo || '';
+        user.instagram = savedProfile.instagram || '';
+      }
+
+      var countries = ['中国', '日本', '韩国', '美国', '英国', '澳大利亚', '新西兰', '印度', '泰国', '新加坡', '马来西亚', '印度尼西亚', '菲律宾', '越南', '缅甸', '斯里兰卡', '尼泊尔', '俄罗斯', '蒙古', '其他'];
+
+      var formHtml = '<div class="profile-form">'
+        + '<h2>&#9997; 编辑创作者资料</h2>'
+        + '<div class="avatar-upload">'
+        + '<img id="avatarPreview" src="' + TP + '" style="background:linear-gradient(135deg,#B8860B,#DAA520);width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid var(--line-soft);" alt="头像" />'
+        + '<div><button class="avatar-upload-btn" id="avatarChangeBtn">更换头像（模拟）</button>'
+        + '<div class="text-xs text-secondary mt-1">支持 JPG/PNG，建议 400x400</div></div>'
+        + '</div>'
+
+        + '<div class="bc-form-group">'
+        + '<label for="profileName">姓名 <span style="color:var(--danger)">*</span></label>'
+        + '<input type="text" class="bc-form-input" id="profileName" value="' + (user.name || '') + '" placeholder="请输入姓名" />'
+        + '<div class="bc-form-error" id="nameError" style="display:none;">请输入姓名</div>'
+        + '</div>'
+
+        + '<div class="bc-form-group">'
+        + '<label for="profileBio">简介</label>'
+        + '<textarea class="bc-form-textarea" id="profileBio" placeholder="介绍一下你自己...">' + (user.bio || '') + '</textarea>'
+        + '</div>'
+
+        + '<div class="bc-form-group">'
+        + '<label for="profileCountry">国家/地区</label>'
+        + '<select class="bc-form-select" id="profileCountry">';
+      countries.forEach(function(c) {
+        formHtml += '<option value="' + c + '"' + (c === user.country ? ' selected' : '') + '>' + c + '</option>';
+      });
+      formHtml += '</select></div>'
+
+        + '<div class="bc-form-group">'
+        + '<label for="profileWebsite">个人网站</label>'
+        + '<input type="url" class="bc-form-input" id="profileWebsite" value="' + (user.website || '') + '" placeholder="https://..." />'
+        + '</div>'
+
+        + '<div class="bc-form-group">'
+        + '<label for="profileWeibo">微博</label>'
+        + '<input type="text" class="bc-form-input" id="profileWeibo" value="' + (user.weibo || '') + '" placeholder="@username" />'
+        + '</div>'
+
+        + '<div class="bc-form-group">'
+        + '<label for="profileInstagram">Instagram</label>'
+        + '<input type="text" class="bc-form-input" id="profileInstagram" value="' + (user.instagram || '') + '" placeholder="@username" />'
+        + '</div>'
+
+        + '<div class="form-actions">'
+        + '<button class="btn btn-accent" id="saveBtn">保存</button>'
+        + '<button class="btn btn-outline" id="cancelBtn">取消</button>'
+        + '</div>'
+        + '</div>';
+
+      document.getElementById('profileFormContainer').innerHTML = formHtml;
+
+      document.getElementById('avatarChangeBtn').addEventListener('click', function() {
+        BI.showToast('头像更换功能（模拟）：已选择新头像', 'info');
+        var preview = document.getElementById('avatarPreview');
+        if (preview) {
+          preview.style.background = 'linear-gradient(135deg,#DAA520,#B8860B)';
+        }
+      });
+
+      document.getElementById('saveBtn').addEventListener('click', function() {
+        var name = document.getElementById('profileName').value.trim();
+        var nameError = document.getElementById('nameError');
+
+        if (!name) {
+          nameError.style.display = 'block';
+          document.getElementById('profileName').classList.add('error');
+          BI.showToast('请填写姓名', 'warning');
+          return;
+        }
+        nameError.style.display = 'none';
+        document.getElementById('profileName').classList.remove('error');
+
+        var profileData = {
+          name: name,
+          bio: document.getElementById('profileBio').value.trim(),
+          country: document.getElementById('profileCountry').value,
+          website: document.getElementById('profileWebsite').value.trim(),
+          weibo: document.getElementById('profileWeibo').value.trim(),
+          instagram: document.getElementById('profileInstagram').value.trim(),
+          updatedAt: new Date().toISOString()
+        };
+
+        BStor.setItem('bc_userProfile', profileData);
+        BI.showToast('资料保存成功！', 'success');
+      });
+
+      document.getElementById('cancelBtn').addEventListener('click', function() {
+        window.location.href = '/creator/index.html';
+      });
+    });
+  </script>
+</body>
+</html>

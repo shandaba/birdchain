@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>创作者中心 - BirdChain鸟链</title>
+  <meta name="description" content="BirdChain创作者中心，管理你的作品、版权、收益和贡献。">
+  <meta property="og:title" content="创作者中心 - BirdChain鸟链">
+  <meta property="og:description" content="BirdChain创作者中心，管理你的作品、版权、收益和贡献。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .bc-dashboard-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+      margin-top: 24px;
+    }
+    .bc-dashboard-section {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .bc-dashboard-section h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .bc-quick-action {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      background: var(--bg-soft);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      border: 1px solid transparent;
+      margin-bottom: 10px;
+    }
+    .bc-quick-action:hover {
+      border-color: var(--brand-accent);
+      background: var(--brand-accent-soft);
+    }
+    .bc-quick-action-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-sm);
+      background: var(--brand-primary);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    .bc-quick-action-info {
+      flex: 1;
+    }
+    .bc-quick-action-info .title {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-strong);
+    }
+    .bc-quick-action-info .desc {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+    .bc-level-display {
+      text-align: center;
+      padding: 8px 0;
+    }
+    .bc-level-number {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--brand-accent-dark);
+    }
+    .bc-level-label {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+    .bc-level-bar {
+      height: 8px;
+      background: var(--bg-soft);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+    .bc-level-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--brand-primary), var(--brand-accent));
+      border-radius: 4px;
+      transition: width var(--transition-slow);
+    }
+    .bc-level-next {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+    .bc-badge-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      background: var(--brand-accent-soft);
+      color: var(--brand-accent-dark);
+      margin: 3px;
+    }
+    .bc-influence-stat {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--line-soft);
+      font-size: 0.84rem;
+    }
+    .bc-influence-stat:last-child {
+      border-bottom: none;
+    }
+    .bc-influence-stat .val {
+      font-weight: 600;
+      color: var(--brand-accent-dark);
+    }
+    .bc-mini-work-card {
+      display: flex;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line-soft);
+      align-items: center;
+    }
+    .bc-mini-work-card:last-child {
+      border-bottom: none;
+    }
+    .bc-mini-work-card img {
+      width: 60px;
+      height: 60px;
+      border-radius: var(--radius-sm);
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .bc-mini-work-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .bc-mini-work-info .title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .bc-mini-work-info .meta {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+    .bc-profile-header-creator {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 1024px) {
+      .bc-dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 767px) {
+      .bc-creator-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+      <div id="dashboardContent"></div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BD = window.BirdChainData;
+      var BI = window.BirdChainInteractions;
+      var BStor = window.BirdChainStorage;
+      var TP = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('creator'));
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '创作者中心' }
+      ]);
+
+      BI.initAll();
+
+      var users = await BD.loadData('users');
+      var user = users.find(function(u) { return u.id === 'user-001'; });
+      if (!user) user = users[0];
+
+      var works = await BD.loadData('works');
+      var userWorks = BStor.getItem(BStor.KEYS.userWorks, []);
+      var publishedArticles = BStor.getItem(BStor.KEYS.publishedArticles, []);
+      var completedTasks = BStor.getItem(BStor.KEYS.completedTasks, []);
+
+      var savedProfile = BStor.getItem('bc_userProfile', null);
+      if (savedProfile) {
+        user.name = savedProfile.name || user.name;
+        user.bio = savedProfile.bio || user.bio;
+        user.country = savedProfile.country || user.country;
+      }
+
+      var allWorks = userWorks.concat(works.filter(function(w) {
+        return w.creatorId === 'creator-001' || w.creator === user.name;
+      }));
+
+      var now = new Date();
+      var joinDate = new Date(user.joinDate);
+      var joinDays = Math.floor((now - joinDate) / (1000 * 60 * 60 * 24));
+
+      var coverHtml = '<div class="bc-profile-header-creator">'
+        + '<div class="bc-profile-cover">'
+        + '<img src="' + TP + '" style="background:linear-gradient(135deg,#1B4332,#2D6A4F,#40916C);width:100%;height:200px;object-fit:cover;" alt="cover" />'
+        + '</div>'
+        + '<div class="bc-profile-info">'
+        + '<img src="' + TP + '" style="background:linear-gradient(135deg,#B8860B,#DAA520);width:96px;height:96px;border-radius:50%;border:4px solid var(--bg-card);object-fit:cover;box-shadow:var(--shadow-md);" alt="' + user.name + '" class="bc-profile-avatar" />'
+        + '<div style="flex:1;min-width:0;">'
+        + '<div class="bc-profile-name">' + user.name + ' <span style="display:inline-flex;">' + (window.VERIFIED_SVG || '<svg width="14" height="14" viewBox="0 0 24 24" fill="#C7A56D"><circle cx="12" cy="12" r="10" fill="#C7A56D"/><polyline points="7 12 10 15 17 8" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>') + '</span></div>'
+        + '<div class="bc-profile-bio">' + (user.bio || '') + '</div>'
+        + '<div style="display:flex;gap:16px;margin-top:8px;font-size:0.82rem;color:var(--text-secondary);flex-wrap:wrap;">'
+        + '<span>&#127757; ' + (user.country || '中国') + '</span>'
+        + '<span>&#128197; ' + joinDate.getFullYear() + '年' + (joinDate.getMonth()+1) + '月加入 · ' + joinDays + '天</span>'
+        + '<span class="tag tag-accent">Lv.' + user.level + ' 创作者</span>'
+        + '</div>'
+        + '</div>'
+        + '<a href="/creator/profile.html" class="btn btn-outline btn-sm" style="flex-shrink:0;">编辑资料</a>'
+        + '</div>'
+        + '</div>';
+
+      var statsHtml = '<div class="bc-creator-stats" style="margin-bottom:24px;">'
+        + '<div class="bc-stat-card"><div class="value" data-counter="' + allWorks.length + '">0</div><div class="label">作品数</div></div>'
+        + '<div class="bc-stat-card"><div class="value" data-counter="' + user.stats.followers + '">0</div><div class="label">粉丝数</div></div>'
+        + '<div class="bc-stat-card"><div class="value" data-counter="' + user.stats.favorites + '">0</div><div class="label">收藏数</div></div>'
+        + '<div class="bc-stat-card"><div class="value" data-counter="' + user.stats.likes + '">0</div><div class="label">获赞数</div></div>'
+        + '</div>';
+
+      var leftContent = '';
+
+      leftContent += '<div class="bc-dashboard-section">'
+        + '<h3>&#128247; 最新作品</h3>'
+        + '<div class="grid-3">';
+      var recentWorks = allWorks.slice(0, 6);
+      if (recentWorks.length > 0) {
+        recentWorks.forEach(function(w) {
+          leftContent += '<div class="bc-work-card" onclick="location.href=\'/discover/work-detail.html?id=' + (w.id || '') + '\'">'
+            + '<div class="bc-work-card-img" style="aspect-ratio:4/3;">'
+            + '<img src="' + TP + '" style="background:linear-gradient(135deg,#2a5c4a,#1a3a2a);width:100%;aspect-ratio:4/3;object-fit:cover;" alt="' + (w.title || '') + '" />'
+            + '<div class="bc-work-card-overlay"><div class="bc-work-card-actions">'
+            + '<button data-action="favorite" data-work-id="' + (w.id || '') + '">' + (window.STAR_ICON_SVG || '&#9733;') + '</button>'
+            + '<button data-action="like" data-work-id="' + (w.id || '') + '">' + (window.HEART_ICON_SVG || '&#9829;') + '</button>'
+            + '</div></div>'
+            + '</div>'
+            + '<div class="bc-work-card-body"><div class="bc-work-card-title">' + (w.title || '') + '</div>'
+            + '<div class="bc-work-card-meta"><span>' + (w.category || '') + '</span><span>' + (w.views ? (window.formatNumber ? formatNumber(w.views) : w.views) : '0') + ' 浏览</span></div>'
+            + '</div></div>';
+        });
+      } else {
+        leftContent += '<div class="bc-empty" style="grid-column:1/-1;"><div class="bc-empty-icon">&#128247;</div><h4>还没有作品</h4><p>开始上传你的第一件作品吧</p></div>';
+      }
+      leftContent += '</div></div>';
+
+      leftContent += '<div class="bc-dashboard-section">'
+        + '<h3>&#128214; 最新文章</h3>';
+      if (publishedArticles.length > 0) {
+        var recentArticles = publishedArticles.slice(0, 3);
+        recentArticles.forEach(function(a) {
+          leftContent += '<div class="bc-mini-work-card">'
+            + '<img src="' + TP + '" style="background:linear-gradient(135deg,#1B4F72,#2980B9);width:60px;height:60px;border-radius:6px;object-fit:cover;" alt="' + (a.title || '') + '" />'
+            + '<div class="bc-mini-work-info"><div class="title">' + (a.title || '') + '</div>'
+            + '<div class="meta">' + (a.date || '') + ' · ' + (a.category || '') + ' · ' + (a.status === 'draft' ? '草稿' : '已发布') + '</div></div>'
+            + '<a href="/topics/article-detail.html?id=' + (a.id || '') + '" class="btn btn-ghost btn-sm">查看</a>'
+            + '</div>';
+        });
+      } else {
+        leftContent += '<div class="bc-empty"><div class="bc-empty-icon">&#128214;</div><h4>还没有文章</h4><p>开始撰写你的第一篇专题文章吧</p></div>';
+      }
+      leftContent += '</div>';
+
+      var contributionScore = completedTasks.reduce(function(s, t) { return s + (t.points || 0); }, 0);
+      var contribLevel = contributionScore >= 500 ? '黄金贡献者' : contributionScore >= 300 ? '白银贡献者' : contributionScore >= 100 ? '青铜贡献者' : '新手贡献者';
+
+      var rightContent = '<div class="bc-dashboard-section">'
+        + '<h3>&#9889; 快捷操作</h3>'
+        + '<a href="/creator/upload.html" class="bc-quick-action"><div class="bc-quick-action-icon">&#128247;</div><div class="bc-quick-action-info"><div class="title">上传作品</div><div class="desc">分享你的鸟类影像创作</div></div></a>'
+        + '<a href="/topics/write-article.html" class="bc-quick-action"><div class="bc-quick-action-icon">&#9997;</div><div class="bc-quick-action-info"><div class="title">写文章</div><div class="desc">撰写专题分析文章</div></div></a>'
+        + '<a href="/creator/certificates.html" class="bc-quick-action"><div class="bc-quick-action-icon">&#128196;</div><div class="bc-quick-action-info"><div class="title">查看证书</div><div class="desc">管理你的版权证书</div></div></a>'
+        + '<a href="/creator/earnings.html" class="bc-quick-action"><div class="bc-quick-action-icon">&#128176;</div><div class="bc-quick-action-info"><div class="title">收益概览</div><div class="desc">查看收益与提现</div></div></a>'
+        + '</div>';
+
+      var levelProgress = (user.level % 10) / 10 * 100;
+      if (levelProgress === 0) levelProgress = 100;
+
+      rightContent += '<div class="bc-dashboard-section">'
+        + '<h3>&#127942; 创作者等级</h3>'
+        + '<div class="bc-level-display">'
+        + '<div class="bc-level-number">Lv.' + user.level + '</div>'
+        + '<div class="bc-level-label">经验值进度</div>'
+        + '<div class="bc-level-bar"><div class="bc-level-bar-fill" style="width:' + levelProgress + '%;"></div></div>'
+        + '<div class="bc-level-next">距离下一级还需更多创作</div>'
+        + '</div></div>';
+
+      rightContent += '<div class="bc-dashboard-section">'
+        + '<h3>&#127775; 创作者勋章</h3>';
+      if (user.badges && user.badges.length > 0) {
+        user.badges.forEach(function(b) {
+          rightContent += '<span class="bc-badge-tag">&#127775; ' + b + '</span>';
+        });
+      }
+      rightContent += '</div>';
+
+      rightContent += '<div class="bc-dashboard-section">'
+        + '<h3>&#128202; 社区影响力</h3>'
+        + '<div class="bc-influence-stat"><span>作品总数</span><span class="val">' + allWorks.length + '</span></div>'
+        + '<div class="bc-influence-stat"><span>粉丝数</span><span class="val">' + (window.formatNumber ? formatNumber(user.stats.followers) : user.stats.followers) + '</span></div>'
+        + '<div class="bc-influence-stat"><span>获赞数</span><span class="val">' + (window.formatNumber ? formatNumber(user.stats.likes) : user.stats.likes) + '</span></div>'
+        + '<div class="bc-influence-stat"><span>收藏数</span><span class="val">' + (window.formatNumber ? formatNumber(user.stats.favorites) : user.stats.favorites) + '</span></div>'
+        + '<div class="bc-influence-stat"><span>加入天数</span><span class="val">' + joinDays + ' 天</span></div>'
+        + '</div>';
+
+      rightContent += '<div class="bc-dashboard-section">'
+        + '<h3>&#127919; 任务与贡献</h3>'
+        + '<div class="bc-influence-stat"><span>贡献值</span><span class="val">' + contributionScore + '</span></div>'
+        + '<div class="bc-influence-stat"><span>贡献等级</span><span class="val" style="color:var(--brand-accent-dark);">' + contribLevel + '</span></div>'
+        + '<div class="bc-influence-stat"><span>已完成任务</span><span class="val">' + completedTasks.length + '</span></div>'
+        + '<a href="/creator/tasks.html" class="btn btn-outline btn-sm mt-2" style="width:100%;">查看全部任务</a>'
+        + '</div>';
+
+      var dashboardHtml = '<div class="bc-dashboard-grid">'
+        + '<div>' + leftContent + '</div>'
+        + '<div>' + rightContent + '</div>'
+        + '</div>';
+
+      document.getElementById('dashboardContent').innerHTML = coverHtml + statsHtml + dashboardHtml;
+
+      BI.initLikeButtons();
+      BI.initFavoriteButtons();
+
+      setTimeout(function() {
+        document.querySelectorAll('[data-counter]').forEach(function(el) {
+          var target = parseInt(el.getAttribute('data-counter')) || 0;
+          var duration = 1500;
+          var start = 0;
+          var startTime = null;
+          function animate(ts) {
+            if (!startTime) startTime = ts;
+            var progress = Math.min((ts - startTime) / duration, 1);
+            var current = Math.floor(progress * target);
+            el.textContent = window.formatNumber ? formatNumber(current) : current;
+            if (progress < 1) requestAnimationFrame(animate);
+          }
+          requestAnimationFrame(animate);
+        });
+      }, 200);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>摄影器材 - BirdChain鸟链</title>
+  <meta name="description" content="探索鸟类摄影与观鸟装备，从专业相机镜头到望远镜，找到最适合你的器材。">
+  <meta property="og:title" content="摄影器材 - BirdChain鸟链">
+  <meta property="og:description" content="鸟类摄影与观鸟装备指南，专业器材评测与推荐。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .gear-hero {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin: 20px 0 32px;
+      background: linear-gradient(135deg, #1B4965, #2980B9);
+      min-height: 280px;
+      display: flex;
+      align-items: center;
+      padding: 48px;
+    }
+    .gear-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 40%, rgba(199, 165, 109, 0.15), transparent 60%);
+      pointer-events: none;
+    }
+    .gear-hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 560px;
+    }
+    .gear-hero-content h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+    .gear-hero-content p {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.82);
+      line-height: 1.65;
+    }
+    .gear-category-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .gear-category-tab {
+      padding: 8px 22px;
+      border-radius: 24px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      background: var(--bg-soft);
+      color: var(--text-secondary);
+      border: 1.5px solid transparent;
+      transition: all var(--transition-fast);
+    }
+    .gear-category-tab:hover,
+    .gear-category-tab.active {
+      background: var(--brand-accent-soft);
+      color: var(--brand-accent-dark);
+      border-color: var(--brand-accent);
+    }
+    .gear-type-chips {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+    .gear-type-chip {
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      background: var(--bg-soft);
+      color: var(--text-secondary);
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all var(--transition-fast);
+    }
+    .gear-type-chip:hover,
+    .gear-type-chip.active {
+      background: var(--brand-accent-soft);
+      color: var(--brand-accent-dark);
+      border-color: var(--brand-accent);
+    }
+    .gear-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+    .gear-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--line-soft);
+      transition: all var(--transition-normal);
+      cursor: pointer;
+    }
+    .gear-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+    .gear-card-img {
+      aspect-ratio: 1/1;
+      overflow: hidden;
+    }
+    .gear-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .gear-card-body {
+      padding: 18px 16px;
+    }
+    .gear-card-body h5 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text-strong);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .gear-card-brand {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+    .gear-card-rating {
+      font-size: 0.82rem;
+      color: var(--brand-accent);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .gear-card-price {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--danger);
+      margin-top: 8px;
+    }
+    .gear-featured-section {
+      background: var(--bg-soft);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      margin: 40px 0;
+    }
+    .gear-featured-list {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .gear-featured-item {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border: 1px solid var(--line-soft);
+      flex: 1;
+      min-width: 240px;
+    }
+    .gear-featured-item-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      background: var(--bg-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--brand-accent);
+      flex-shrink: 0;
+    }
+    .gear-featured-item-info h6 {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .gear-featured-item-info span {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+    }
+    .gear-purchase-banner {
+      background: linear-gradient(135deg, #6B4226, #8B6914);
+      border-radius: var(--radius-lg);
+      padding: 40px 48px;
+      margin: 40px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #fff;
+      gap: 32px;
+    }
+    .gear-purchase-banner h3 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .gear-purchase-banner p {
+      opacity: 0.85;
+      font-size: 0.9rem;
+    }
+    .gear-purchase-links {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    .gear-purchase-link {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      text-align: center;
+      transition: all var(--transition-fast);
+      cursor: pointer;
+    }
+    .gear-purchase-link:hover {
+      border-color: var(--brand-accent);
+      box-shadow: var(--shadow-sm);
+    }
+    .gear-purchase-link-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--bg-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 12px;
+      color: var(--brand-accent);
+    }
+    .gear-purchase-link h5 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .gear-purchase-link p {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+    @media (max-width: 1199px) {
+      .gear-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 991px) {
+      .gear-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 767px) {
+      .gear-grid { grid-template-columns: 1fr; }
+      .gear-hero { padding: 32px 20px; min-height: 220px; }
+      .gear-hero-content h1 { font-size: 1.5rem; }
+      .gear-featured-section { padding: 24px 16px; }
+      .gear-purchase-links { grid-template-columns: 1fr; }
+      .gear-purchase-banner { flex-direction: column; text-align: center; padding: 28px 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+
+      <div class="gear-hero">
+        <div class="gear-hero-content">
+          <h1>摄影器材与装备</h1>
+          <p>从专业超远摄镜头到便携望远镜，从相机机身到隐蔽装备——为你精选鸟类摄影与观鸟的每一件利器。</p>
+        </div>
+      </div>
+
+      <div class="gear-category-tabs" id="gearCategoryTabs">
+        <button class="gear-category-tab active" data-category="all">全部器材</button>
+        <button class="gear-category-tab" data-category="摄影装备">摄影装备</button>
+        <button class="gear-category-tab" data-category="观鸟装备">观鸟装备</button>
+      </div>
+
+      <div class="gear-type-chips" id="gearTypeChips">
+        <button class="gear-type-chip active" data-type="all">全部类型</button>
+        <button class="gear-type-chip" data-type="相机机身">相机</button>
+        <button class="gear-type-chip" data-type="镜头">镜头</button>
+        <button class="gear-type-chip" data-type="双筒望远镜">双筒望远镜</button>
+        <button class="gear-type-chip" data-type="单筒望远镜">单筒望远镜</button>
+        <button class="gear-type-chip" data-type="三脚架">三脚架</button>
+        <button class="gear-type-chip" data-type="隐蔽装备">配件</button>
+      </div>
+
+      <div class="gear-grid" id="gearGrid"></div>
+
+      <div class="gear-featured-section">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">摄影师使用清单</h2>
+            <p class="section-subtitle">专业鸟类摄影师推荐的装备组合</p>
+          </div>
+        </div>
+        <div class="gear-featured-list" id="gearFeaturedList"></div>
+      </div>
+
+      <section class="section" id="gearReviewSection">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">器材评测</h2>
+            <p class="section-subtitle">深度评测，帮你做出明智选择</p>
+          </div>
+        </div>
+        <div id="gearReviewLinks"></div>
+      </section>
+
+      <div class="gear-purchase-links" id="purchaseLinks">
+        <a href="#" class="gear-purchase-link" onclick="event.preventDefault(); BirdChainInteractions.showToast('即将跳转至官方商城', 'info')">
+          <div class="gear-purchase-link-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          </div>
+          <h5>官方商城</h5>
+          <p>品牌直营 · 正品保障</p>
+        </a>
+        <a href="#" class="gear-purchase-link" onclick="event.preventDefault(); BirdChainInteractions.showToast('即将跳转至京东旗舰店', 'info')">
+          <div class="gear-purchase-link-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </div>
+          <h5>电商旗舰店</h5>
+          <p>京东/天猫 · 比价选购</p>
+        </a>
+        <a href="#" class="gear-purchase-link" onclick="event.preventDefault(); BirdChainInteractions.showToast('即将跳转至二手器材市场', 'info')">
+          <div class="gear-purchase-link-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <h5>二手器材</h5>
+          <p>优质二手 · 性价比之选</p>
+        </a>
+      </div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BI = window.BirdChainInteractions;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('gear'));
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '摄影器材', href: '/gear/index.html' }
+      ]);
+
+      var gearData = await loadData('gear');
+      var currentCategory = 'all';
+      var currentType = 'all';
+
+      var gradientColors = [
+        'linear-gradient(135deg, #2c3e50, #3498db)',
+        'linear-gradient(135deg, #1B4332, #2D6A4F)',
+        'linear-gradient(135deg, #6B4226, #8B6914)',
+        'linear-gradient(135deg, #1B4F72, #2980B9)',
+        'linear-gradient(135deg, #457B9D, #A8DADC)',
+        'linear-gradient(135deg, #3A5A40, #588157)',
+        'linear-gradient(135deg, #BC6C25, #DDA15E)',
+        'linear-gradient(135deg, #2D6A4F, #40916C)',
+        'linear-gradient(135deg, #6C584C, #A98467)',
+        'linear-gradient(135deg, #1A535C, #4ECDC4)'
+      ];
+
+      function renderGearGrid() {
+        var filtered = gearData.slice();
+        if (currentCategory !== 'all') {
+          filtered = filtered.filter(function(g) { return g.category === currentCategory; });
+        }
+        if (currentType !== 'all') {
+          filtered = filtered.filter(function(g) { return g.type === currentType; });
+        }
+        var html = '';
+        filtered.forEach(function(g, i) {
+          html += '<a href="/gear/product-detail.html?id=' + g.id + '" class="gear-card">';
+          html += '<div class="gear-card-img">';
+          html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: ' + gradientColors[i % gradientColors.length] + '; width:100%; height:100%; object-fit:cover;" alt="' + esc(g.name) + '">';
+          html += '</div>';
+          html += '<div class="gear-card-body">';
+          html += '<h5>' + esc(g.name) + '</h5>';
+          html += '<div class="gear-card-brand">' + esc(g.brand) + ' · ' + esc(g.type) + '</div>';
+          html += '<div class="gear-card-rating">';
+          html += '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+          html += ' ' + (g.rating || '0') + ' (' + (g.reviewCount || 0) + '条评测)';
+          html += '</div>';
+          html += '<div class="gear-card-price">¥' + (g.price || 0).toLocaleString() + '</div>';
+          html += '</div>';
+          html += '</a>';
+        });
+        if (!html) {
+          html = BC.renderEmptyState('暂无符合条件的器材');
+        }
+        document.getElementById('gearGrid').innerHTML = html;
+      }
+
+      function renderFeaturedGear() {
+        var featured = gearData.slice(0, 4);
+        var html = '';
+        featured.forEach(function(g) {
+          html += '<div class="gear-featured-item">';
+          html += '<div class="gear-featured-item-icon">';
+          html += '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>';
+          html += '</div>';
+          html += '<div class="gear-featured-item-info">';
+          html += '<h6>' + esc(g.name) + '</h6>';
+          html += '<span>' + esc(g.brand) + ' · ' + (g.suitableFor || []).slice(0, 2).join(' / ') + '</span>';
+          html += '</div>';
+          html += '</div>';
+        });
+        document.getElementById('gearFeaturedList').innerHTML = html;
+      }
+
+      function renderReviewLinks() {
+        var reviewGear = gearData.slice(0, 6);
+        var html = '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">';
+        reviewGear.forEach(function(g) {
+          html += '<a href="/gear/review-detail.html?id=' + g.id + '" class="gear-card" style="padding:20px;text-align:left;">';
+          html += '<h5 style="font-size:0.95rem;margin-bottom:6px;">' + esc(g.name) + ' 深度评测</h5>';
+          html += '<p style="font-size:0.82rem;color:var(--text-secondary);">专业评测 · ' + esc(g.brand) + ' · ' + (g.reviewCount || 0) + '条评测</p>';
+          html += '<span style="font-size:0.85rem;color:var(--brand-accent);margin-top:8px;display:inline-block;">查看评测 →</span>';
+          html += '</a>';
+        });
+        html += '</div>';
+        document.getElementById('gearReviewLinks').innerHTML = html;
+      }
+
+      renderGearGrid();
+      renderFeaturedGear();
+      renderReviewLinks();
+
+      document.getElementById('gearCategoryTabs').addEventListener('click', function(e) {
+        var tab = e.target.closest('.gear-category-tab');
+        if (!tab) return;
+        currentCategory = tab.getAttribute('data-category');
+        var tabs = this.querySelectorAll('.gear-category-tab');
+        tabs.forEach(function(t) { t.classList.remove('active'); });
+        tab.classList.add('active');
+        renderGearGrid();
+      });
+
+      document.getElementById('gearTypeChips').addEventListener('click', function(e) {
+        var chip = e.target.closest('.gear-type-chip');
+        if (!chip) return;
+        currentType = chip.getAttribute('data-type');
+        var chips = this.querySelectorAll('.gear-type-chip');
+        chips.forEach(function(c) { c.classList.remove('active'); });
+        chip.classList.add('active');
+        renderGearGrid();
+      });
+
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+      BI.initAll();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>授权说明 - BirdChain鸟链</title>
+  <meta name="description" content="BirdChain鸟类影像版权授权说明，了解各类授权类型的使用范围与价格。">
+  <meta property="og:title" content="授权说明 - BirdChain鸟链">
+  <meta property="og:description" content="了解BirdChain版权授权类型与使用范围。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .bc-guide-hero {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      height: 200px;
+      margin: 20px 0 32px;
+    }
+    .bc-guide-hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .bc-guide-hero-content {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(7, 27, 45, 0.85), rgba(7, 27, 45, 0.15));
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 32px;
+      color: #fff;
+    }
+    .bc-guide-hero-content h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .bc-guide-hero-content p {
+      font-size: 0.95rem;
+      opacity: 0.85;
+    }
+    .bc-license-type-card {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 28px;
+      margin-bottom: 24px;
+      display: flex;
+      gap: 24px;
+      transition: all var(--transition-normal);
+    }
+    .bc-license-type-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+    .bc-license-type-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: var(--radius-md);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+    .bc-license-type-body {
+      flex: 1;
+      min-width: 0;
+    }
+    .bc-license-type-body h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .bc-license-type-body p {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 10px;
+    }
+    .bc-license-type-meta {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+    .bc-license-type-meta span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .bc-license-type-price {
+      font-weight: 700;
+      color: var(--brand-accent-dark);
+      font-size: 1rem;
+    }
+    .bc-license-type-cases {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .bc-license-type-case {
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      background: var(--bg-soft);
+      color: var(--text-secondary);
+    }
+    .bc-faq-section {
+      margin: 60px 0 40px;
+    }
+    .bc-faq-section h2 {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .bc-faq-item {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 20px 24px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .bc-faq-item:hover {
+      border-color: var(--brand-accent);
+    }
+    .bc-faq-item h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .bc-faq-item h4 svg {
+      transition: transform var(--transition-fast);
+    }
+    .bc-faq-item.open h4 svg {
+      transform: rotate(180deg);
+    }
+    .bc-faq-answer {
+      display: none;
+      margin-top: 12px;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+    .bc-faq-item.open .bc-faq-answer {
+      display: block;
+    }
+    @media (max-width: 767px) {
+      .bc-guide-hero { height: 140px; border-radius: var(--radius-md); }
+      .bc-guide-hero-content { padding: 20px; }
+      .bc-guide-hero-content h1 { font-size: 1.3rem; }
+      .bc-license-type-card { flex-direction: column; padding: 20px; }
+      .bc-license-type-icon { width: 60px; height: 60px; font-size: 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+
+      <div class="bc-guide-hero">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+             style="background: linear-gradient(135deg, #1B4F72, #2980B9); width:100%; height:100%; object-fit:cover;" alt="授权说明">
+        <div class="bc-guide-hero-content">
+          <h1>版权授权说明</h1>
+          <p>了解BirdChain各类授权类型，选择最适合您的使用方案</p>
+        </div>
+      </div>
+
+      <div id="licenseTypes"></div>
+
+      <div class="bc-faq-section">
+        <h2 class="section-title">常见问题</h2>
+        <div id="faqList"></div>
+      </div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BI = window.BirdChainInteractions;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('market'));
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '版权市场', href: '/market/index.html' },
+        { label: '授权说明' }
+      ]);
+
+      var licenseTypes = [
+        {
+          title: '个人非商用',
+          icon: '个人',
+          iconBg: 'linear-gradient(135deg, #457B9D, #A8DADC)',
+          desc: '适用于个人非商业用途，包括个人网站展示、社交媒体分享、个人打印装饰、学习研究等场景。不可用于任何商业广告、产品包装、企业宣传或转售行为。',
+          priceRange: '¥99 - ¥399',
+          duration: '永久',
+          territory: '全球',
+          cases: ['个人博客', '社交分享', '学习研究', '个人打印']
+        },
+        {
+          title: '标准商用',
+          icon: '标准',
+          iconBg: 'linear-gradient(135deg, #2D6A4F, #40916C)',
+          desc: '在个人用途基础上增加商业使用权限，适用于企业网站、数字媒体、宣传册、展会展示等商业场景。不可用于产品包装、品牌代言或转授权。',
+          priceRange: '¥299 - ¥799',
+          duration: '永久',
+          territory: '全球',
+          cases: ['企业网站', '宣传册', '数字媒体', '展会展示']
+        },
+        {
+          title: '扩展商用',
+          icon: '扩展',
+          iconBg: 'linear-gradient(135deg, #1B4F72, #2980B9)',
+          desc: '在标准商用基础上增加更广泛的商业使用权，适用于广告宣传、产品包装、企业宣传片、出版物印刷等。不可用于独家品牌合作或转授权。',
+          priceRange: '¥499 - ¥1299',
+          duration: '永久',
+          territory: '全球',
+          cases: ['广告宣传', '产品包装', '出版物', '企业宣传片']
+        },
+        {
+          title: '商品化授权',
+          icon: '商品',
+          iconBg: 'linear-gradient(135deg, #B8860B, #DAA520)',
+          desc: '允许将作品用于商品化用途，包括文创产品、服饰、家居用品、文具等实体商品的图案设计。授权费用包含商品化系数加成。',
+          priceRange: '¥799 - ¥2999',
+          duration: '按协议',
+          territory: '按协议',
+          cases: ['文创产品', '服饰印花', '家居用品', '文具设计']
+        },
+        {
+          title: 'AI二创授权',
+          icon: 'AI创',
+          iconBg: 'linear-gradient(135deg, #6C584C, #A98467)',
+          desc: '允许使用该作品进行AI二次创作，包括风格迁移、图像生成训练素材、AI辅助创作等。需在衍生作品中标注原始作品来源。',
+          priceRange: '¥599 - ¥1999',
+          duration: '永久',
+          territory: '全球',
+          cases: ['AI风格迁移', 'AI辅助创作', '数字衍生', '风格学习']
+        },
+        {
+          title: 'AI训练授权',
+          icon: 'AI训',
+          iconBg: 'linear-gradient(135deg, #7B2D26, #C44536)',
+          desc: '允许将该作品用于AI模型的训练数据集，包括图像生成模型、分类模型等。此为特殊授权类型，价格较高，且需签署数据使用协议。',
+          priceRange: '¥2999 - ¥9999+',
+          duration: '永久',
+          territory: '全球',
+          cases: ['AI模型训练', '数据集构建', '算法研究', '学术训练']
+        },
+        {
+          title: '独家授权',
+          icon: '独家',
+          iconBg: 'linear-gradient(135deg, #1B4332, #2D6A4F, #40916C)',
+          desc: '购买后获得作品的独家使用权，原作者在授权期内不得将同一作品授权给任何其他方。适用于品牌独家合作和高端商业用途，是最顶级的授权类型。',
+          priceRange: '¥999 - ¥9999+',
+          duration: '1-5年（按协议）',
+          territory: '按协议约定',
+          cases: ['品牌独家', '全线产品', '全球广告', '影视授权']
+        }
+      ];
+
+      var html = '';
+      licenseTypes.forEach(function(lt) {
+        html += '<div class="bc-license-type-card">';
+        html += '<div class="bc-license-type-icon" style="background:' + lt.iconBg + '">' + esc(lt.icon) + '</div>';
+        html += '<div class="bc-license-type-body">';
+        html += '<h3>' + esc(lt.title) + '</h3>';
+        html += '<p>' + esc(lt.desc) + '</p>';
+        html += '<div class="bc-license-type-meta">';
+        html += '<span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> ' + esc(lt.priceRange) + '</span>';
+        html += '<span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> ' + esc(lt.duration) + '</span>';
+        html += '<span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> ' + esc(lt.territory) + '</span>';
+        html += '</div>';
+        html += '<div class="bc-license-type-cases">';
+        lt.cases.forEach(function(c) {
+          html += '<span class="bc-license-type-case">' + esc(c) + '</span>';
+        });
+        html += '</div>';
+        html += '</div>';
+        html += '</div>';
+      });
+      document.getElementById('licenseTypes').innerHTML = html;
+
+      var faqs = [
+        { q: '如何选择适合我的授权类型？', a: '首先确定您的使用场景：个人展示选择个人非商用；企业网站和宣传选择标准商用；广告和印刷品选择扩展商用；实体商品选择商品化授权；AI相关使用选择AI二创或AI训练授权；品牌独家合作选择独家授权。您也可以使用授权计算器自动匹配。' },
+        { q: '购买授权后可以退款吗？', a: '由于版权作品的数字特性，授权一经生成区块链存证证书即不支持退款。建议您在购买前仔细阅读授权说明，确认使用场景后再下单。' },
+        { q: '授权证书的法律效力如何？', a: 'BirdChain授权证书采用区块链存证技术，包含作品哈希指纹、授权信息、时间戳等不可篡改的数据。该证书可作为版权纠纷中的有效证据，具有法律参考价值。' },
+        { q: 'AI二创授权和AI训练授权有什么区别？', a: 'AI二创授权允许使用作品进行风格迁移、图像衍生等二次创作，面向创作者个人。AI训练授权允许将作品纳入AI模型的训练数据集，面向AI公司和研究机构，价格更高且需签署专门的数据使用协议。' },
+        { q: '创作者如何获得收益？', a: '每次授权交易中，创作者获得70%的分成，平台收取20%的服务费用于运营和技术维护，剩余10%注入鸟类保护基金，用于支持全球鸟类保护项目。' },
+        { q: '购买独家授权后，之前售出的授权是否受影响？', a: '不受影响。独家授权仅限制授权期内的新授权，在此之前已售出的授权依然有效。独家授权生效后，该作品将从公开市场中下架。' }
+      ];
+
+      var faqHtml = '';
+      faqs.forEach(function(faq) {
+        faqHtml += '<div class="bc-faq-item" onclick="toggleFaq(this)">';
+        faqHtml += '<h4>' + esc(faq.q) + ' ' + CHEVRON_DOWN_SVG + '</h4>';
+        faqHtml += '<div class="bc-faq-answer">' + esc(faq.a) + '</div>';
+        faqHtml += '</div>';
+      });
+      document.getElementById('faqList').innerHTML = faqHtml;
+
+      window.toggleFaq = function(el) {
+        el.classList.toggle('open');
+      };
+
+      BI.initNewsletterForm();
+      BI.initThemeToggle();
+      BI.initMobileMenu();
+      BI.initSearchBar();
+      BI.initCartButtons();
+      BI.updateCartBadge();
+    });
+  </script>
+</body>
+</html>

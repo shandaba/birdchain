@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>文章详情 - BirdChain鸟链</title>
+  <meta name="description" content="BirdChain深度文章阅读。">
+  <meta property="og:title" content="文章详情 - BirdChain鸟链">
+  <meta property="og:description" content="BirdChain深度文章阅读。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .bc-article-cover {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      aspect-ratio: 16/9;
+      max-height: 480px;
+      margin: 20px 0 32px;
+    }
+    .bc-article-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .bc-article-layout {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .bc-article-header {
+      margin-bottom: 32px;
+    }
+    .bc-article-header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      line-height: 1.35;
+    }
+    .bc-article-meta {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+    .bc-article-meta .author-name {
+      font-weight: 600;
+      color: var(--text-strong);
+    }
+    .bc-role-badge {
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      background: var(--brand-accent-soft);
+      color: var(--brand-accent-dark);
+    }
+    .bc-article-summary {
+      padding: 20px 24px;
+      background: var(--bg-soft);
+      border-radius: var(--radius-md);
+      border-left: 4px solid var(--brand-accent);
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--text-strong);
+      margin-bottom: 32px;
+    }
+    .bc-article-content {
+      font-size: 1.05rem;
+      line-height: 1.85;
+      color: var(--text-main);
+      margin-bottom: 40px;
+    }
+    .bc-article-content p {
+      margin-bottom: 20px;
+      text-indent: 2em;
+    }
+    .bc-article-gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 28px 0;
+    }
+    .bc-article-gallery-item {
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      aspect-ratio: 4/3;
+      cursor: pointer;
+      transition: transform var(--transition-fast);
+    }
+    .bc-article-gallery-item:hover {
+      transform: scale(1.03);
+    }
+    .bc-article-gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .bc-article-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 0;
+      margin: 32px 0;
+      border-top: 1px solid var(--line-soft);
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .bc-article-actions button {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 18px;
+      border-radius: 22px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: all var(--transition-fast);
+      background: var(--bg-soft);
+      color: var(--text-secondary);
+      border: 1px solid transparent;
+    }
+    .bc-article-actions button:hover {
+      background: var(--brand-accent-soft);
+      color: var(--brand-accent-dark);
+      border-color: var(--brand-accent);
+    }
+    .bc-article-actions button.liked,
+    .bc-article-actions button.favorited {
+      background: #fce4e4;
+      color: #c0392b;
+      border-color: #c0392b;
+    }
+    .bc-ref-works {
+      margin-bottom: 40px;
+    }
+    .bc-ref-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .bc-ref-item {
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      cursor: pointer;
+      transition: all var(--transition-normal);
+    }
+    .bc-ref-item:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+    .bc-ref-item-img {
+      aspect-ratio: 4/3;
+      overflow: hidden;
+    }
+    .bc-ref-item-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .bc-ref-item-body {
+      padding: 8px 10px;
+    }
+    .bc-ref-item-body h6 {
+      font-size: 0.8rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .bc-ref-item-body .sub {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+    }
+    .bc-recommended {
+      margin-bottom: 40px;
+    }
+    .bc-recommended-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .bc-recommended-card {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      cursor: pointer;
+      transition: all var(--transition-normal);
+    }
+    .bc-recommended-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+    .bc-recommended-card-img {
+      aspect-ratio: 16/9;
+      overflow: hidden;
+    }
+    .bc-recommended-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .bc-recommended-card-body {
+      padding: 12px;
+    }
+    .bc-recommended-card-body h5 {
+      font-size: 0.88rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .bc-recommended-card-body .meta {
+      font-size: 0.76rem;
+      color: var(--text-secondary);
+    }
+    .bc-comments-section {
+      margin-bottom: 48px;
+    }
+    .bc-comments-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+    .bc-comment-item {
+      padding: 14px 16px;
+      background: var(--bg-soft);
+      border-radius: var(--radius-md);
+    }
+    .bc-comment-item .comment-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+      font-size: 0.84rem;
+    }
+    .bc-comment-item .comment-author {
+      font-weight: 600;
+      color: var(--text-strong);
+    }
+    .bc-comment-item .comment-time {
+      font-size: 0.76rem;
+      color: var(--text-secondary);
+    }
+    .bc-comment-item .comment-body {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--text-main);
+    }
+    .bc-comment-form {
+      display: flex;
+      gap: 10px;
+    }
+    .bc-comment-form textarea {
+      flex: 1;
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--line-soft);
+      background: var(--bg-card);
+      color: var(--text-main);
+      font-size: 0.9rem;
+      resize: vertical;
+      min-height: 80px;
+      outline: none;
+      transition: border-color var(--transition-fast);
+    }
+    .bc-comment-form textarea:focus {
+      border-color: var(--brand-accent);
+    }
+    .bc-comment-form button {
+      align-self: flex-end;
+      padding: 10px 24px;
+      border-radius: 24px;
+      background: var(--brand-accent);
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      transition: background var(--transition-fast);
+    }
+    .bc-comment-form button:hover {
+      background: var(--brand-accent-dark);
+    }
+    .bc-not-found {
+      text-align: center;
+      padding: 80px 20px;
+    }
+    .bc-not-found h2 {
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+    }
+    .bc-not-found p {
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+    .bc-tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 16px 0;
+    }
+    .bc-tags-row span {
+      padding: 4px 12px;
+      border-radius: 16px;
+      font-size: 0.78rem;
+      background: var(--bg-soft);
+      color: var(--text-secondary);
+    }
+    @media (max-width: 768px) {
+      .bc-article-header h1 { font-size: 1.4rem; }
+      .bc-article-content { font-size: 0.95rem; }
+      .bc-article-gallery { grid-template-columns: repeat(2, 1fr); }
+      .bc-ref-grid { grid-template-columns: repeat(2, 1fr); }
+      .bc-recommended-grid { grid-template-columns: repeat(2, 1fr); }
+      .bc-article-cover { aspect-ratio: 16/9; max-height: none; }
+    }
+    @media (max-width: 480px) {
+      .bc-article-gallery { grid-template-columns: 1fr; }
+      .bc-ref-grid { grid-template-columns: 1fr; }
+      .bc-recommended-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+      <div id="articleContent"></div>
+      <div id="notFound" style="display:none;">
+        <div class="bc-not-found">
+          <h2>文章未找到</h2>
+          <p>您访问的文章不存在或已被移除。</p>
+          <a href="/topics/" class="btn btn-accent" style="padding:10px 28px;border-radius:24px;display:inline-block;">返回专题主页</a>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var BC = window.BirdChainComponents;
+      var BD = window.BirdChainData;
+      var BI = window.BirdChainInteractions;
+      var BS = window.BirdChainStorage;
+
+      var app = document.getElementById('app');
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('topics'));
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+      BI.initAll();
+
+      var params = new URLSearchParams(window.location.search);
+      var articleId = params.get('id');
+
+      var articles = await BD.loadData('articles');
+      var topics = await BD.loadData('topics');
+      var works = await BD.loadData('works');
+      var species = await BD.loadData('species');
+      var creators = await BD.loadData('creators');
+
+      var workMap = {};
+      works.forEach(function(w) { workMap[w.id] = w; });
+
+      var speciesMap = {};
+      species.forEach(function(s) { speciesMap[s.id] = s; });
+
+      var creatorMap = {};
+      creators.forEach(function(c) { creatorMap[c.id] = c; });
+
+      var article = articles.find(function(a) { return a.id === articleId; });
+      if (!article) {
+        document.getElementById('notFound').style.display = '';
+        return;
+      }
+
+      document.title = article.title + ' - BirdChain鸟链';
+      document.querySelector('meta[name="description"]').setAttribute('content', article.summary);
+      document.querySelector('meta[property="og:title"]').setAttribute('content', article.title + ' - BirdChain鸟链');
+      document.querySelector('meta[property="og:description"]').setAttribute('content', article.summary);
+
+      var topic = topics.find(function(t) { return t.id === article.topicId; });
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '专题/深度分析', href: '/topics/' },
+        { label: topic ? topic.title : '专题', href: '/topics/topic-detail.html?id=' + (article.topicId || '') },
+        { label: article.title }
+      ]);
+
+      var html = '';
+
+      html += '<div class="bc-article-cover">';
+      html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: linear-gradient(135deg, #2a5c4a, #1a3a2a);" alt="' + esc(article.title) + '">';
+      html += '</div>';
+
+      html += '<div class="bc-article-layout">';
+
+      html += '<div class="bc-article-header">';
+      html += '<h1>' + esc(article.title) + '</h1>';
+      html += '<div class="bc-article-meta">';
+      html += '<span class="author-name">' + esc(article.authorName) + '</span>';
+      if (article.authorRole) {
+        html += '<span class="bc-role-badge">' + esc(article.authorRole) + '</span>';
+      }
+      html += '<span>' + esc(article.publishDate) + '</span>';
+      html += '<span>' + (article.views || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' 阅读</span>';
+      html += '<span>' + (article.likes || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' 喜欢</span>';
+      html += '</div>';
+
+      if (article.tags && article.tags.length > 0) {
+        html += '<div class="bc-tags-row">';
+        article.tags.forEach(function(t) {
+          html += '<span>' + esc(t) + '</span>';
+        });
+        html += '</div>';
+      }
+
+      html += '</div>';
+
+      html += '<div class="bc-article-summary">';
+      html += esc(article.summary);
+      html += '</div>';
+
+      html += '<div class="bc-article-content">';
+      var paragraphs = (article.content || '').split('\n').filter(function(p) { return p.trim() !== ''; });
+      if (paragraphs.length === 0) paragraphs = [article.content];
+      paragraphs.forEach(function(p) {
+        html += '<p>' + esc(p.trim()) + '</p>';
+      });
+      html += '</div>';
+
+      html += '<div class="bc-article-actions">';
+      html += '<button data-action="like" data-work-id="' + article.id + '" aria-label="喜欢">';
+      html += '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>';
+      html += ' 喜欢';
+      html += '</button>';
+      html += '<button data-action="favorite" data-work-id="' + article.id + '" aria-label="收藏">';
+      html += '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+      html += ' 收藏';
+      html += '</button>';
+      html += '<button aria-label="分享" onclick="BirdChainInteractions.showToast(\'链接已复制到剪贴板\', \'success\')">';
+      html += '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>';
+      html += ' 分享';
+      html += '</button>';
+      html += '</div>';
+
+      if (article.relatedWorks && article.relatedWorks.length > 0) {
+        html += '<section class="bc-ref-works">';
+        html += '<h2 class="section-title" style="font-size:1.3rem;">引用作品</h2>';
+        html += '<div class="bc-ref-grid">';
+        article.relatedWorks.forEach(function(wid) {
+          var wk = workMap[wid];
+          if (!wk) return;
+          html += '<div class="bc-ref-item" onclick="window.location.href=\'/discover/work-detail.html?id=' + wk.id + '\'">';
+          html += '<div class="bc-ref-item-img">';
+          html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: linear-gradient(135deg, #BC6C25, #DDA15E);" alt="' + esc(wk.title) + '">';
+          html += '</div>';
+          html += '<div class="bc-ref-item-body">';
+          html += '<h6>' + esc(wk.title) + '</h6>';
+          html += '<div class="sub">' + esc(wk.species || '') + '</div>';
+          html += '</div>';
+          html += '</div>';
+        });
+        html += '</div>';
+        html += '</section>';
+      }
+
+      var recommended = articles.filter(function(a) {
+        return a.id !== article.id && (
+          a.topicId === article.topicId ||
+          (a.tags && article.tags && a.tags.some(function(t) { return article.tags.indexOf(t) !== -1; }))
+        );
+      }).slice(0, 3);
+
+      if (recommended.length > 0) {
+        html += '<section class="bc-recommended">';
+        html += '<h2 class="section-title" style="font-size:1.3rem;">推荐阅读</h2>';
+        html += '<div class="bc-recommended-grid">';
+        recommended.forEach(function(ra) {
+          html += '<div class="bc-recommended-card" onclick="window.location.href=\'/topics/article-detail.html?id=' + ra.id + '\'">';
+          html += '<div class="bc-recommended-card-img">';
+          html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: linear-gradient(135deg, #3A5A40, #588157);" alt="' + esc(ra.title) + '">';
+          html += '</div>';
+          html += '<div class="bc-recommended-card-body">';
+          html += '<h5>' + esc(ra.title) + '</h5>';
+          html += '<div class="meta">' + esc(ra.authorName) + ' · ' + esc(ra.publishDate) + '</div>';
+          html += '</div>';
+          html += '</div>';
+        });
+        html += '</div>';
+        html += '</section>';
+      }
+
+      html += '<section class="bc-comments-section">';
+      html += '<h2 class="section-title" style="font-size:1.3rem;">评论</h2>';
+      html += '<div class="bc-comments-list" id="commentsList"></div>';
+      html += '<div class="bc-comment-form">';
+      html += '<form data-action="comment-form" data-target-id="' + article.id + '" data-target-type="article">';
+      html += '<textarea placeholder="写下你的评论..." required></textarea>';
+      html += '<button type="submit">发布</button>';
+      html += '</form>';
+      html += '</div>';
+      html += '</section>';
+
+      html += '</div>';
+
+      document.getElementById('articleContent').innerHTML = html;
+
+      renderComments(article.id);
+
+      document.addEventListener('bc:comment-added', function(e) {
+        if (e.detail.targetId === article.id) {
+          renderComments(article.id);
+        }
+      });
+    });
+
+    function renderComments(articleId) {
+      var BC = window.BirdChainComponents;
+      var BS = window.BirdChainStorage;
+      var comments = BS.getItem(BS.KEYS.comments_data, {});
+      var key = 'article_' + articleId;
+      var list = comments[key] || [];
+
+      var container = document.getElementById('commentsList');
+      if (!container) return;
+
+      if (list.length === 0) {
+        container.innerHTML = '<p style="color:var(--text-secondary);font-size:0.9rem;padding:12px 0;">暂无评论，来写下第一条评论吧</p>';
+        return;
+      }
+
+      var html = '';
+      list.slice().reverse().forEach(function(c) {
+        var time = new Date(c.time);
+        var timeStr = time.getFullYear() + '-' +
+          String(time.getMonth() + 1).padStart(2, '0') + '-' +
+          String(time.getDate()).padStart(2, '0') + ' ' +
+          String(time.getHours()).padStart(2, '0') + ':' +
+          String(time.getMinutes()).padStart(2, '0');
+        html += '<div class="bc-comment-item">';
+        html += '<div class="comment-header">';
+        html += '<span class="comment-author">' + esc(c.author) + '</span>';
+        html += '<span class="comment-time">' + timeStr + '</span>';
+        html += '</div>';
+        html += '<div class="comment-body">' + esc(c.content) + '</div>';
+        html += '</div>';
+      });
+      container.innerHTML = html;
+    }
+  </script>
+</body>
+</html>

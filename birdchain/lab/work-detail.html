@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>作品详情 - 鸟类视觉实验室 - BirdChain鸟链</title>
+  <meta name="description" content="查看AI创作的鸟类视觉作品详情，包括提示词、风格和授权信息。">
+  <meta property="og:title" content="作品详情 - BirdChain鸟链">
+  <meta property="og:description" content="查看AI鸟类视觉作品详情。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .detail-layout { display: grid; grid-template-columns: 1fr 380px; gap: 32px; margin-bottom: 40px; }
+    .detail-image { border-radius: var(--radius-lg); overflow: hidden; background: var(--bg-card); border: 1px solid var(--line-soft); }
+    .detail-image img { width: 100%; aspect-ratio: 16/10; object-fit: cover; }
+    .detail-info-panel { background: var(--bg-card); border: 1px solid var(--line-soft); border-radius: var(--radius-lg); padding: 24px; }
+    .detail-info-panel h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 16px; }
+    .detail-info-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--line-soft); font-size: 0.88rem; }
+    .detail-info-row .label { color: var(--text-secondary); flex-shrink: 0; }
+    .detail-info-row .value { font-weight: 500; text-align: right; }
+    .detail-prompt-box { background: var(--bg-soft); border-radius: var(--radius-md); padding: 14px; margin: 16px 0; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; }
+    .detail-actions { display: flex; gap: 10px; margin-top: 20px; }
+    .detail-actions button { flex: 1; padding: 12px; border-radius: var(--radius-md); font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all var(--transition-fast); }
+    .btn-download { background: var(--brand-primary); color: #fff; border: none; }
+    .btn-download:hover { background: var(--brand-primary-dark); }
+    .btn-merch { background: var(--bg-soft); color: var(--text-main); border: 1px solid var(--line-soft); }
+    .btn-merch:hover { border-color: var(--brand-accent); color: var(--brand-accent); }
+    @media (max-width:1024px) { .detail-layout { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div class="bc-breadcrumb">
+        <a href="/">首页</a><span class="sep">/</span><a href="/lab/index.html">鸟类视觉实验室</a><span class="sep">/</span><a href="/lab/gallery.html">作品画廊</a><span class="sep">/</span><span class="current">作品详情</span>
+      </div>
+      <div id="detailContent"></div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      app.insertAdjacentHTML('afterbegin', BirdChainComponents.renderHeader('lab'));
+      app.insertAdjacentHTML('beforeend', BirdChainComponents.renderFooter());
+      BirdChainInteractions.initAll();
+
+      var BC = window.BirdChainStorage;
+      var BCD = window.BirdChainData;
+
+      var params = new URLSearchParams(window.location.search);
+      var workId = params.get('id');
+
+      var detailContent = document.getElementById('detailContent');
+
+      if (!workId) {
+        detailContent.innerHTML = '<div class="bc-empty"><div class="bc-empty-icon">🔍</div><h4>未指定作品ID</h4><p>请从画廊选择一个作品查看详情</p></div>';
+        return;
+      }
+
+      var work = await BCD.getWorkById(workId);
+      if (!work) {
+        detailContent.innerHTML = '<div class="bc-empty"><div class="bc-empty-icon">🔍</div><h4>作品未找到</h4><p>该作品可能已被移除</p></div>';
+        return;
+      }
+
+      var gradients = ['#1B4332,#2D6A4F','#1B4F72,#2980B9','#B8860B,#DAA520','#006D77,#83C5BE','#2D6A4F,#40916C','#3A5A40,#588157'];
+      var grad = gradients[Math.floor(Math.random() * gradients.length)];
+      var licenseLabel = work.licenseType || '标准授权';
+      var licenseBadge = licenseLabel.indexOf('独家') !== -1 ? 'badge-premium' : (licenseLabel.indexOf('公益') !== -1 ? 'badge-verified' : '');
+
+      detailContent.innerHTML =
+        '<div class="detail-layout">' +
+        '<div class="detail-image">' +
+        '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background:linear-gradient(135deg,' + grad + ');width:100%;aspect-ratio:16/10;object-fit:cover;" alt="' + (work.title||'') + '">' +
+        '</div>' +
+        '<div class="detail-info-panel">' +
+        '<h3>' + (work.title||'') + '</h3>' +
+        '<div class="detail-info-row"><span class="label">创作类型</span><span class="value"><span class="tag tag-accent">' + (work.category||'AI创作') + '</span></span></div>' +
+        '<div class="detail-info-row"><span class="label">鸟种</span><span class="value">' + (work.species||'未知') + '</span></div>' +
+        '<div class="detail-info-row"><span class="label">栖息地</span><span class="value">' + (work.habitat||'未知') + '</span></div>' +
+        '<div class="detail-info-row"><span class="label">地区</span><span class="value">' + (work.country||'未知') + '</span></div>' +
+        '<div class="detail-info-row"><span class="label">授权状态</span><span class="value"><span class="badge ' + licenseBadge + '">' + licenseLabel + '</span></span></div>' +
+        '<div class="detail-info-row"><span class="label">浏览</span><span class="value">' + (typeof formatNumber !== 'undefined' ? formatNumber(work.views||0) : work.views||0) + '</span></div>' +
+        '<div class="detail-info-row"><span class="label">喜欢</span><span class="value">' + (typeof formatNumber !== 'undefined' ? formatNumber(work.likes||0) : work.likes||0) + '</span></div>' +
+        '<div class="detail-prompt-box">💡 <strong>提示词参考：</strong><br>' + (work.description||'暂无提示词') + '</div>' +
+        '<div class="detail-info-row"><span class="label">风格</span><span class="value">AI创作</span></div>' +
+        '<div class="detail-actions">' +
+        '<button class="btn-download" data-action="download-detail">下载作品</button>' +
+        '<button class="btn-merch" data-action="go-to-merch">加入周边设计</button>' +
+        '</div>' +
+        '</div>' +
+        '</div>';
+
+      detailContent.addEventListener('click', function(e) {
+        var downloadBtn = e.target.closest('[data-action="download-detail"]');
+        var merchBtn = e.target.closest('[data-action="go-to-merch"]');
+        if (downloadBtn) {
+          e.preventDefault();
+          BirdChainInteractions.showToast('模拟下载：作品已开始下载', 'success');
+        }
+        if (merchBtn) {
+          e.preventDefault();
+          window.location.href = '/merch/index.html';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

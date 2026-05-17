@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>版权市场 - BirdChain鸟链</title>
+  <meta name="description" content="BirdChain鸟类影像版权市场，每一张作品都可生成授权凭证，保护创作者权益，释放影像价值。">
+  <meta property="og:title" content="版权市场 - BirdChain鸟链">
+  <meta property="og:description" content="每一张作品都可生成授权凭证，保护创作者权益，释放影像价值。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .bc-market-hero {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      height: 220px;
+      margin: 20px 0 32px;
+    }
+    .bc-market-hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .bc-market-hero-content {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(7, 27, 45, 0.85), rgba(7, 27, 45, 0.15));
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 32px;
+      color: #fff;
+    }
+    .bc-market-hero-content h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .bc-market-hero-content p {
+      font-size: 0.95rem;
+      opacity: 0.85;
+      max-width: 600px;
+    }
+    .bc-market-search {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .bc-market-search input {
+      flex: 1;
+      min-width: 240px;
+      padding: 12px 18px;
+      border-radius: var(--radius-md);
+      border: 1.5px solid var(--line-soft);
+      background: var(--bg-card);
+      color: var(--text-main);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color var(--transition-fast);
+    }
+    .bc-market-search input:focus {
+      border-color: var(--brand-accent);
+    }
+    .bc-market-search input::placeholder {
+      color: var(--neutral-soft);
+    }
+    .bc-market-search button {
+      padding: 12px 24px;
+      border-radius: var(--radius-md);
+      background: var(--brand-primary);
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.95rem;
+      white-space: nowrap;
+      transition: background var(--transition-fast);
+    }
+    .bc-market-search button:hover {
+      background: var(--brand-primary-dark);
+    }
+    .bc-market-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .bc-market-toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .bc-license-card {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      transition: all var(--transition-normal);
+      cursor: pointer;
+    }
+    .bc-license-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+    .bc-license-card-img {
+      aspect-ratio: 16/10;
+      overflow: hidden;
+      position: relative;
+    }
+    .bc-license-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform var(--transition-slow);
+    }
+    .bc-license-card:hover .bc-license-card-img img {
+      transform: scale(1.04);
+    }
+    .bc-license-card-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #fff;
+      background: var(--brand-accent);
+    }
+    .bc-license-card-premium {
+      background: var(--brand-primary);
+    }
+    .bc-license-card-actions {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      display: flex;
+      gap: 6px;
+      opacity: 0;
+      transition: opacity var(--transition-fast);
+    }
+    .bc-license-card:hover .bc-license-card-actions {
+      opacity: 1;
+    }
+    .bc-license-card-action-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(7, 27, 45, 0.7);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: none;
+      transition: all var(--transition-fast);
+      font-size: 0.85rem;
+    }
+    .bc-license-card-action-btn:hover {
+      background: var(--brand-accent);
+    }
+    .bc-license-card-action-btn.favorited,
+    .bc-license-card-action-btn.liked {
+      background: var(--danger);
+    }
+    .bc-license-card-body {
+      padding: 14px;
+    }
+    .bc-license-card-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      color: var(--text-strong);
+    }
+    .bc-license-card-author {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+    .bc-license-card-author img {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .bc-license-card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .bc-license-card-species {
+      font-size: 0.78rem;
+      color: var(--brand-accent-dark);
+      font-weight: 500;
+    }
+    .bc-license-card-price {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-strong);
+    }
+    .bc-license-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid var(--line-soft);
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+    .bc-license-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .bc-feature-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin: 40px 0;
+    }
+    .bc-feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 28px 24px;
+      text-align: center;
+      transition: all var(--transition-normal);
+    }
+    .bc-feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+    .bc-feature-card-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--brand-accent-soft);
+      color: var(--brand-accent-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 1.4rem;
+    }
+    .bc-feature-card h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .bc-feature-card p {
+      font-size: 0.84rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .bc-cta-banner {
+      background: linear-gradient(135deg, #1B4332, #2D6A4F, #40916C);
+      border-radius: var(--radius-lg);
+      padding: 48px 40px;
+      text-align: center;
+      color: #fff;
+      margin: 40px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .bc-cta-banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(199, 165, 109, 0.12), transparent 60%);
+      pointer-events: none;
+    }
+    .bc-cta-banner h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 10px;
+      position: relative;
+    }
+    .bc-cta-banner p {
+      font-size: 1rem;
+      opacity: 0.88;
+      max-width: 520px;
+      margin: 0 auto 24px;
+      position: relative;
+    }
+    .bc-cta-banner .btn {
+      position: relative;
+      font-size: 1rem;
+      padding: 14px 36px;
+      border-radius: 28px;
+    }
+    @media (max-width: 1199px) {
+      .bc-license-grid { grid-template-columns: repeat(2, 1fr); }
+      .bc-feature-cards { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 767px) {
+      .bc-market-hero { height: 150px; margin: 12px 0 20px; border-radius: var(--radius-md); }
+      .bc-market-hero-content { padding: 20px; }
+      .bc-market-hero-content h1 { font-size: 1.35rem; }
+      .bc-license-grid { grid-template-columns: 1fr; }
+      .bc-feature-cards { grid-template-columns: 1fr; }
+      .bc-cta-banner { padding: 32px 20px; }
+      .bc-market-search { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+
+      <div class="bc-market-hero">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+             style="background: linear-gradient(135deg, #1B4332, #2D6A4F, #40916C); width:100%; height:100%; object-fit:cover;" alt="版权市场">
+        <div class="bc-market-hero-content">
+          <h1>鸟类影像版权市场</h1>
+          <p>每一张作品都可生成授权凭证，保护创作者权益，释放影像价值</p>
+        </div>
+      </div>
+
+      <div class="bc-market-search">
+        <input type="text" id="marketSearch" placeholder="搜索物种、摄影师、作品ID、关键词...">
+        <button id="searchBtn">搜索</button>
+      </div>
+
+      <div class="bc-layout-sidebar">
+        <aside class="bc-sidebar-filter" id="sidebarFilter">
+          <div class="bc-filter-group">
+            <h4>使用场景</h4>
+            <label class="bc-filter-option"><input type="checkbox" value="出版发行" data-filter="usage"> 出版发行</label>
+            <label class="bc-filter-option"><input type="checkbox" value="广告营销" data-filter="usage"> 广告营销</label>
+            <label class="bc-filter-option"><input type="checkbox" value="媒体报道" data-filter="usage"> 媒体报道</label>
+            <label class="bc-filter-option"><input type="checkbox" value="教育科研" data-filter="usage"> 教育科研</label>
+            <label class="bc-filter-option"><input type="checkbox" value="文创产品" data-filter="usage"> 文创产品</label>
+            <label class="bc-filter-option"><input type="checkbox" value="个人用途" data-filter="usage"> 个人用途</label>
+            <label class="bc-filter-option"><input type="checkbox" value="AI二创" data-filter="usage"> AI二创</label>
+            <label class="bc-filter-option"><input type="checkbox" value="AI训练" data-filter="usage"> AI训练</label>
+          </div>
+
+          <div class="bc-filter-group">
+            <h4>版权类型</h4>
+            <label class="bc-filter-option"><input type="checkbox" value="标准授权" data-filter="license"> 标准授权</label>
+            <label class="bc-filter-option"><input type="checkbox" value="扩展授权" data-filter="license"> 扩展授权</label>
+            <label class="bc-filter-option"><input type="checkbox" value="独家授权" data-filter="license"> 独家授权</label>
+            <label class="bc-filter-option"><input type="checkbox" value="公益授权" data-filter="license"> 公益授权</label>
+          </div>
+
+          <div class="bc-filter-group">
+            <h4>鸟类物种</h4>
+            <label class="bc-filter-option"><input type="checkbox" value="翠鸟" data-filter="species"> 翠鸟</label>
+            <label class="bc-filter-option"><input type="checkbox" value="白鹭" data-filter="species"> 白鹭</label>
+            <label class="bc-filter-option"><input type="checkbox" value="鹰" data-filter="species"> 鹰</label>
+            <label class="bc-filter-option"><input type="checkbox" value="蜂鸟" data-filter="species"> 蜂鸟</label>
+            <label class="bc-filter-option"><input type="checkbox" value="猫头鹰" data-filter="species"> 猫头鹰</label>
+            <label class="bc-filter-option"><input type="checkbox" value="鹤" data-filter="species"> 鹤</label>
+            <label class="bc-filter-option"><input type="checkbox" value="鹦鹉" data-filter="species"> 鹦鹉</label>
+          </div>
+
+          <div class="bc-filter-group">
+            <h4>价格区间</h4>
+            <label class="bc-filter-option"><input type="radio" name="priceRange" value="" checked data-filter="price"> 全部</label>
+            <label class="bc-filter-option"><input type="radio" name="priceRange" value="0-100" data-filter="price"> ¥100以下</label>
+            <label class="bc-filter-option"><input type="radio" name="priceRange" value="100-500" data-filter="price"> ¥100-500</label>
+            <label class="bc-filter-option"><input type="radio" name="priceRange" value="500-1000" data-filter="price"> ¥500-1000</label>
+            <label class="bc-filter-option"><input type="radio" name="priceRange" value="1000+" data-filter="price"> ¥1000以上</label>
+          </div>
+
+          <div class="bc-filter-group">
+            <h4>地区</h4>
+            <label class="bc-filter-option"><input type="checkbox" value="中国" data-filter="country"> 中国</label>
+            <label class="bc-filter-option"><input type="checkbox" value="日本" data-filter="country"> 日本</label>
+            <label class="bc-filter-option"><input type="checkbox" value="巴西" data-filter="country"> 巴西</label>
+            <label class="bc-filter-option"><input type="checkbox" value="肯尼亚" data-filter="country"> 肯尼亚</label>
+            <label class="bc-filter-option"><input type="checkbox" value="挪威" data-filter="country"> 挪威</label>
+            <label class="bc-filter-option"><input type="checkbox" value="澳大利亚" data-filter="country"> 澳大利亚</label>
+          </div>
+
+          <div class="bc-filter-group">
+            <h4>图片方向</h4>
+            <label class="bc-filter-option"><input type="radio" name="orientation" value="" checked data-filter="orientation"> 全部</label>
+            <label class="bc-filter-option"><input type="radio" name="orientation" value="横图" data-filter="orientation"> 横图</label>
+            <label class="bc-filter-option"><input type="radio" name="orientation" value="竖图" data-filter="orientation"> 竖图</label>
+            <label class="bc-filter-option"><input type="radio" name="orientation" value="方图" data-filter="orientation"> 方图</label>
+          </div>
+        </aside>
+
+        <div class="bc-detail-main">
+          <div class="bc-market-toolbar">
+            <span class="text-sm text-secondary" id="resultCount">加载中...</span>
+            <div class="bc-market-toolbar-right">
+              <select class="bc-filter-select" id="sortSelect">
+                <option value="newest">最新发布</option>
+                <option value="popular">最多收藏</option>
+                <option value="views">最多浏览</option>
+                <option value="price-asc">价格从低到高</option>
+                <option value="price-desc">价格从高到低</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="bc-license-grid" id="worksGrid"></div>
+          <div id="paginationContainer"></div>
+        </div>
+      </div>
+
+      <section class="section" id="creatorsSection">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">摄影师推荐</h2>
+            <p class="section-subtitle">全球顶尖鸟类影像创作者</p>
+          </div>
+        </div>
+        <div class="grid-4" id="creatorsGrid"></div>
+      </section>
+
+      <div class="bc-feature-cards">
+        <div class="bc-feature-card">
+          <div class="bc-feature-card-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+          </div>
+          <h4>区块链存证</h4>
+          <p>每一份授权记录上链存证，哈希指纹不可篡改，确保版权归属透明可信。</p>
+        </div>
+        <div class="bc-feature-card">
+          <div class="bc-feature-card-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <h4>智能授权</h4>
+          <p>根据用途、地域、期限自动计算授权费用，AI二创与商品化授权一键选择。</p>
+        </div>
+        <div class="bc-feature-card">
+          <div class="bc-feature-card-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <h4>创作者收益</h4>
+          <p>创作者获得70%分成，平台仅收20%服务费，10%注入鸟类保护基金。</p>
+        </div>
+      </div>
+
+      <div class="bc-cta-banner">
+        <h3>定制授权方案</h3>
+        <p>有特殊授权需求？联系我们获取专属版权授权方案，满足企业级大规模使用需求。</p>
+        <a href="/market/license-guide.html" class="btn btn-accent">了解授权方案</a>
+      </div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BD = window.BirdChainData;
+      var BI = window.BirdChainInteractions;
+      var BS = window.BirdChainStorage;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('market'));
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '版权市场' }
+      ]);
+
+      var allWorks = await BD.loadData('works');
+      var creators = await BD.loadData('creators');
+      var creatorMap = {};
+      creators.forEach(function(c) { creatorMap[c.id] = c; });
+
+      var currentPage = 1;
+      var perPage = 9;
+      var currentSort = 'newest';
+      var activeFilters = { usage: [], license: [], species: [], price: '', country: [], orientation: '' };
+      var searchQuery = '';
+
+      function getFilteredWorks() {
+        var filtered = allWorks.slice();
+
+        if (activeFilters.license.length > 0) {
+          filtered = filtered.filter(function(w) {
+            return activeFilters.license.indexOf(w.licenseType) !== -1;
+          });
+        }
+        if (activeFilters.species.length > 0) {
+          filtered = filtered.filter(function(w) {
+            return activeFilters.species.some(function(s) {
+              return w.species && w.species.indexOf(s) !== -1;
+            });
+          });
+        }
+        if (activeFilters.price) {
+          var range = activeFilters.price;
+          if (range === '0-100') filtered = filtered.filter(function(w) { return (w.basePrice || 0) < 100; });
+          else if (range === '100-500') filtered = filtered.filter(function(w) { var p = w.basePrice || 0; return p >= 100 && p <= 500; });
+          else if (range === '500-1000') filtered = filtered.filter(function(w) { var p = w.basePrice || 0; return p >= 500 && p <= 1000; });
+          else if (range === '1000+') filtered = filtered.filter(function(w) { return (w.basePrice || 0) > 1000; });
+        }
+        if (activeFilters.country.length > 0) {
+          filtered = filtered.filter(function(w) { return activeFilters.country.indexOf(w.country) !== -1; });
+        }
+        if (activeFilters.orientation) {
+          filtered = filtered.filter(function(w) { return w.orientation === activeFilters.orientation; });
+        }
+        if (searchQuery) {
+          var q = searchQuery.toLowerCase();
+          filtered = filtered.filter(function(w) {
+            var creator = creatorMap[w.creatorId] || {};
+            return (w.title && w.title.toLowerCase().indexOf(q) !== -1) ||
+                   (w.species && w.species.toLowerCase().indexOf(q) !== -1) ||
+                   (w.id && w.id.toLowerCase().indexOf(q) !== -1) ||
+                   (w.tags && w.tags.some(function(t) { return t.toLowerCase().indexOf(q) !== -1; })) ||
+                   (creator.name && creator.name.toLowerCase().indexOf(q) !== -1) ||
+                   (w.description && w.description.toLowerCase().indexOf(q) !== -1);
+          });
+        }
+
+        switch (currentSort) {
+          case 'popular':
+            filtered.sort(function(a, b) { return (b.favorites || 0) - (a.favorites || 0); });
+            break;
+          case 'views':
+            filtered.sort(function(a, b) { return (b.views || 0) - (a.views || 0); });
+            break;
+          case 'price-asc':
+            filtered.sort(function(a, b) { return (a.basePrice || 0) - (b.basePrice || 0); });
+            break;
+          case 'price-desc':
+            filtered.sort(function(a, b) { return (b.basePrice || 0) - (a.basePrice || 0); });
+            break;
+          default:
+            filtered.sort(function(a, b) { return new Date(b.createdAt || 0) - new Date(a.createdAt || 0); });
+            break;
+        }
+        return filtered;
+      }
+
+      function renderLicenseCard(w) {
+        var creator = creatorMap[w.creatorId] || {};
+        var aspectMap = { '横图': '16/9', '竖图': '3/4', '方图': '1/1' };
+        var ratio = aspectMap[w.orientation] || '4/3';
+        var licenseTypeLabel = w.licenseType || '标准授权';
+        var licenseColor = (licenseTypeLabel === '独家授权') ? 'var(--brand-primary)' : 'var(--brand-accent)';
+
+        var html = '<div class="bc-license-card" onclick="window.location.href=\'/market/work-detail.html?id=' + esc(w.id) + '\'">';
+        html += '<div class="bc-license-card-img" style="aspect-ratio:' + ratio + '">';
+        html += '<img src="' + TRANSPARENT_PIXEL + '" alt="' + esc(w.title) + '" style="' + bgGradient(w.dataImg) + ' width:100%; height:100%; object-fit:cover;" loading="lazy">';
+        if (w.isPremium) {
+          html += '<span class="bc-license-card-badge bc-license-card-premium">Premium</span>';
+        } else {
+          html += '<span class="bc-license-card-badge" style="background:' + licenseColor + '">' + esc(licenseTypeLabel) + '</span>';
+        }
+        html += '<div class="bc-license-card-actions">';
+        html += '<button class="bc-license-card-action-btn" data-action="favorite" data-work-id="' + esc(w.id) + '" onclick="event.stopPropagation()">' + STAR_ICON_SVG + '</button>';
+        html += '<button class="bc-license-card-action-btn" data-action="add-to-cart" data-item-id="' + esc(w.id) + '" data-item-name="' + esc(w.title) + '" data-item-price="' + (w.basePrice || 0) + '" data-item-type="work" onclick="event.stopPropagation()">' + CART_ICON_SVG + '</button>';
+        html += '</div>';
+        html += '</div>';
+        html += '<div class="bc-license-card-body">';
+        html += '<div class="bc-license-card-title">' + esc(w.title) + '</div>';
+        html += '<div class="bc-license-card-author">';
+        html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: linear-gradient(135deg, #457B9D, #A8DADC); width:20px; height:20px; border-radius:50%; object-fit:cover;" alt="">';
+        html += '<span>' + esc(creator.name || '未知创作者') + '</span>';
+        if (creator.verified) html += VERIFIED_SVG;
+        html += '</div>';
+        html += '<div class="bc-license-card-meta">';
+        html += '<span class="bc-license-card-species">' + esc(w.species || '') + '</span>';
+        html += '<span class="bc-license-card-price">' + formatPrice(w.basePrice) + '</span>';
+        html += '</div>';
+        html += '<div class="bc-license-card-footer">';
+        html += '<span>证书: ' + esc(w.certificateId || '—') + '</span>';
+        html += '<span>' + EYE_ICON_SVG + ' ' + formatNumber(w.views || 0) + '</span>';
+        html += '</div>';
+        html += '</div>';
+        html += '</div>';
+        return html;
+      }
+
+      function renderWorks() {
+        var filtered = getFilteredWorks();
+        var totalPages = Math.ceil(filtered.length / perPage);
+        if (currentPage > totalPages) currentPage = totalPages || 1;
+        var start = (currentPage - 1) * perPage;
+        var pageWorks = filtered.slice(start, start + perPage);
+
+        var grid = document.getElementById('worksGrid');
+        var html = '';
+        pageWorks.forEach(function(w) { html += renderLicenseCard(w); });
+        if (html === '') html = BC.renderEmptyState('暂无符合条件的版权作品');
+        grid.innerHTML = html;
+
+        document.getElementById('resultCount').textContent = '共 ' + filtered.length + ' 件作品';
+
+        var pagContainer = document.getElementById('paginationContainer');
+        pagContainer.innerHTML = BC.renderPagination(currentPage, totalPages);
+        pagContainer.querySelectorAll('button[data-page]').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            var p = parseInt(this.getAttribute('data-page'));
+            if (p >= 1 && p <= totalPages) {
+              currentPage = p;
+              renderWorks();
+              window.scrollTo({ top: grid.offsetTop - 100, behavior: 'smooth' });
+            }
+          });
+        });
+
+        BI.initLikeButtons();
+        BI.initFavoriteButtons();
+        BI.initCartButtons();
+      }
+
+      function renderCreators() {
+        var sorted = creators.slice().sort(function(a, b) { return (b.followers || 0) - (a.followers || 0); });
+        var top4 = sorted.slice(0, 4);
+        var html = '';
+        top4.forEach(function(c) {
+          html += BC.renderCreatorCard({
+            id: c.id, name: c.name, avatar: c.avatar, dataImg: c.dataImg || null,
+            verified: c.verified, specialty: (c.specialties || []).join(' / '),
+            works: c.works || 0, followers: c.followers || 0
+          });
+        });
+        document.getElementById('creatorsGrid').innerHTML = html;
+      }
+
+      function applyFiltersFromUI() {
+        activeFilters.license = [];
+        activeFilters.species = [];
+        activeFilters.country = [];
+        activeFilters.price = '';
+        activeFilters.orientation = '';
+
+        document.querySelectorAll('#sidebarFilter input[type="checkbox"]:checked').forEach(function(cb) {
+          var type = cb.getAttribute('data-filter');
+          if (type === 'license') activeFilters.license.push(cb.value);
+          if (type === 'species') activeFilters.species.push(cb.value);
+          if (type === 'country') activeFilters.country.push(cb.value);
+        });
+
+        var priceRadio = document.querySelector('#sidebarFilter input[name="priceRange"]:checked');
+        if (priceRadio) activeFilters.price = priceRadio.value;
+
+        var oriRadio = document.querySelector('#sidebarFilter input[name="orientation"]:checked');
+        if (oriRadio) activeFilters.orientation = oriRadio.value;
+      }
+
+      document.getElementById('sidebarFilter').addEventListener('change', function() {
+        applyFiltersFromUI();
+        currentPage = 1;
+        renderWorks();
+      });
+
+      document.getElementById('sortSelect').addEventListener('change', function() {
+        currentSort = this.value;
+        currentPage = 1;
+        renderWorks();
+      });
+
+      document.getElementById('searchBtn').addEventListener('click', function() {
+        searchQuery = document.getElementById('marketSearch').value.trim();
+        currentPage = 1;
+        renderWorks();
+      });
+
+      document.getElementById('marketSearch').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          searchQuery = this.value.trim();
+          currentPage = 1;
+          renderWorks();
+        }
+      });
+
+      BI.initLikeButtons();
+      BI.initFavoriteButtons();
+      BI.initFollowButtons();
+      BI.initCartButtons();
+      BI.initNewsletterForm();
+      BI.initThemeToggle();
+      BI.initMobileMenu();
+      BI.initSearchBar();
+      BI.updateCartBadge();
+
+      renderWorks();
+      renderCreators();
+    });
+  </script>
+</body>
+</html>

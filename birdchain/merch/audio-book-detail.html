@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>儿童有声读物 - BirdChain鸟链</title>
+  <meta name="description" content="BirdChain儿童有声读物，用声音探索鸟类的奇妙世界">
+  <meta property="og:title" content="儿童有声读物 - BirdChain鸟链">
+  <meta property="og:description" content="BirdChain儿童有声读物，用声音探索鸟类的奇妙世界">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div class="bc-breadcrumb">
+        <a href="/">首页</a><span class="sep">›</span>
+        <a href="/merch/">创作周边</a><span class="sep">›</span>
+        <span class="current">儿童有声读物</span>
+      </div>
+
+      <div class="bc-detail-layout">
+        <div class="bc-detail-main">
+          <div class="bc-page-hero" style="height:320px;">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                 style="background:linear-gradient(135deg, #3d6b4f, #1e4a2f);width:100%;height:100%;object-fit:cover;" alt="儿童有声读物">
+            <div class="bc-page-hero-content">
+              <h1 id="audioTitle">翠鸟的奇妙世界</h1>
+              <p>适龄段：4-8岁 | 共6个章节 | 总时长约45分钟</p>
+            </div>
+          </div>
+
+          <div class="section">
+            <h2 class="section-title">鸟种故事</h2>
+            <div class="bc-species-card" style="display:flex;flex-direction:row;overflow:hidden;margin-bottom:24px;">
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                   style="background:linear-gradient(135deg, #4a8c6f, #2a5c4a);width:200px;height:150px;object-fit:cover;flex-shrink:0;" alt="翠鸟">
+              <div class="bc-species-card-body" style="padding:16px;">
+                <h5>普通翠鸟</h5>
+                <p class="sci-name">Alcedo atthis</p>
+                <p class="text-sm text-secondary mt-1">翠鸟是一种羽毛艳丽、捕鱼技巧高超的小型鸟类。它们常常静静地停在水边的树枝上，一旦发现猎物，就会像一道蓝色的闪电般俯冲入水。这本有声读物将带领小朋友们走进翠鸟的奇妙世界，了解它们的生活习性、捕食技巧和栖息环境。</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="section">
+            <h2 class="section-title">音频章节</h2>
+            <div id="chapterList" class="mb-4"></div>
+          </div>
+
+          <div class="section">
+            <h2 class="section-title">AR卡片入口</h2>
+            <div style="display:flex;gap:20px;align-items:center;padding:24px;background:var(--bg-card);border:1px solid var(--line-soft);border-radius:var(--radius-md);">
+              <div style="width:120px;height:160px;background:linear-gradient(135deg, #2a5c4a, #4a8c6f);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.8rem;text-align:center;flex-shrink:0;">AR卡片<br>预览</div>
+              <div>
+                <h5 style="font-size:1rem;font-weight:600;margin-bottom:8px;">配套AR互动卡片</h5>
+                <p class="text-sm text-secondary">购买本有声读物即赠送一套AR互动卡片。使用BirdChain App扫描卡片，即可在手机屏幕上看到立体生动的翠鸟模型，还能听到鸟鸣声。让孩子在听觉和视觉的双重体验中学习自然知识。</p>
+                <button class="btn btn-accent mt-2">了解AR体验</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bc-detail-sidebar">
+          <div class="bc-license-calc">
+            <h4>购买信息</h4>
+            <div class="bc-checkout-row">
+              <span>价格</span>
+              <span style="font-weight:700;color:var(--brand-accent-dark);">¥39.90</span>
+            </div>
+            <div class="bc-checkout-row">
+              <span>适龄段</span>
+              <span>4-8岁</span>
+            </div>
+            <div class="bc-checkout-row">
+              <span>章节数</span>
+              <span>6章</span>
+            </div>
+            <div class="bc-checkout-row">
+              <span>总时长</span>
+              <span>约45分钟</span>
+            </div>
+            <div class="bc-checkout-row">
+              <span>语言</span>
+              <span>中文普通话</span>
+            </div>
+            <div class="bc-checkout-row">
+              <span>包含</span>
+              <span>AR互动卡片×3</span>
+            </div>
+            <button class="btn btn-accent mt-3" style="width:100%;" onclick="addToCart()">加入购物车</button>
+            <button class="btn btn-outline mt-2" style="width:100%;" onclick="previewAudio()">试听片段</button>
+          </div>
+
+          <div class="mt-3" style="background:var(--bg-card);border:1px solid var(--line-soft);border-radius:var(--radius-md);padding:16px;">
+            <h4 style="font-size:0.9rem;font-weight:600;margin-bottom:12px;">更多儿童有声读物</h4>
+            <div id="moreAudio"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      BirdChainComponents.renderHeader('merch');
+      BirdChainComponents.renderFooter();
+      BirdChainInteractions.initAll();
+
+      var chapters = [
+        {id:1, title:'第一章：初识翠鸟', duration:'6:30', desc:'认识这位蓝色的小精灵，了解翠鸟的外形特征和生活环境。'},
+        {id:2, title:'第二章：翠鸟的家', duration:'7:15', desc:'探访翠鸟在河岸边挖的洞穴巢穴，了解它们的家庭生活。'},
+        {id:3, title:'第三章：捕鱼高手', duration:'8:00', desc:'看翠鸟如何以惊人的速度和精准度从水中捕鱼。'},
+        {id:4, title:'第四章：翠鸟的朋友们', duration:'7:45', desc:'认识与翠鸟共享栖息地的其他水鸟朋友。'},
+        {id:5, title:'第五章：四季翠鸟', duration:'6:50', desc:'了解翠鸟在不同季节的生活变化和迁徙习性。'},
+        {id:6, title:'第六章：保护翠鸟家园', duration:'8:40', desc:'学习如何保护河流生态，守护翠鸟和其他水鸟的家园。'}
+      ];
+
+      var chapterHtml = '';
+      for (var i = 0; i < chapters.length; i++) {
+        var ch = chapters[i];
+        chapterHtml += '<div class="bc-audio-player" style="margin-bottom:8px;">'
+          + '<button class="bc-audio-play-btn" onclick="playChapter(' + ch.id + ', this)">▶</button>'
+          + '<div class="bc-audio-info">'
+          + '<h6>' + ch.title + '</h6>'
+          + '<p>' + ch.desc + '</p>'
+          + '<p class="text-xs text-secondary">时长：' + ch.duration + '</p>'
+          + '<div class="bc-audio-progress"><div class="bc-audio-progress-bar" style="width:0%"></div></div>'
+          + '</div>'
+          + '</div>';
+      }
+      document.getElementById('chapterList').innerHTML = chapterHtml;
+
+      var moreBooks = [
+        {title:'丹顶鹤的迁徙之旅', age:'5-10岁', cover:'linear-gradient(135deg, #5a7a8a, #3a5a6a)'},
+        {title:'猫头鹰的夜之王国', age:'4-8岁', cover:'linear-gradient(135deg, #3a4a5a, #1a2a3a)'},
+        {title:'企鹅的冰雪世界', age:'3-7岁', cover:'linear-gradient(135deg, #7a9aaa, #4a7a8a)'}
+      ];
+      var moreHtml = '';
+      for (var j = 0; j < moreBooks.length; j++) {
+        var b = moreBooks[j];
+        moreHtml += '<div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid var(--line-soft);cursor:pointer;">'
+          + '<div style="width:48px;height:48px;border-radius:var(--radius-sm);flex-shrink:0;background:' + b.cover + ';"></div>'
+          + '<div><div style="font-size:0.82rem;font-weight:500;">' + b.title + '</div>'
+          + '<div style="font-size:0.72rem;color:var(--text-secondary);">适龄 ' + b.age + '</div></div></div>';
+      }
+      document.getElementById('moreAudio').innerHTML = moreHtml;
+    });
+
+    var currentPlaying = null;
+    var playTimer = null;
+    var progressVal = 0;
+
+    function playChapter(id, btn) {
+      if (currentPlaying && currentPlaying.btn === btn) {
+        stopPlayback();
+        return;
+      }
+      stopPlayback();
+      currentPlaying = {id:id, btn:btn, progress:0};
+      btn.textContent = '⏸';
+      btn.style.background = 'var(--danger)';
+      var bar = btn.parentElement.querySelector('.bc-audio-progress-bar');
+      progressVal = 0;
+      playTimer = setInterval(function() {
+        progressVal += 2;
+        if (progressVal >= 100) {
+          stopPlayback();
+          BirdChainInteractions.showToast('章节播放完毕', 'success');
+        }
+        bar.style.width = progressVal + '%';
+      }, 500);
+    }
+
+    function stopPlayback() {
+      if (playTimer) { clearInterval(playTimer); playTimer = null; }
+      if (currentPlaying) {
+        currentPlaying.btn.textContent = '▶';
+        currentPlaying.btn.style.background = 'var(--brand-primary)';
+        currentPlaying.btn.parentElement.querySelector('.bc-audio-progress-bar').style.width = '0%';
+        currentPlaying = null;
+      }
+    }
+
+    function previewAudio() {
+      BirdChainInteractions.showToast('正在加载试听片段...', 'info');
+      setTimeout(function() {
+        BirdChainInteractions.showToast('试听片段：翠鸟鸣叫与故事开场', 'success');
+      }, 800);
+    }
+
+    function addToCart() {
+      var item = {
+        id: 'audio-kf-001',
+        name: '翠鸟的奇妙世界（儿童有声读物）',
+        price: 39.90,
+        type: 'merch',
+        image: 'linear-gradient(135deg, #3d6b4f, #1e4a2f)',
+        quantity: 1
+      };
+      var cart = BirdChainStorage.getItem('cartItems', []);
+      var existing = cart.find(function(c) { return c.id === item.id; });
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push(item);
+      }
+      BirdChainStorage.setItem('cartItems', cart);
+      BirdChainInteractions.showToast('已加入购物车', 'success');
+      BirdChainInteractions.updateCartBadge();
+    }
+  </script>
+</body>
+</html>

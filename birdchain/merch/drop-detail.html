@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>主题系列 - 创作周边 - BirdChain鸟链</title>
+  <meta name="description" content="探索BirdChain创作周边的主题系列Drop，了解系列故事、参与创作者和限量商品。">
+  <meta property="og:title" content="主题系列 - BirdChain鸟链">
+  <meta property="og:description" content="探索创作周边主题系列。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .drop-cover { aspect-ratio: 21/9; border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 32px; }
+    .drop-cover img { width: 100%; height: 100%; object-fit: cover; }
+    .drop-layout { display: grid; grid-template-columns: 1fr 360px; gap: 32px; margin-bottom: 40px; }
+    .drop-main { }
+    .drop-main h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; }
+    .drop-story { font-size: 0.92rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 32px; white-space: pre-line; }
+    .drop-sidebar { }
+    .drop-info-card { background: var(--bg-card); border: 1px solid var(--line-soft); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 20px; }
+    .drop-info-card h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 12px; }
+    .drop-info-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--line-soft); font-size: 0.85rem; }
+    .drop-info-row .label { color: var(--text-secondary); }
+    .drop-info-row .value { font-weight: 500; }
+    .drop-badge-limited { display: inline-flex; align-items: center; gap: 4px; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; background: var(--danger); color: #fff; }
+    .drop-products-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+    .drop-creator-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line-soft); }
+    .drop-creator-row:last-child { border-bottom: none; }
+    .drop-creator-avatar { width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0; }
+    @media (max-width:1024px) { .drop-layout { grid-template-columns: 1fr; } .drop-products-grid { grid-template-columns: repeat(2,1fr); } }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div class="bc-breadcrumb">
+        <a href="/">首页</a><span class="sep">/</span><a href="/merch/index.html">创作周边</a><span class="sep">/</span><span class="current">主题系列</span>
+      </div>
+      <div id="dropContent"></div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      app.insertAdjacentHTML('afterbegin', BirdChainComponents.renderHeader('merch'));
+      app.insertAdjacentHTML('beforeend', BirdChainComponents.renderFooter());
+      BirdChainInteractions.initAll();
+
+      var BC = window.BirdChainStorage;
+      var BCD = window.BirdChainData;
+
+      var params = new URLSearchParams(window.location.search);
+      var seriesId = params.get('id') || '热带之歌';
+
+      var seriesData = {
+        '热带之歌': {
+          title: '热带之歌',
+          story: '从赤道雨林到热带岛屿，从蜂鸟悬停到极乐鸟起舞——热带之歌系列以最绚烂的色彩致敬地球最富生物多样性的生态系统。\n\n热带雨林仅占地球陆地面积的7%，却孕育了世界上超过半数的鸟类物种。从蓝孔雀华丽的尾屏到火烈鸟粉色的浪潮，从犀鸟穿透雨林的号角到极乐鸟天堂般的舞蹈，每一只鸟都是热带森林中独一无二的音符。\n\n本系列精选热带地区最具代表性的鸟类影像作品，将其转化为生活中的实用好物。每购买一件热带之歌系列商品，将有3%的收益捐赠用于热带雨林鸟类栖息地保护项目。',
+          coverGrad: 'linear-gradient(135deg,#BC6C25,#DDA15E,#F4A261)',
+          limit: 500,
+          protectionRatio: '3%'
+        },
+        '迁徙之旅': {
+          title: '迁徙之旅',
+          story: '每年，数以亿计的候鸟沿着古老的迁徙路线，跨越山海、穿越国界，完成生命的壮丽轮回。迁徙之旅系列以候鸟的史诗旅程为灵感，记录它们跨越千山万水的勇气与坚韧。\n\n从大天鹅飞跃天山的壮丽队列，到白鹤在鄱阳湖越冬的优雅身姿，从黑脸琵鹭沿东亚-澳大利西亚迁飞路线的漫长飞行，到丹顶鹤从扎龙飞往盐城的温暖旅程——每一次迁徙都是生命奇迹的见证。\n\n本系列以候鸟迁徙为主题，将迁徙路线上的关键栖息地和代表鸟种融入设计之中，唤起人们对候鸟及其栖息地保护的关注。',
+          coverGrad: 'linear-gradient(135deg,#1B4965,#5FA8D3,#A8DADC)',
+          limit: 400,
+          protectionRatio: '5%'
+        },
+        '夜的守望者': {
+          title: '夜的守望者',
+          story: '当太阳沉入地平线，另一群鸟类开始活跃。猫头鹰、夜鹰、夜鹭——它们是夜的守望者，在黑暗中展开无声的翅膀，以敏锐的感官主宰着夜的世界。\n\n雕鸮橙黄色的大眼睛在月光下闪烁，金雕在星空中展翅翱翔，夜鹭在暮色中静静守候——夜行性鸟类以其独特的适应能力，在人类熟睡的时刻书写着自然的另一面。\n\n夜的守望者系列以暗色调为主，融入夜光元素，将夜间猛禽的神秘魅力带入日常。每件商品都蕴含着对夜间生态系统的敬意。',
+          coverGrad: 'linear-gradient(135deg,#2C3E50,#3498DB,#5DADE2)',
+          limit: 300,
+          protectionRatio: '4%'
+        },
+        '海岸线': {
+          title: '海岸线',
+          story: '潮起潮落之间，海岸线是陆地与海洋交汇的生命地带。滩涂上，黑脸琵鹭用琵琶形的长喙左右扫动觅食；礁石间，白鹭在暮色中优雅归巢；沙滩上，数以万计的候鸟在此停歇补给。\n\n海岸线系列以滨海湿地和滩涂生态为灵感源泉，捕捉潮间带鸟类在日出日落间的灵动瞬间。简约的设计风格呼应着海风的清爽与滩涂的辽阔。\n\n每购买一件海岸线系列商品，将捐赠5%用于中国沿海湿地和候鸟栖息地保护。',
+          coverGrad: 'linear-gradient(135deg,#006D77,#83C5BE,#EDF6F9)',
+          limit: 350,
+          protectionRatio: '5%'
+        },
+        '湿地之翼': {
+          title: '湿地之翼',
+          story: '湿地是地球之肾，也是众多鸟类的家园。从丹顶鹤在晨雾中翩翩起舞，到鸳鸯在春日池塘中悠然戏水，从东方白鹳在电塔上筑巢育雏，到紫水鸡在芦苇荡中漫步——湿地孕育了最优雅的生命姿态。\n\n湿地之翼系列以湿地鸟类为主题，将水彩般的柔美色调与湿地生态的诗意相结合。每一件作品都承载着对湿地保护的美好期许。\n\n本系列商品的部分收益将用于支持中国湿地保护区的鸟类监测与栖息地恢复项目。',
+          coverGrad: 'linear-gradient(135deg,#386641,#A7C957,#D4E09B)',
+          limit: 450,
+          protectionRatio: '4%'
+        }
+      };
+
+      var series = seriesData[seriesId] || seriesData['热带之歌'];
+      var products = await BCD.loadData('products');
+      var seriesProducts = products.filter(function(p) { return p.series === series.title; });
+
+      var container = document.getElementById('dropContent');
+
+      var gradients = ['#1B4332,#2D6A4F','#1B4F72,#2980B9','#B8860B,#DAA520','#006D77,#83C5BE','#2D6A4F,#40916C','#3A5A40,#588157'];
+
+      var productsHtml = '';
+      if (seriesProducts.length > 0) {
+        seriesProducts.forEach(function(p, i) {
+          var grad = gradients[i % gradients.length];
+          productsHtml +=
+            '<div class="bc-product-card">' +
+            '<div class="bc-product-card-img">' +
+            '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background:linear-gradient(135deg,' + grad + ');width:100%;height:100%;object-fit:cover;" alt="' + (p.name||'') + '" loading="lazy">' +
+            '</div>' +
+            '<div class="bc-product-card-body">' +
+            '<div class="bc-product-card-title">' + (p.name||'') + '</div>' +
+            '<div class="bc-product-card-category">' + (p.category||'') + '</div>' +
+            '<div class="bc-product-card-price">' + (typeof formatPrice !== 'undefined' ? formatPrice(p.price) : '¥' + p.price) + '</div>' +
+            '</div></div>';
+        });
+      }
+
+      container.innerHTML =
+        '<div class="drop-cover">' +
+        '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background:' + series.coverGrad + ';width:100%;height:100%;object-fit:cover;" alt="' + series.title + '">' +
+        '</div>' +
+        '<div class="drop-layout">' +
+        '<div class="drop-main">' +
+        '<h2>' + series.title + '</h2>' +
+        '<div class="drop-story">' + series.story + '</div>' +
+        '<h3 style="font-size:1.1rem;font-weight:600;margin-bottom:16px;">包含商品</h3>' +
+        '<div class="drop-products-grid">' + productsHtml + '</div>' +
+        '</div>' +
+        '<div class="drop-sidebar">' +
+        '<div class="drop-info-card">' +
+        '<h4>系列信息</h4>' +
+        '<div class="drop-info-row"><span class="label">主题系列</span><span class="value">' + series.title + '</span></div>' +
+        '<div class="drop-info-row"><span class="label">限量数量</span><span class="value"><span class="drop-badge-limited">限量 ' + series.limit + ' 件</span></span></div>' +
+        '<div class="drop-info-row"><span class="label">保护基金比例</span><span class="value" style="color:var(--brand-accent-dark);font-weight:700;">' + series.protectionRatio + '</span></div>' +
+        '<div class="drop-info-row"><span class="label">商品数量</span><span class="value">' + seriesProducts.length + ' 件</span></div>' +
+        '</div>' +
+        '<div class="drop-info-card">' +
+        '<h4>参与创作者</h4>' +
+        '<div class="drop-creator-row"><div class="drop-creator-avatar"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background:linear-gradient(135deg,#1B4332,#2D6A4F);width:40px;height:40px;border-radius:50%;object-fit:cover;" alt="摄影师"></div><div><div style="font-weight:600;font-size:0.85rem;">张明远</div><div style="font-size:0.75rem;color:var(--text-secondary);">野生动物摄影师</div></div></div>' +
+        '<div class="drop-creator-row"><div class="drop-creator-avatar"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background:linear-gradient(135deg,#1B4F72,#2980B9);width:40px;height:40px;border-radius:50%;object-fit:cover;" alt="设计师"></div><div><div style="font-weight:600;font-size:0.85rem;">林小羽</div><div style="font-size:0.75rem;color:var(--text-secondary);">插画师/设计师</div></div></div>' +
+        '</div>' +
+        '<div class="drop-info-card">' +
+        '<h4>参与设计师</h4>' +
+        '<div class="drop-creator-row"><div class="drop-creator-avatar"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background:linear-gradient(135deg,#B8860B,#DAA520);width:40px;height:40px;border-radius:50%;object-fit:cover;" alt="设计师"></div><div><div style="font-weight:600;font-size:0.85rem;">陈艺文</div><div style="font-size:0.75rem;color:var(--text-secondary);">产品设计师</div></div></div>' +
+        '</div>' +
+        '</div>' +
+        '</div>';
+
+      container.querySelectorAll('.bc-product-card').forEach(function(card) {
+        card.addEventListener('click', function() {
+          var idx = Array.from(card.parentElement.children).indexOf(card);
+          if (seriesProducts[idx]) {
+            window.location.href = '/merch/product-detail.html?id=' + seriesProducts[idx].id;
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

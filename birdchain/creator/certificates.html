@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>版权证书 - 创作者中心 - BirdChain鸟链</title>
+  <meta name="description" content="查看和管理你的BirdChain版权证书。">
+  <meta property="og:title" content="版权证书 - 创作者中心 - BirdChain鸟链">
+  <meta property="og:description" content="查看和管理你的BirdChain版权证书。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .certificates-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .cert-card {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin-bottom: 16px;
+      transition: all var(--transition-fast);
+    }
+    .cert-card:hover {
+      box-shadow: var(--shadow-md);
+    }
+    .cert-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .cert-id {
+      font-family: monospace;
+      font-size: 0.82rem;
+      color: var(--brand-accent-dark);
+      font-weight: 600;
+    }
+    .cert-status {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .cert-status.active {
+      background: var(--success);
+      color: #fff;
+    }
+    .cert-status.pending {
+      background: var(--warning);
+      color: #fff;
+    }
+    .cert-status.reviewing {
+      background: var(--brand-primary);
+      color: #fff;
+    }
+    .cert-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      font-size: 0.85rem;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .cert-row:last-child {
+      border-bottom: none;
+    }
+    .cert-row .lbl {
+      color: var(--text-secondary);
+    }
+    .cert-row .val {
+      font-weight: 500;
+      text-align: right;
+    }
+    .cert-actions {
+      margin-top: 12px;
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+    .cert-detail-expand {
+      display: none;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line-soft);
+    }
+    .cert-detail-expand.open {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+      <div id="certificatesContainer" class="certificates-container"></div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BI = window.BirdChainInteractions;
+      var BStor = window.BirdChainStorage;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('creator'));
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '创作者中心', href: '/creator/index.html' },
+        { label: '版权证书' }
+      ]);
+
+      BI.initAll();
+
+      var licenseOrders = BStor.getItem(BStor.KEYS.licenseOrders, []);
+
+      var simOrders = [
+        { id: 'cert-2024-0001', workTitle: '翠鸟入水捕鱼的瞬间', licenseType: '标准授权', date: '2024-03-15', status: 'active' },
+        { id: 'cert-2024-0002', workTitle: '丹顶鹤晨雾中的双人舞', licenseType: '独家授权', date: '2024-05-20', status: 'active' },
+        { id: 'cert-2024-0003', workTitle: '白鹭栖息的黄昏', licenseType: '标准授权', date: '2024-07-08', status: 'reviewing' }
+      ];
+
+      var allOrders = simOrders.concat(licenseOrders.map(function(o) {
+        return {
+          id: o.id || o.certificateId || 'cert-' + Date.now(),
+          workTitle: o.workTitle || o.title || '未知作品',
+          licenseType: o.licenseType || o.type || '标准授权',
+          date: o.date || o.createdAt || '未知日期',
+          status: o.status || 'active'
+        };
+      }));
+
+      var activeCerts = allOrders.filter(function(o) { return o.status === 'active'; });
+      var pendingCerts = allOrders.filter(function(o) { return o.status === 'reviewing' || o.status === 'pending'; });
+
+      function renderCertCard(cert) {
+        var statusClass = cert.status === 'active' ? 'active' : cert.status === 'reviewing' ? 'reviewing' : 'pending';
+        var statusText = cert.status === 'active' ? '已生效' : cert.status === 'reviewing' ? '审核中' : '待审核';
+        return '<div class="cert-card">'
+          + '<div class="cert-card-header">'
+          + '<span class="cert-id">' + cert.id + '</span>'
+          + '<span class="cert-status ' + statusClass + '">' + statusText + '</span>'
+          + '</div>'
+          + '<div class="cert-row"><span class="lbl">作品名称</span><span class="val">' + cert.workTitle + '</span></div>'
+          + '<div class="cert-row"><span class="lbl">授权类型</span><span class="val">' + cert.licenseType + '</span></div>'
+          + '<div class="cert-row"><span class="lbl">生成日期</span><span class="val">' + cert.date + '</span></div>'
+          + '<div class="cert-actions">'
+          + '<button class="btn btn-outline btn-sm cert-detail-btn" data-cert-id="' + cert.id + '">查看详情</button>'
+          + '<a href="/market/certificate-detail.html?id=' + cert.id + '" class="btn btn-ghost btn-sm">证书详情页</a>'
+          + '</div>'
+          + '<div class="cert-detail-expand" id="certDetail_' + cert.id + '">'
+          + '<div class="cert-row"><span class="lbl">证书ID</span><span class="val">' + cert.id + '</span></div>'
+          + '<div class="cert-row"><span class="lbl">区块链哈希</span><span class="val" style="font-family:monospace;font-size:0.75rem;">0x7a3b...9f2e</span></div>'
+          + '<div class="cert-row"><span class="lbl">确权时间</span><span class="val">' + cert.date + ' 10:30:00 UTC+8</span></div>'
+          + '<div class="cert-row"><span class="lbl">认证节点</span><span class="val">BirdChain Node #12</span></div>'
+          + '</div>'
+          + '</div>';
+      }
+
+      var activeHtml = activeCerts.length > 0
+        ? activeCerts.map(renderCertCard).join('')
+        : BC.renderEmptyState('暂无已生成的证书', window.EMPTY_FOLDER_SVG || '');
+
+      var pendingHtml = pendingCerts.length > 0
+        ? pendingCerts.map(renderCertCard).join('')
+        : BC.renderEmptyState('暂无审核中的证书', window.EMPTY_FOLDER_SVG || '');
+
+      var certHtml = '<h2 style="font-size:1.3rem;font-weight:700;margin-bottom:24px;">&#128196; 版权证书管理</h2>'
+        + '<div class="bc-tabs" id="certTabs">'
+        + '<button class="bc-tab active" data-tab="active">已生成证书 (' + activeCerts.length + ')</button>'
+        + '<button class="bc-tab" data-tab="pending">审核中 (' + pendingCerts.length + ')</button>'
+        + '</div>'
+        + '<div class="bc-tab-panel" id="tabActive">' + activeHtml + '</div>'
+        + '<div class="bc-tab-panel" id="tabPending" style="display:none;">' + pendingHtml + '</div>';
+
+      document.getElementById('certificatesContainer').innerHTML = certHtml;
+
+      document.getElementById('certTabs').addEventListener('click', function(e) {
+        var btn = e.target.closest('[data-tab]');
+        if (!btn) return;
+        document.querySelectorAll('#certTabs .bc-tab').forEach(function(t) { t.classList.remove('active'); });
+        btn.classList.add('active');
+        var tabName = btn.getAttribute('data-tab');
+        document.getElementById('tabActive').style.display = tabName === 'active' ? '' : 'none';
+        document.getElementById('tabPending').style.display = tabName === 'pending' ? '' : 'none';
+      });
+
+      document.addEventListener('click', function(e) {
+        var btn = e.target.closest('.cert-detail-btn');
+        if (!btn) return;
+        var certId = btn.getAttribute('data-cert-id');
+        var detail = document.getElementById('certDetail_' + certId);
+        if (detail) {
+          detail.classList.toggle('open');
+          btn.textContent = detail.classList.contains('open') ? '收起详情' : '查看详情';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

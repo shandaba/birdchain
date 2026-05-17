@@ -1,0 +1,60 @@
+[
+  {
+    "id": "license-001",
+    "type": "标准授权",
+    "description": "适用于个人非商业用途，包括个人网站、社交媒体分享、个人打印等。不可用于商业广告、产品包装或转售。",
+    "usageTypes": [
+      {"name": "个人展示", "coefficient": 1.0},
+      {"name": "社交媒体", "coefficient": 1.0},
+      {"name": "个人打印", "coefficient": 1.2},
+      {"name": "教育用途", "coefficient": 0.8}
+    ],
+    "basePriceRange": {"min": 99, "max": 399},
+    "duration": "永久",
+    "territory": "全球"
+  },
+  {
+    "id": "license-002",
+    "type": "扩展授权",
+    "description": "在标准授权基础上增加商业用途权限，包括广告宣传、产品包装、企业网站等。不可用于独家品牌合作或转授权。",
+    "usageTypes": [
+      {"name": "商业广告", "coefficient": 2.0},
+      {"name": "产品包装", "coefficient": 2.5},
+      {"name": "企业宣传", "coefficient": 1.8},
+      {"name": "出版物", "coefficient": 1.5},
+      {"name": "数字媒体", "coefficient": 1.5}
+    ],
+    "basePriceRange": {"min": 349, "max": 899},
+    "duration": "永久",
+    "territory": "全球"
+  },
+  {
+    "id": "license-003",
+    "type": "独家授权",
+    "description": "购买后获得作品的独家使用权，原作者在授权期内不得将同一作品授权给其他方。适用于品牌独家合作和高端商业用途。",
+    "usageTypes": [
+      {"name": "品牌独家", "coefficient": 5.0},
+      {"name": "全线产品", "coefficient": 4.0},
+      {"name": "全球广告", "coefficient": 3.5},
+      {"name": "影视授权", "coefficient": 3.0}
+    ],
+    "basePriceRange": {"min": 599, "max": 999},
+    "duration": "1-5年",
+    "territory": "按协议约定"
+  },
+  {
+    "id": "license-004",
+    "type": "公益授权",
+    "description": "专为公益组织、教育机构和自然保护项目设计的低价授权方案。作品仅限用于非营利性公益宣传和教育活动。",
+    "usageTypes": [
+      {"name": "公益宣传", "coefficient": 0.3},
+      {"name": "自然教育", "coefficient": 0.2},
+      {"name": "学术研究", "coefficient": 0.1},
+      {"name": "保护项目", "coefficient": 0.1}
+    ],
+    "basePriceRange": {"min": 99, "max": 199},
+    "duration": "永久",
+    "territory": "全球",
+    "note": "需提供公益组织或教育机构资质证明"
+  }
+]

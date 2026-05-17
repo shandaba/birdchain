@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>保护行动 - BirdChain鸟链</title>
+  <meta name="description" content="参与BirdChain鸟类保护行动，支持鸟类栖息地保护、反盗猎和生态恢复项目。">
+  <meta property="og:title" content="鸟类保护行动 - BirdChain鸟链">
+  <meta property="og:description" content="参与鸟类保护行动，捐助保护项目、成为志愿者、传播保护理念。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .protection-hero {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin: 20px 0 32px;
+      background: linear-gradient(135deg, #6B4226, #8B6914);
+      min-height: 340px;
+      display: flex;
+      align-items: center;
+      padding: 56px 48px;
+    }
+    .protection-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 40%, rgba(199, 165, 109, 0.18), transparent 60%);
+      pointer-events: none;
+    }
+    .protection-hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 580px;
+    }
+    .protection-hero-content h1 {
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 16px;
+      line-height: 1.3;
+    }
+    .protection-hero-content p {
+      font-size: 1.08rem;
+      color: rgba(255,255,255,0.82);
+      line-height: 1.75;
+      margin-bottom: 28px;
+    }
+    .protection-projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .protection-project-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--line-soft);
+      transition: all var(--transition-normal);
+      cursor: pointer;
+    }
+    .protection-project-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+    .protection-project-cover {
+      aspect-ratio: 16/9;
+      overflow: hidden;
+      position: relative;
+    }
+    .protection-project-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .protection-project-location {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: rgba(7,27,45,0.75);
+      color: #fff;
+      backdrop-filter: blur(8px);
+    }
+    .protection-project-body {
+      padding: 20px;
+    }
+    .protection-project-body h5 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text-strong);
+    }
+    .protection-project-species {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    .protection-project-species span {
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.72rem;
+      background: var(--bg-soft);
+      color: var(--text-secondary);
+    }
+    .protection-project-progress {
+      margin-bottom: 12px;
+    }
+    .protection-project-progress-bar {
+      height: 6px;
+      border-radius: 3px;
+      background: var(--line-soft);
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+    .protection-project-progress-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: var(--brand-accent);
+      transition: width var(--transition-normal);
+    }
+    .protection-project-progress-text {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+    .protection-project-progress-text strong {
+      color: var(--brand-accent);
+    }
+    .protection-project-body .btn {
+      width: 100%;
+      margin-top: 8px;
+    }
+    .protection-species-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .protection-species-card {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      text-align: center;
+    }
+    .protection-species-card-img {
+      aspect-ratio: 4/3;
+      overflow: hidden;
+    }
+    .protection-species-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .protection-species-card-body {
+      padding: 12px;
+    }
+    .protection-species-card-body h6 {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .protection-species-badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      margin-top: 4px;
+    }
+    .protection-species-badge.cr { background: #dc3545; color: #fff; }
+    .protection-species-badge.en { background: #fd7e14; color: #fff; }
+    .protection-species-badge.vu { background: #ffc107; color: #333; }
+    .protection-species-badge.nt { background: #17a2b8; color: #fff; }
+    .protection-fund-info {
+      background: var(--bg-soft);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      margin: 40px 0;
+    }
+    .protection-transparency-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin: 20px 0;
+    }
+    .protection-transparency-card {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 28px 20px;
+      text-align: center;
+    }
+    .protection-transparency-card strong {
+      display: block;
+      font-size: 2rem;
+      color: var(--brand-accent);
+      margin-bottom: 4px;
+    }
+    .protection-transparency-card span {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+    .protection-action-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .protection-action-card {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-lg);
+      padding: 28px 20px;
+      text-align: center;
+      transition: all var(--transition-fast);
+      cursor: pointer;
+    }
+    .protection-action-card:hover {
+      border-color: var(--brand-accent);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+    .protection-action-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--bg-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 14px;
+      color: var(--brand-accent);
+    }
+    .protection-action-card h5 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .protection-action-card p {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    @media (max-width: 1199px) {
+      .protection-projects-grid { grid-template-columns: repeat(2, 1fr); }
+      .protection-action-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 991px) {
+      .protection-species-grid { grid-template-columns: repeat(2, 1fr); }
+      .protection-transparency-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 767px) {
+      .protection-projects-grid { grid-template-columns: 1fr; }
+      .protection-action-grid { grid-template-columns: 1fr; }
+      .protection-hero { padding: 32px 20px; min-height: 260px; }
+      .protection-hero-content h1 { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+
+      <div class="protection-hero">
+        <div class="protection-hero-content">
+          <h1>鸟类保护行动</h1>
+          <p>每一份关注都是力量，每一次行动都在改变。加入BirdChain保护行动，为濒危鸟类撑起一片自由的天空。</p>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <a href="/protection/donation.html" class="btn btn-accent btn-lg">参与捐助</a>
+            <a href="#projects" class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,0.4);">查看项目</a>
+          </div>
+        </div>
+      </div>
+
+      <section class="section" id="projects" style="padding-top:0;">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">保护项目</h2>
+            <p class="section-subtitle">我们正在推进的鸟类保护项目，每一个都需要你的支持</p>
+          </div>
+        </div>
+        <div class="protection-projects-grid" id="projectsGrid"></div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">受威胁鸟种</h2>
+            <p class="section-subtitle">关注受威胁鸟类，了解它们的保护状况</p>
+          </div>
+        </div>
+        <div class="protection-species-grid" id="speciesGrid"></div>
+      </section>
+
+      <div class="protection-fund-info">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">公益基金说明</h2>
+            <p class="section-subtitle">BirdChain保护基金致力于推动中国鸟类保护事业的发展</p>
+          </div>
+        </div>
+        <p style="font-size:0.9rem;color:var(--text-secondary);line-height:1.7;margin-bottom:20px;">BirdChain保护基金是一项专注于鸟类及其栖息地保护的公益基金。基金由BirdChain平台发起，联合多家环保组织和科研机构，致力于通过科学研究、实地保护、公众教育和政策倡导等方式，推动中国鸟类保护事业的发展。所有捐助资金的使用均公开透明，定期发布资金使用报告。</p>
+      </div>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">透明记录</h2>
+            <p class="section-subtitle">每一笔捐助的去向都公开透明</p>
+          </div>
+        </div>
+        <div class="protection-transparency-grid">
+          <div class="protection-transparency-card">
+            <strong>¥485,200</strong>
+            <span>累计募集资金</span>
+          </div>
+          <div class="protection-transparency-card">
+            <strong>12</strong>
+            <span>已完结项目</span>
+          </div>
+          <div class="protection-transparency-card">
+            <strong>86%</strong>
+            <span>资金使用率</span>
+          </div>
+          <div class="protection-transparency-card">
+            <strong>8个</strong>
+            <span>栖息地保护站点</span>
+          </div>
+          <div class="protection-transparency-card">
+            <strong>3,200</strong>
+            <span>捐助人次</span>
+          </div>
+          <div class="protection-transparency-card">
+            <strong>15种</strong>
+            <span>受保护鸟类物种</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">参与方式</h2>
+            <p class="section-subtitle">多种方式参与鸟类保护，选择适合你的</p>
+          </div>
+        </div>
+        <div class="protection-action-grid">
+          <div class="protection-action-card" onclick="window.location.href='/protection/donation.html'">
+            <div class="protection-action-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <h5>捐助</h5>
+            <p>支持具体保护项目，你的捐助将直接用于栖息地保护和物种保护</p>
+          </div>
+          <div class="protection-action-card" onclick="BirdChainInteractions.showToast('志愿者报名即将开放', 'info')">
+            <div class="protection-action-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <h5>志愿者</h5>
+            <p>参与实地保护行动，成为鸟类保护的践行者</p>
+          </div>
+          <div class="protection-action-card" onclick="BirdChainInteractions.showToast('传播功能即将上线', 'info')">
+            <div class="protection-action-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            </div>
+            <h5>传播</h5>
+            <p>分享保护故事，让更多人了解鸟类保护的重要性</p>
+          </div>
+          <div class="protection-action-card" onclick="BirdChainInteractions.showToast('记录功能即将上线', 'info')">
+            <div class="protection-action-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+            <h5>记录</h5>
+            <p>记录鸟类观测数据，为科学研究提供基础信息</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BI = window.BirdChainInteractions;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('protection'));
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '保护行动', href: '/protection/index.html' }
+      ]);
+
+      var projects = await loadData('protectionProjects');
+      var species = [];
+      try { species = await loadData('species'); } catch(e) {}
+
+      var gradientColors = [
+        'linear-gradient(135deg, #2D6A4F, #40916C)',
+        'linear-gradient(135deg, #1B4965, #2980B9)',
+        'linear-gradient(135deg, #6B4226, #8B6914)',
+        'linear-gradient(135deg, #457B9D, #A8DADC)',
+        'linear-gradient(135deg, #3A5A40, #588157)',
+        'linear-gradient(135deg, #BC6C25, #DDA15E)',
+        'linear-gradient(135deg, #2c3e50, #3498db)',
+        'linear-gradient(135deg, #1B4332, #2D6A4F)',
+        'linear-gradient(135deg, #6C584C, #A98467)',
+        'linear-gradient(135deg, #1A535C, #4ECDC4)'
+      ];
+
+      var projectsHtml = '';
+      projects.forEach(function(p, i) {
+        var raised = p.raised || 0;
+        var goal = p.goal || 1;
+        var percent = Math.min(100, Math.round((raised / goal) * 100));
+        projectsHtml += '<a href="/protection/project-detail.html?id=' + p.id + '" class="protection-project-card">';
+        projectsHtml += '<div class="protection-project-cover">';
+        projectsHtml += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: ' + gradientColors[i % gradientColors.length] + '; width:100%; height:100%; object-fit:cover;" alt="' + esc(p.title) + '">';
+        projectsHtml += '<span class="protection-project-location">' + esc(p.location) + '</span>';
+        projectsHtml += '</div>';
+        projectsHtml += '<div class="protection-project-body">';
+        projectsHtml += '<h5>' + esc(p.title) + '</h5>';
+        if (p.species && p.species.length > 0) {
+          projectsHtml += '<div class="protection-project-species">';
+          p.species.forEach(function(s) { projectsHtml += '<span>' + esc(s) + '</span>'; });
+          projectsHtml += '</div>';
+        }
+        projectsHtml += '<div class="protection-project-progress">';
+        projectsHtml += '<div class="protection-project-progress-bar"><div class="protection-project-progress-fill" style="width:' + percent + '%"></div></div>';
+        projectsHtml += '<div class="protection-project-progress-text">';
+        projectsHtml += '<span>已筹 ¥' + raised.toLocaleString() + '</span>';
+        projectsHtml += '<span>目标 <strong>¥' + goal.toLocaleString() + '</strong> (' + percent + '%)</span>';
+        projectsHtml += '</div>';
+        projectsHtml += '</div>';
+        projectsHtml += '<span class="btn btn-accent">了解详情</span>';
+        projectsHtml += '</div>';
+        projectsHtml += '</a>';
+      });
+      document.getElementById('projectsGrid').innerHTML = projectsHtml || BC.renderEmptyState('暂无保护项目');
+
+      var threatenedSpecies = species.filter(function(s) { return s.conservation && s.conservation !== 'LC'; }).slice(0, 4);
+      var speciesHtml = '';
+      threatenedSpecies.forEach(function(s, i) {
+        var badgeMap = { 'CR': '极危', 'EN': '濒危', 'VU': '易危', 'NT': '近危' };
+        var badgeClass = { 'CR': 'cr', 'EN': 'en', 'VU': 'vu', 'NT': 'nt' };
+        speciesHtml += '<div class="protection-species-card">';
+        speciesHtml += '<div class="protection-species-card-img">';
+        speciesHtml += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: ' + gradientColors[(i+3) % gradientColors.length] + '; width:100%; height:100%; object-fit:cover;" alt="' + esc(s.nameCn) + '">';
+        speciesHtml += '</div>';
+        speciesHtml += '<div class="protection-species-card-body">';
+        speciesHtml += '<h6>' + esc(s.nameCn) + '</h6>';
+        speciesHtml += '<span class="protection-species-badge ' + (badgeClass[s.conservation] || 'nt') + '">' + (badgeMap[s.conservation] || s.conservation) + '</span>';
+        speciesHtml += '</div>';
+        speciesHtml += '</div>';
+      });
+      document.getElementById('speciesGrid').innerHTML = speciesHtml || BC.renderEmptyState('暂无受威胁物种数据');
+
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+      BI.initAll();
+    });
+  </script>
+</body>
+</html>

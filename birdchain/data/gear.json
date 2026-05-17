@@ -1,0 +1,206 @@
+[
+  {
+    "id": "gear-001",
+    "name": "佳能 EOS R5 全画幅无反相机",
+    "brand": "Canon",
+    "category": "摄影装备",
+    "type": "相机机身",
+    "price": 25999,
+    "cover": "/assets/images/gear/canon-r5.jpg",
+    "specs": {
+      "像素": "4500万",
+      "连拍速度": "20张/秒",
+      "对焦点": "1053个",
+      "视频": "8K RAW",
+      "防抖": "机身5轴防抖",
+      "重量": "650g"
+    },
+    "rating": 4.8,
+    "reviewCount": 256,
+    "suitableFor": ["翠鸟高速摄影", "丹顶鹤动态捕捉", "蜂鸟悬停拍摄"],
+    "relatedWorks": ["work-001", "work-002", "work-010"]
+  },
+  {
+    "id": "gear-002",
+    "name": "索尼 FE 600mm f/4 GM OSS 超远摄定焦镜头",
+    "brand": "Sony",
+    "category": "摄影装备",
+    "type": "镜头",
+    "price": 96999,
+    "cover": "/assets/images/gear/sony-600mm.jpg",
+    "specs": {
+      "焦距": "600mm",
+      "最大光圈": "f/4",
+      "防抖": "OSS光学防抖",
+      "重量": "3040g",
+      "最近对焦": "4.5m"
+    },
+    "rating": 4.9,
+    "reviewCount": 189,
+    "suitableFor": ["野生鸟类摄影", "猛禽拍摄", "水鸟远摄"],
+    "relatedWorks": ["work-004", "work-006", "work-011"]
+  },
+  {
+    "id": "gear-003",
+    "name": "施华洛世奇 EL 10x42 双筒望远镜",
+    "brand": "Swarovski",
+    "category": "观鸟装备",
+    "type": "双筒望远镜",
+    "price": 18900,
+    "cover": "/assets/images/gear/swarovski-el.jpg",
+    "specs": {
+      "倍率": "10倍",
+      "物镜口径": "42mm",
+      "视场": "112m/1000m",
+      "透光率": "90%",
+      "防水": "充氮防水",
+      "重量": "835g"
+    },
+    "rating": 4.9,
+    "reviewCount": 423,
+    "suitableFor": ["专业观鸟", "湿地观察", "森林观鸟"],
+    "relatedWorks": ["work-003", "work-005"]
+  },
+  {
+    "id": "gear-004",
+    "name": "尼康 Z9 旗舰全画幅无反相机",
+    "brand": "Nikon",
+    "category": "摄影装备",
+    "type": "相机机身",
+    "price": 35999,
+    "cover": "/assets/images/gear/nikon-z9.jpg",
+    "specs": {
+      "像素": "4570万",
+      "连拍速度": "120张/秒",
+      "对焦点": "493个",
+      "视频": "8K 60p",
+      "防抖": "机身5轴防抖",
+      "重量": "1340g"
+    },
+    "rating": 4.7,
+    "reviewCount": 312,
+    "suitableFor": ["高速连拍", "猛禽摄影", "鸟类飞行拍摄"],
+    "relatedWorks": ["work-003", "work-006", "work-012"]
+  },
+  {
+    "id": "gear-005",
+    "name": "蔡司 Victory SF 8x42 双筒望远镜",
+    "brand": "Zeiss",
+    "category": "观鸟装备",
+    "type": "双筒望远镜",
+    "price": 21800,
+    "cover": "/assets/images/gear/zeiss-sf.jpg",
+    "specs": {
+      "倍率": "8倍",
+      "物镜口径": "42mm",
+      "视场": "148m/1000m",
+      "透光率": "92%",
+      "防水": "充氮防水",
+      "重量": "780g"
+    },
+    "rating": 4.8,
+    "reviewCount": 345,
+    "suitableFor": ["雨林观鸟", "山地观鸟", "长途观鸟旅行"],
+    "relatedWorks": ["work-016", "work-024"]
+  },
+  {
+    "id": "gear-006",
+    "name": "捷信 GT5543LS 系统三脚架",
+    "brand": "Gitzo",
+    "category": "摄影装备",
+    "type": "三脚架",
+    "price": 8999,
+    "cover": "/assets/images/gear/gitzo-tripod.jpg",
+    "specs": {
+      "材质": "碳纤维",
+      "最大高度": "156cm",
+      "承重": "40kg",
+      "自重": "2.8kg",
+      "节数": "4节"
+    },
+    "rating": 4.6,
+    "reviewCount": 178,
+    "suitableFor": ["超远摄镜头支撑", "长时间蹲守", "恶劣环境拍摄"],
+    "relatedWorks": ["work-002", "work-010"]
+  },
+  {
+    "id": "gear-007",
+    "name": "佳能 RF 100-500mm f/4.5-7.1L IS USM 变焦镜头",
+    "brand": "Canon",
+    "category": "摄影装备",
+    "type": "镜头",
+    "price": 21999,
+    "cover": "/assets/images/gear/canon-100-500.jpg",
+    "specs": {
+      "焦距": "100-500mm",
+      "最大光圈": "f/4.5-7.1",
+      "防抖": "5级IS防抖",
+      "重量": "1370g",
+      "最近对焦": "0.9m"
+    },
+    "rating": 4.7,
+    "reviewCount": 234,
+    "suitableFor": ["旅行观鸟摄影", "轻量化拍摄", "多场景适用"],
+    "relatedWorks": ["work-015", "work-021"]
+  },
+  {
+    "id": "gear-008",
+    "name": "KOWA TSN-883 观鸟单筒望远镜",
+    "brand": "KOWA",
+    "category": "观鸟装备",
+    "type": "单筒望远镜",
+    "price": 15800,
+    "cover": "/assets/images/gear/kowa-tsn883.jpg",
+    "specs": {
+      "物镜口径": "88mm",
+      "倍率": "25-60倍变焦",
+      "镜片": "萤石镜片",
+      "防水": "充氮防水",
+      "重量": "1520g"
+    },
+    "rating": 4.7,
+    "reviewCount": 156,
+    "suitableFor": ["远距离水鸟观察", "滩涂观鸟", "高原观鸟"],
+    "relatedWorks": ["work-005", "work-009"]
+  },
+  {
+    "id": "gear-009",
+    "name": "迷彩隐蔽摄影帐篷",
+    "brand": "Tragopan",
+    "category": "观鸟装备",
+    "type": "隐蔽装备",
+    "price": 1599,
+    "cover": "/assets/images/gear/camouflage-tent.jpg",
+    "specs": {
+      "材质": "防水迷彩面料",
+      "尺寸": "150x150x140cm",
+      "窗口": "4面开窗",
+      "重量": "3.5kg",
+      "配件": "摄影窗支架"
+    },
+    "rating": 4.5,
+    "reviewCount": 89,
+    "suitableFor": ["近距离鸟类摄影", "湿地蹲守", "森林隐蔽拍摄"],
+    "relatedWorks": ["work-001", "work-007"]
+  },
+  {
+    "id": "gear-010",
+    "name": "索尼 FE 200-600mm f/5.6-6.3 G OSS 超远摄变焦镜头",
+    "brand": "Sony",
+    "category": "摄影装备",
+    "type": "镜头",
+    "price": 13999,
+    "cover": "/assets/images/gear/sony-200-600.jpg",
+    "specs": {
+      "焦距": "200-600mm",
+      "最大光圈": "f/5.6-6.3",
+      "防抖": "OSS光学防抖",
+      "重量": "2115g",
+      "最近对焦": "2.4m"
+    },
+    "rating": 4.8,
+    "reviewCount": 467,
+    "suitableFor": ["入门鸟类摄影", "轻便远摄", "手持拍摄"],
+    "relatedWorks": ["work-005", "work-020"]
+  }
+]

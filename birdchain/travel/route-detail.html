@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>线路详情 - BirdChain鸟链</title>
+  <meta name="description" content="查看鸟类摄影旅行线路的详细信息，包括每日行程、目标鸟种和导师介绍。">
+  <meta property="og:title" content="线路详情 - BirdChain鸟链">
+  <meta property="og:description" content="查看鸟类摄影旅行线路的详细信息，包括每日行程、目标鸟种和导师介绍。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .route-hero {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      aspect-ratio: 21/9;
+      margin: 20px 0 24px;
+    }
+    .route-hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .route-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .route-header h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+    .route-header p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+    .route-quick-info {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .route-quick-item {
+      background: var(--bg-soft);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      text-align: center;
+    }
+    .route-quick-item .value {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--brand-accent-dark);
+    }
+    .route-quick-item .label {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+    .route-section {
+      margin-bottom: 32px;
+    }
+    .route-section h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .route-section p {
+      font-size: 0.92rem;
+      color: var(--text-main);
+      line-height: 1.8;
+    }
+    .itinerary-day {
+      display: flex;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .itinerary-day:last-child { border-bottom: none; }
+    .itinerary-day-num {
+      background: var(--brand-primary);
+      color: #fff;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+    .itinerary-day-desc {
+      flex: 1;
+      font-size: 0.9rem;
+      color: var(--text-main);
+      line-height: 1.7;
+      padding-top: 5px;
+    }
+    .species-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .species-item {
+      background: var(--bg-soft);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      text-align: center;
+      font-size: 0.88rem;
+      font-weight: 500;
+      border: 1px solid var(--line-soft);
+    }
+    .guide-card {
+      display: flex;
+      gap: 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      align-items: center;
+    }
+    .guide-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .guide-avatar img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .guide-info h5 {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    .guide-info p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+    .equipment-list {
+      list-style: disc;
+      padding-left: 20px;
+    }
+    .equipment-list li {
+      font-size: 0.88rem;
+      color: var(--text-main);
+      padding: 4px 0;
+    }
+    .includes-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .includes-tag {
+      padding: 5px 14px;
+      background: var(--brand-accent-soft);
+      color: var(--brand-accent-dark);
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 500;
+    }
+    @media (max-width: 767px) {
+      .route-header h1 { font-size: 1.25rem; }
+      .route-quick-info { grid-template-columns: repeat(2, 1fr); }
+      .species-grid { grid-template-columns: repeat(2, 1fr); }
+      .guide-card { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+      <div id="routeContent"></div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BD = window.BirdChainData;
+      var BI = window.BirdChainInteractions;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('travel'));
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+
+      var params = new URLSearchParams(window.location.search);
+      var routeId = params.get('id');
+
+      var routes = await BD.loadData('travelRoutes');
+      var route = routes.find(function(r) { return r.id === routeId; });
+
+      if (!route) {
+        document.getElementById('routeContent').innerHTML = '<div class="container"><div class="bc-empty"><h4>线路不存在</h4><p>请检查线路ID是否正确</p><a href="/travel/index.html" class="btn btn-primary mt-3">返回旅行列表</a></div></div>';
+        return;
+      }
+
+      document.title = route.title + ' - BirdChain鸟链';
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '摄影旅行', href: '/travel/index.html' },
+        { label: route.title }
+      ]);
+
+      var spots = route.maxParticipants - (route.enrolled || 0);
+      var gradients = [
+        'linear-gradient(135deg, #1B4332, #2D6A4F)',
+        'linear-gradient(135deg, #1B4F72, #2980B9)',
+        'linear-gradient(135deg, #B8860B, #DAA520)'
+      ];
+
+      var html = '';
+
+      html += '<div class="route-hero">';
+      html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"';
+      html += ' style="background: linear-gradient(135deg, #1B4332, #40916C, #2D6A4F); width:100%; height:100%; object-fit:cover;"';
+      html += ' alt="' + route.title + '">';
+      html += '</div>';
+
+      html += '<div class="route-header">';
+      html += '<div>';
+      html += '<h1>' + route.title + '</h1>';
+      html += '<p>' + LOCATION_ICON_SVG + ' ' + route.country + ' · ' + route.destination + '</p>';
+      html += '</div>';
+      html += '<a href="/travel/booking.html?routeId=' + route.id + '" class="btn btn-accent">立即报名</a>';
+      html += '</div>';
+
+      html += '<div class="route-quick-info">';
+      html += '<div class="route-quick-item"><div class="value">' + route.duration + '天</div><div class="label">行程时长</div></div>';
+      html += '<div class="route-quick-item"><div class="value">' + route.difficulty + '</div><div class="label">难度等级</div></div>';
+      html += '<div class="route-quick-item"><div class="value">' + formatPrice(route.price) + '</div><div class="label">费用</div></div>';
+      html += '<div class="route-quick-item"><div class="value">剩余' + spots + '位</div><div class="label">' + route.enrolled + '/' + route.maxParticipants + ' 已报</div></div>';
+      html += '</div>';
+
+      html += '<div class="route-section">';
+      html += '<h3>线路详情</h3>';
+      html += '<p>' + route.destination + '，由导师 ' + route.guideName + ' 带队，为期 ' + route.duration + ' 天的沉浸式鸟类摄影之旅。适合' + route.difficulty + '级别观鸟爱好者。目标鸟种包括：' + (route.targetSpecies || []).join('、') + '。</p>';
+      html += '</div>';
+
+      if (route.itinerary && route.itinerary.length > 0) {
+        html += '<div class="route-section">';
+        html += '<h3>每日行程</h3>';
+        route.itinerary.forEach(function(day) {
+          html += '<div class="itinerary-day">';
+          html += '<div class="itinerary-day-num">' + day.day + '</div>';
+          html += '<div class="itinerary-day-desc">' + day.description + '</div>';
+          html += '</div>';
+        });
+        html += '</div>';
+      }
+
+      if (route.targetSpecies && route.targetSpecies.length > 0) {
+        html += '<div class="route-section">';
+        html += '<h3>目标鸟种</h3>';
+        html += '<div class="species-grid">';
+        route.targetSpecies.forEach(function(s) {
+          html += '<div class="species-item">' + s + '</div>';
+        });
+        html += '</div>';
+        html += '</div>';
+      }
+
+      html += '<div class="route-section">';
+      html += '<h3>导师介绍</h3>';
+      html += '<div class="guide-card">';
+      html += '<div class="guide-avatar">';
+      html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: linear-gradient(135deg, #1B4F72, #2980B9); width:100%; height:100%; border-radius:50%; object-fit:cover;" alt="' + route.guideName + '">';
+      html += '</div>';
+      html += '<div class="guide-info">';
+      html += '<h5>' + route.guideName + '</h5>';
+      html += '<p>资深生态摄影师，多年野外鸟类摄影经验，熟悉' + route.destination + '及周边区域的最佳拍摄点位。</p>';
+      html += '</div>';
+      html += '</div>';
+      html += '</div>';
+
+      html += '<div class="route-section">';
+      html += '<h3>装备建议</h3>';
+      html += '<ul class="equipment-list">';
+      html += '<li>长焦镜头（建议400mm及以上）</li>';
+      html += '<li>三脚架或独脚架</li>';
+      html += '<li>双筒望远镜（8x42或10x42）</li>';
+      html += '<li>适合户外活动的服装和徒步鞋</li>';
+      html += '<li>防晒用品和防蚊用品</li>';
+      html += '<li>备用电池和存储卡</li>';
+      if (route.difficulty === '高级' || route.difficulty === '专业') {
+        html += '<li>高原反应药物（高原线路）</li>';
+        html += '<li>专业户外装备（冲锋衣、登山鞋等）</li>';
+      }
+      html += '</ul>';
+      html += '</div>';
+
+      if (route.includes && route.includes.length > 0) {
+        html += '<div class="route-section">';
+        html += '<h3>费用包含</h3>';
+        html += '<div class="includes-list">';
+        route.includes.forEach(function(item) {
+          html += '<span class="includes-tag">' + item + '</span>';
+        });
+        html += '</div>';
+        html += '</div>';
+      }
+
+      html += '<div class="route-section">';
+      html += '<h3>报名说明</h3>';
+      html += '<p>每团限额' + route.maxParticipants + '人，目前已有' + (route.enrolled || 0) + '人报名，剩余' + spots + '个名额。报名后我们将在24小时内与您联系确认行程详情。</p>';
+      html += '<a href="/travel/booking.html?routeId=' + route.id + '" class="btn btn-accent btn-lg mt-3">立即报名</a>';
+      html += '</div>';
+
+      document.getElementById('routeContent').innerHTML = html;
+
+      BI.initAll();
+    });
+  </script>
+</body>
+</html>

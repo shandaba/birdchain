@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>自然教育 - BirdChain鸟链</title>
+  <meta name="description" content="鸟链自然教育平台，提供学校产学研合作、儿童自然教育和鸟类有声读物。">
+  <meta property="og:title" content="自然教育 - BirdChain鸟链">
+  <meta property="og:description" content="鸟链自然教育平台，提供学校产学研合作、儿童自然教育和鸟类有声读物。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .education-hero {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      height: 300px;
+      margin: 20px 0 32px;
+    }
+    .education-hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .education-hero-content {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(7, 27, 45, 0.85), rgba(7, 27, 45, 0.15));
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 32px;
+      color: #fff;
+    }
+    .education-hero-content h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .education-hero-content p {
+      font-size: 0.95rem;
+      opacity: 0.85;
+      max-width: 560px;
+    }
+    .edu-entry-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .edu-entry-card {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      transition: all var(--transition-normal);
+      cursor: pointer;
+    }
+    .edu-entry-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+    .edu-entry-card-img {
+      aspect-ratio: 16/9;
+      overflow: hidden;
+    }
+    .edu-entry-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform var(--transition-slow);
+    }
+    .edu-entry-card:hover .edu-entry-card-img img {
+      transform: scale(1.04);
+    }
+    .edu-entry-card-body {
+      padding: 24px;
+    }
+    .edu-entry-card-body h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .edu-entry-card-body p {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .edu-cta-banner {
+      background: linear-gradient(135deg, #16395C, #0F2E4A, #1B4965);
+      border-radius: var(--radius-lg);
+      padding: 48px;
+      text-align: center;
+      color: #fff;
+      margin: 40px 0;
+    }
+    .edu-cta-banner h3 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .edu-cta-banner p {
+      font-size: 0.95rem;
+      opacity: 0.85;
+      margin-bottom: 24px;
+    }
+    .teacher-resource {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      transition: all var(--transition-fast);
+    }
+    .teacher-resource:hover {
+      box-shadow: var(--shadow-md);
+    }
+    .teacher-resource h5 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .teacher-resource p {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+    @media (max-width: 767px) {
+      .education-hero { height: 200px; margin: 12px 0 20px; border-radius: var(--radius-md); }
+      .education-hero-content { padding: 20px; }
+      .education-hero-content h1 { font-size: 1.35rem; }
+      .edu-entry-cards { grid-template-columns: 1fr; }
+      .edu-cta-banner { padding: 28px 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+      <div class="education-hero">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+             style="background: linear-gradient(135deg, #1B4332, #40916C, #2D6A4F); width:100%; height:100%; object-fit:cover;" alt="自然教育">
+        <div class="education-hero-content">
+          <h1>自然教育</h1>
+          <p>从学校到家庭，从课堂到自然，让每个人都能了解鸟类、热爱自然</p>
+        </div>
+      </div>
+
+      <div class="edu-entry-cards" id="entryCards">
+        <a href="/education/school-program.html" class="edu-entry-card">
+          <div class="edu-entry-card-img">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                 style="background: linear-gradient(135deg, #16395C, #1B4965); width:100%; height:100%; object-fit:cover;" alt="学校产学研">
+          </div>
+          <div class="edu-entry-card-body">
+            <h3>学校产学研</h3>
+            <p>与高校和科研机构合作，提供鸟类生态学课程、研究课题合作和学生实习项目。</p>
+            <span class="btn btn-outline btn-sm">了解详情 &rarr;</span>
+          </div>
+        </a>
+        <a href="/education/course-detail.html?id=course-003" class="edu-entry-card">
+          <div class="edu-entry-card-img">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                 style="background: linear-gradient(135deg, #B8860B, #DAA520); width:100%; height:100%; object-fit:cover;" alt="儿童自然教育">
+          </div>
+          <div class="edu-entry-card-body">
+            <h3>儿童自然教育</h3>
+            <p>专为儿童和青少年设计的观鸟启蒙课程、科学探究营和自然笔记活动。</p>
+            <span class="btn btn-outline btn-sm">探索课程 &rarr;</span>
+          </div>
+        </a>
+        <a href="/education/kids-audio.html" class="edu-entry-card">
+          <div class="edu-entry-card-img">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                 style="background: linear-gradient(135deg, #006D77, #83C5BE); width:100%; height:100%; object-fit:cover;" alt="鸟类有声读物">
+          </div>
+          <div class="edu-entry-card-body">
+            <h3>鸟类有声读物</h3>
+            <p>精心制作的鸟类有声绘本和科普音频，让孩子在听故事中认识鸟类世界。</p>
+            <span class="btn btn-outline btn-sm">开始收听 &rarr;</span>
+          </div>
+        </a>
+      </div>
+
+      <section class="section" id="coursesSection">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">课程包</h2>
+            <p class="section-subtitle">精选自然教育课程</p>
+          </div>
+        </div>
+        <div class="grid-3" id="coursesGrid"></div>
+      </section>
+
+      <section class="section" id="researchSection">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">研学项目</h2>
+            <p class="section-subtitle">沉浸式野外研学体验</p>
+          </div>
+        </div>
+        <div class="grid-3">
+          <div class="bc-station-card" style="cursor:pointer;" onclick="window.location.href='/travel/route-detail.html?id=route-001'">
+            <div class="bc-station-card-img">
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                   style="background: linear-gradient(135deg, #1B4332, #2D6A4F); width:100%; height:100%; object-fit:cover;" alt="鄱阳湖候鸟研习">
+            </div>
+            <div class="bc-station-card-body">
+              <div class="bc-station-card-title">鄱阳湖候鸟生态研习</div>
+              <div class="bc-station-card-region">5天 · 入门级</div>
+              <div class="bc-station-card-stats">
+                <span>适合12岁以上</span>
+                <span>鄱阳湖保护区</span>
+              </div>
+            </div>
+          </div>
+          <div class="bc-station-card" style="cursor:pointer;" onclick="window.location.href='/travel/route-detail.html?id=route-003'">
+            <div class="bc-station-card-img">
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                   style="background: linear-gradient(135deg, #1B4F72, #2980B9); width:100%; height:100%; object-fit:cover;" alt="秦岭朱鹮探秘">
+            </div>
+            <div class="bc-station-card-body">
+              <div class="bc-station-card-title">秦岭朱鹮保护研习营</div>
+              <div class="bc-station-card-region">5天 · 中级</div>
+              <div class="bc-station-card-stats">
+                <span>适合16岁以上</span>
+                <span>洋县朱鹮保护区</span>
+              </div>
+            </div>
+          </div>
+          <div class="bc-station-card" style="cursor:pointer;" onclick="window.location.href='/travel/route-detail.html?id=route-004'">
+            <div class="bc-station-card-img">
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                   style="background: linear-gradient(135deg, #006D77, #83C5BE); width:100%; height:100%; object-fit:cover;" alt="青藏高原科考">
+            </div>
+            <div class="bc-station-card-body">
+              <div class="bc-station-card-title">三江源高原鸟类科考</div>
+              <div class="bc-station-card-region">7天 · 高级</div>
+              <div class="bc-station-card-stats">
+                <span>适合18岁以上</span>
+                <span>三江源国家公园</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="teacherSection">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">教师资源</h2>
+            <p class="section-subtitle">为教育工作者提供的教学资源</p>
+          </div>
+        </div>
+        <div class="grid-3">
+          <div class="teacher-resource">
+            <h5>鸟类教学课件</h5>
+            <p>涵盖鸟类分类、迁徙、行为等主题的PPT课件和教案，适合中小学科学课程。</p>
+          </div>
+          <div class="teacher-resource">
+            <h5>野外观察指南</h5>
+            <p>校园观鸟活动组织指南，包含观察记录表和常见鸟类识别卡片。</p>
+          </div>
+          <div class="teacher-resource">
+            <h5>视频教学素材</h5>
+            <p>高清鸟类行为视频素材库，支持课堂教学和在线学习使用。</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="edu-cta-banner">
+        <h3>学校合作申请</h3>
+        <p>欢迎各级学校和教育机构与我们合作，共同推进鸟类自然教育事业</p>
+        <a href="/education/school-program.html" class="btn btn-accent btn-lg">申请合作</a>
+      </div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BD = window.BirdChainData;
+      var BI = window.BirdChainInteractions;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('education'));
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '自然教育' }
+      ]);
+
+      var courses = await BD.loadData('courses');
+      var displayCourses = courses.filter(function(c) { return c.type !== '有声读物'; });
+
+      var gradients = [
+        'linear-gradient(135deg, #1B4332, #2D6A4F)',
+        'linear-gradient(135deg, #1B4F72, #2980B9)',
+        'linear-gradient(135deg, #B8860B, #DAA520)',
+        'linear-gradient(135deg, #006D77, #83C5BE)',
+        'linear-gradient(135deg, #6B4226, #8B6914)',
+        'linear-gradient(135deg, #023E8A, #0077B6)'
+      ];
+
+      var html = '';
+      displayCourses.forEach(function(c, i) {
+        html += '<div class="bc-course-card" style="cursor:pointer;" onclick="window.location.href=\'/education/course-detail.html?id=' + c.id + '\'">';
+        html += '<div class="bc-course-card-img">';
+        html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"';
+        html += ' style="background: ' + gradients[i % gradients.length] + '; width:100%; height:100%; object-fit:cover;" alt="' + c.title + '">';
+        html += '</div>';
+        html += '<div class="bc-course-card-body">';
+        html += '<h5>' + c.title + '</h5>';
+        html += '<div class="bc-course-card-age">' + c.ageRange + ' · ' + c.type + '</div>';
+        html += '<div class="bc-course-card-meta">';
+        html += '<span>' + CLOCK_ICON_SVG + ' ' + c.duration + '</span>';
+        html += '<span>' + formatPrice(c.price) + '</span>';
+        html += '</div>';
+        html += '</div>';
+        html += '</div>';
+      });
+      document.getElementById('coursesGrid').innerHTML = html;
+
+      BI.initAll();
+    });
+  </script>
+</body>
+</html>

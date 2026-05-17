@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>收益 - 创作者中心 - BirdChain鸟链</title>
+  <meta name="description" content="查看你的BirdChain创作收益明细和提现。">
+  <meta property="og:title" content="收益 - 创作者中心 - BirdChain鸟链">
+  <meta property="og:description" content="查看你的BirdChain创作收益明细和提现。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .earnings-container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .earnings-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .earnings-table th,
+    .earnings-table td {
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 0.85rem;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .earnings-table th {
+      background: var(--bg-soft);
+      font-weight: 600;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+    .earnings-table td {
+      color: var(--text-main);
+    }
+    .earnings-table .amount {
+      font-weight: 600;
+      color: var(--brand-accent-dark);
+    }
+    .earnings-table .status-tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.72rem;
+      font-weight: 600;
+    }
+    .earnings-table .status-tag.completed {
+      background: var(--success);
+      color: #fff;
+    }
+    .earnings-table .status-tag.pending {
+      background: var(--warning);
+      color: #fff;
+    }
+    .withdraw-section {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    .withdraw-section h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .balance-display {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--brand-accent-dark);
+      margin-bottom: 16px;
+    }
+    .balance-display span {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+    .withdraw-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .chart-container {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    .chart-container h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .bar-chart {
+      display: flex;
+      align-items: flex-end;
+      gap: 20px;
+      height: 200px;
+      padding: 0 10px;
+    }
+    .bar-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      height: 100%;
+      justify-content: flex-end;
+    }
+    .bar {
+      width: 100%;
+      max-width: 50px;
+      border-radius: 6px 6px 0 0;
+      background: linear-gradient(to top, var(--brand-primary), var(--brand-accent));
+      transition: height var(--transition-slow);
+      position: relative;
+    }
+    .bar-value {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--brand-accent-dark);
+      margin-bottom: 4px;
+    }
+    .bar-label {
+      font-size: 0.72rem;
+      color: var(--text-secondary);
+      margin-top: 8px;
+    }
+    @media (max-width: 767px) {
+      .earnings-table { display: block; overflow-x: auto; }
+      .bc-creator-stats { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+      <div id="earningsContainer" class="earnings-container"></div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BI = window.BirdChainInteractions;
+      var BStor = window.BirdChainStorage;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('creator'));
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '创作者中心', href: '/creator/index.html' },
+        { label: '收益' }
+      ]);
+
+      BI.initAll();
+
+      var savedEarnings = BStor.getItem('bc_earnings', []);
+      var simEarnings = [
+        { id: 'earn-001', date: '2026-05-12', type: '授权收入', work: '翠鸟入水捕鱼的瞬间', amount: 299.00, status: 'completed' },
+        { id: 'earn-002', date: '2026-05-08', type: '周边分成', work: '丹顶鹤晨雾中的双人舞', amount: 156.80, status: 'completed' },
+        { id: 'earn-003', date: '2026-04-28', type: '授权收入', work: '白鹭栖息的黄昏', amount: 199.00, status: 'completed' },
+        { id: 'earn-004', date: '2026-04-15', type: 'AI二创分成', work: '黑脸琵鹭觅食', amount: 88.50, status: 'completed' },
+        { id: 'earn-005', date: '2026-03-22', type: '赛事奖金', work: '鸟类摄影大赛一等奖', amount: 5000.00, status: 'completed' },
+        { id: 'earn-006', date: '2026-03-10', type: '授权收入', work: '朱鹮——东方宝石', amount: 599.00, status: 'completed' },
+        { id: 'earn-007', date: '2026-02-28', type: '周边分成', work: '翠鸟入水捕鱼的瞬间', amount: 45.00, status: 'completed' },
+        { id: 'earn-008', date: '2026-05-15', type: '授权收入', work: '丹顶鹤晨雾中的双人舞', amount: 599.00, status: 'pending' }
+      ];
+
+      var allEarnings = simEarnings.concat(savedEarnings);
+      var totalEarnings = allEarnings.filter(function(e) { return e.status === 'completed'; }).reduce(function(s, e) { return s + e.amount; }, 0);
+      var monthEarnings = allEarnings.filter(function(e) {
+        return e.status === 'completed' && e.date.startsWith('2026-05');
+      }).reduce(function(s, e) { return s + e.amount; }, 0);
+      var licenseEarnings = allEarnings.filter(function(e) { return e.status === 'completed' && e.type === '授权收入'; }).reduce(function(s, e) { return s + e.amount; }, 0);
+      var merchEarnings = allEarnings.filter(function(e) { return e.status === 'completed' && e.type === '周边分成'; }).reduce(function(s, e) { return s + e.amount; }, 0);
+
+      var monthlyData = { '2026-01': 0, '2026-02': 45, '2026-03': 5599, '2026-04': 287.5, '2026-05': 454.8 };
+      var maxMonth = Math.max.apply(null, Object.values(monthlyData));
+
+      var chartHtml = '<div class="bar-chart">';
+      Object.keys(monthlyData).forEach(function(k) {
+        var h = maxMonth > 0 ? (monthlyData[k] / maxMonth * 160) : 0;
+        var label = k.split('-')[1] + '月';
+        chartHtml += '<div class="bar-col"><div class="bar-value">¥' + monthlyData[k].toFixed(0) + '</div><div class="bar" style="height:' + Math.max(h, 4) + 'px;"></div><div class="bar-label">' + label + '</div></div>';
+      });
+      chartHtml += '</div>';
+
+      var tableRows = '';
+      allEarnings.forEach(function(e) {
+        var statusClass = e.status === 'completed' ? 'completed' : 'pending';
+        var statusText = e.status === 'completed' ? '已到账' : '待结算';
+        tableRows += '<tr><td>' + e.date + '</td><td>' + e.type + '</td><td>' + e.work + '</td><td class="amount">¥' + e.amount.toFixed(2) + '</td><td><span class="status-tag ' + statusClass + '">' + statusText + '</span></td></tr>';
+      });
+
+      var html = '<h2 style="font-size:1.3rem;font-weight:700;margin-bottom:24px;">&#128176; 收益管理</h2>'
+
+        + '<div class="bc-creator-stats" style="margin-bottom:24px;">'
+        + '<div class="bc-stat-card"><div class="value">¥' + totalEarnings.toFixed(2) + '</div><div class="label">总收益</div></div>'
+        + '<div class="bc-stat-card"><div class="value">¥' + monthEarnings.toFixed(2) + '</div><div class="label">本月收益</div></div>'
+        + '<div class="bc-stat-card"><div class="value">¥' + licenseEarnings.toFixed(2) + '</div><div class="label">授权收入</div></div>'
+        + '<div class="bc-stat-card"><div class="value">¥' + merchEarnings.toFixed(2) + '</div><div class="label">周边分成</div></div>'
+        + '</div>'
+
+        + '<div class="chart-container">'
+        + '<h3>&#128200; 收益趋势（2026年）</h3>'
+        + chartHtml
+        + '</div>'
+
+        + '<h3 style="font-size:1.05rem;font-weight:600;margin-bottom:12px;">收益明细</h3>'
+        + '<div style="overflow-x:auto;"><table class="earnings-table">'
+        + '<thead><tr><th>日期</th><th>类型</th><th>作品</th><th>金额</th><th>状态</th></tr></thead>'
+        + '<tbody>' + tableRows + '</tbody>'
+        + '</table></div>'
+
+        + '<div class="withdraw-section">'
+        + '<h3>&#128179; 提现</h3>'
+        + '<div class="balance-display">¥' + totalEarnings.toFixed(2) + ' <span>可提现余额</span></div>'
+        + '<div class="withdraw-row">'
+        + '<input type="number" class="bc-form-input" id="withdrawAmount" placeholder="提现金额" style="max-width:200px;" min="10" step="1" />'
+        + '<button class="btn btn-accent" id="withdrawBtn">申请提现</button>'
+        + '</div>'
+        + '<div class="text-xs text-secondary mt-1">最低提现金额 ¥10.00，预计3-5个工作日到账</div>'
+        + '<div class="bc-form-error" id="withdrawError" style="display:none;"></div>'
+        + '</div>';
+
+      document.getElementById('earningsContainer').innerHTML = html;
+
+      document.getElementById('withdrawBtn').addEventListener('click', function() {
+        var amount = parseFloat(document.getElementById('withdrawAmount').value);
+        var errorEl = document.getElementById('withdrawError');
+        errorEl.style.display = 'none';
+
+        if (!amount || isNaN(amount) || amount < 10) {
+          errorEl.textContent = '提现金额不能低于 ¥10.00';
+          errorEl.style.display = 'block';
+          BI.showToast('请输入有效提现金额（最低 ¥10.00）', 'warning');
+          return;
+        }
+        if (amount > totalEarnings) {
+          errorEl.textContent = '提现金额不能超过可用余额';
+          errorEl.style.display = 'block';
+          BI.showToast('提现金额超过可用余额', 'warning');
+          return;
+        }
+        BI.showToast('提现申请已提交，预计3-5个工作日到账', 'success');
+        document.getElementById('withdrawAmount').value = '';
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI作品画廊 - 鸟类视觉实验室 - BirdChain鸟链</title>
+  <meta name="description" content="浏览BirdChain鸟类视觉实验室的AI创作作品画廊，发现水彩、写实、水墨等多种风格的鸟类AI艺术作品。">
+  <meta property="og:title" content="AI作品画廊 - BirdChain鸟链">
+  <meta property="og:description" content="浏览AI创作鸟类视觉作品画廊。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .gallery-filter-bar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+    .gallery-style-chip {
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      border: 1px solid var(--line-soft);
+      background: var(--bg-card);
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .gallery-style-chip:hover, .gallery-style-chip.active { background: var(--brand-accent-soft); color: var(--brand-accent-dark); border-color: var(--brand-accent); }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div class="bc-breadcrumb">
+        <a href="/">首页</a><span class="sep">/</span><a href="/lab/index.html">鸟类视觉实验室</a><span class="sep">/</span><span class="current">作品画廊</span>
+      </div>
+      <h1 class="section-title" style="margin-bottom:4px;">AI作品画廊</h1>
+      <p class="section-subtitle">探索AI生成的鸟类视觉艺术作品</p>
+      <div class="gallery-filter-bar" id="filterBar">
+        <span class="gallery-style-chip active" data-filter="all">全部</span>
+        <span class="gallery-style-chip" data-filter="水彩插画">水彩插画</span>
+        <span class="gallery-style-chip" data-filter="自然写实">自然写实</span>
+        <span class="gallery-style-chip" data-filter="复古图鉴">复古图鉴</span>
+        <span class="gallery-style-chip" data-filter="扁平设计">扁平设计</span>
+        <span class="gallery-style-chip" data-filter="国风水墨">国风水墨</span>
+        <span class="gallery-style-chip" data-filter="手绘素描">手绘素描</span>
+        <span class="gallery-style-chip" data-filter="极简线稿">极简线稿</span>
+      </div>
+      <div class="bc-masonry grid-3" id="masonryGrid"></div>
+      <div id="paginationContainer"></div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      app.insertAdjacentHTML('afterbegin', BirdChainComponents.renderHeader('lab'));
+      app.insertAdjacentHTML('beforeend', BirdChainComponents.renderFooter());
+      BirdChainInteractions.initAll();
+
+      var BC = window.BirdChainStorage;
+      var BCD = window.BirdChainData;
+      var BCC = window.BirdChainComponents;
+
+      var ITEMS_PER_PAGE = 9;
+      var currentPage = 1;
+      var currentFilter = 'all';
+      var allAiWorks = [];
+
+      var works = await BCD.loadData('works');
+      allAiWorks = works.filter(function(w) { return w.category === 'AI创作'; });
+
+      function renderGallery(filter, page) {
+        var filtered = filter === 'all' ? allAiWorks : allAiWorks;
+        var totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+        var start = (page - 1) * ITEMS_PER_PAGE;
+        var pageItems = filtered.slice(start, start + ITEMS_PER_PAGE);
+
+        var grid = document.getElementById('masonryGrid');
+        grid.innerHTML = '';
+
+        if (pageItems.length === 0) {
+          grid.innerHTML = '<div class="bc-empty"><div class="bc-empty-icon">🎨</div><h4>暂无匹配作品</h4></div>';
+        } else {
+          var gradients = ['#1B4332,#2D6A4F','#1B4F72,#2980B9','#B8860B,#DAA520','#006D77,#83C5BE','#2D6A4F,#40916C','#3A5A40,#588157','#BC6C25,#DDA15E','#1B4965,#5FA8D3','#386641,#A7C957','#2C3E50,#3498DB'];
+          pageItems.forEach(function(w, i) {
+            var card = document.createElement('div');
+            card.className = 'bc-work-card';
+            var aspectRatios = ['4/3','3/4','1/1','4/3','3/4','4/3','1/1','3/4','4/3'];
+            var ar = aspectRatios[i % aspectRatios.length];
+            var grad = gradients[i % gradients.length];
+            card.innerHTML =
+              '<div class="bc-work-card-img" style="aspect-ratio:' + ar + '">' +
+              '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background:linear-gradient(135deg,' + grad + ');width:100%;height:100%;object-fit:cover;" alt="' + (w.title||'') + '" loading="lazy">' +
+              '<div class="bc-work-card-overlay"><div class="bc-work-card-actions">' +
+              '<button data-action="favorite" data-work-id="' + w.id + '">' + (typeof STAR_ICON_SVG !== 'undefined' ? STAR_ICON_SVG : '☆') + '</button>' +
+              '<button data-action="like" data-work-id="' + w.id + '">' + (typeof HEART_ICON_SVG !== 'undefined' ? HEART_ICON_SVG : '♥') + '</button>' +
+              '</div></div></div>' +
+              '<div class="bc-work-card-body"><div class="bc-work-card-title">' + (w.title||'') + '</div>' +
+              '<div class="bc-work-card-meta"><span class="tag tag-accent">AI创作</span>' +
+              '<span style="font-size:0.78rem;color:var(--text-secondary)">' + (typeof EYE_ICON_SVG !== 'undefined' ? EYE_ICON_SVG : '') + ' ' + (typeof formatNumber !== 'undefined' ? formatNumber(w.views||0) : w.views||0) + '</span></div></div>';
+            card.addEventListener('click', function(e) {
+              if (e.target.closest('button')) return;
+              window.location.href = '/lab/work-detail.html?id=' + w.id;
+            });
+            grid.appendChild(card);
+          });
+        }
+
+        var pagContainer = document.getElementById('paginationContainer');
+        pagContainer.innerHTML = BCC.renderPagination(currentPage, totalPages);
+        pagContainer.querySelectorAll('button[data-page]').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            var p = parseInt(btn.getAttribute('data-page'));
+            if (p >= 1 && p <= totalPages) {
+              currentPage = p;
+              renderGallery(currentFilter, currentPage);
+              window.scrollTo({ top: 300, behavior: 'smooth' });
+            }
+          });
+        });
+      }
+
+      renderGallery('all', 1);
+
+      document.getElementById('filterBar').addEventListener('click', function(e) {
+        var chip = e.target.closest('.gallery-style-chip');
+        if (!chip) return;
+        document.querySelectorAll('.gallery-style-chip').forEach(function(c) { c.classList.remove('active'); });
+        chip.classList.add('active');
+        currentFilter = chip.getAttribute('data-filter');
+        currentPage = 1;
+        renderGallery(currentFilter, currentPage);
+      });
+    });
+  </script>
+</body>
+</html>

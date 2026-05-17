@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>文章管理 - 创作者中心 - BirdChain鸟链</title>
+  <meta name="description" content="管理你的BirdChain专题文章。">
+  <meta property="og:title" content="文章管理 - 创作者中心 - BirdChain鸟链">
+  <meta property="og:description" content="管理你的BirdChain专题文章。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .articles-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .article-card {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      margin-bottom: 12px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      transition: all var(--transition-fast);
+    }
+    .article-card:hover {
+      box-shadow: var(--shadow-md);
+    }
+    .article-card-img {
+      width: 100px;
+      height: 70px;
+      border-radius: var(--radius-sm);
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .article-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .article-title {
+      font-weight: 600;
+      font-size: 0.92rem;
+      color: var(--text-strong);
+      margin-bottom: 4px;
+    }
+    .article-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+    }
+    .article-status {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.72rem;
+      font-weight: 600;
+    }
+    .article-status.published {
+      background: var(--success);
+      color: #fff;
+    }
+    .article-status.draft {
+      background: var(--bg-soft);
+      color: var(--text-secondary);
+    }
+    .article-status.reviewing {
+      background: var(--brand-primary);
+      color: #fff;
+    }
+    .article-actions {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .article-category {
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.72rem;
+      font-weight: 500;
+      background: var(--brand-accent-soft);
+      color: var(--brand-accent-dark);
+    }
+    .confirm-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 27, 45, 0.5);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .confirm-box {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: var(--shadow-xl);
+    }
+    .confirm-box h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .confirm-box p {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+    .confirm-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+    @media (max-width: 767px) {
+      .article-card { flex-direction: column; }
+      .article-card-img { width: 100%; height: 140px; }
+      .article-actions { width: 100%; justify-content: flex-end; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+      <div id="articlesContainer" class="articles-container"></div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BI = window.BirdChainInteractions;
+      var BStor = window.BirdChainStorage;
+      var TP = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('creator'));
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '创作者中心', href: '/creator/index.html' },
+        { label: '文章管理' }
+      ]);
+
+      BI.initAll();
+
+      var publishedArticles = BStor.getItem(BStor.KEYS.publishedArticles, []);
+      var draftArticles = BStor.getItem(BStor.KEYS.draftArticles, []);
+
+      var simPublished = [
+        { id: 'art-001', title: '中国湿地鸟类保护现状与未来展望', date: '2026-04-20', category: '保护研究', status: 'published', excerpt: '深入分析中国湿地生态系统的变化对鸟类种群的影响...' },
+        { id: 'art-002', title: '高速摄影技巧：如何捕捉翠鸟入水瞬间', date: '2026-03-15', category: '摄影技巧', status: 'published', excerpt: '分享高速摄影的设备和参数设置技巧...' },
+        { id: 'art-003', title: '丹顶鹤的迁徙路线与保护策略', date: '2026-02-28', category: '物种研究', status: 'published', excerpt: '追踪丹顶鹤迁徙路线，探讨保护策略...' }
+      ];
+
+      var simDraft = [
+        { id: 'art-draft-001', title: '鸟类摄影构图艺术', date: '2026-05-10', category: '摄影技巧', status: 'draft', excerpt: '未完稿...' }
+      ];
+
+      var simReviewing = [
+        { id: 'art-rev-001', title: 'AI与鸟类影像的未来', date: '2026-05-12', category: '技术趋势', status: 'reviewing', excerpt: '探讨AI技术在鸟类影像创作中的应用...' }
+      ];
+
+      var allPublished = simPublished.concat(publishedArticles.filter(function(a) { return a.status === 'published' || !a.status; }));
+      var allDraft = simDraft.concat(draftArticles.filter(function(a) { return a.status === 'draft'; }));
+      var allReviewing = simReviewing.concat(publishedArticles.filter(function(a) { return a.status === 'reviewing'; }));
+
+      function renderArticleRow(article) {
+        var statusClass = article.status === 'published' ? 'published' : article.status === 'draft' ? 'draft' : 'reviewing';
+        var statusText = article.status === 'published' ? '已发布' : article.status === 'draft' ? '草稿' : '审核中';
+        var bgColors = ['linear-gradient(135deg,#1B4332,#2D6A4F)','linear-gradient(135deg,#1B4F72,#2980B9)','linear-gradient(135deg,#6B4226,#8B6914)','linear-gradient(135deg,#606C38,#283618)'];
+        var bg = bgColors[Math.floor(Math.random() * bgColors.length)];
+
+        return '<div class="article-card" data-article-id="' + article.id + '">'
+          + '<img src="' + TP + '" style="background:' + bg + ';width:100px;height:70px;border-radius:6px;object-fit:cover;" alt="' + article.title + '" class="article-card-img" />'
+          + '<div class="article-info">'
+          + '<div class="article-title">' + article.title + '</div>'
+          + '<div class="article-meta">'
+          + '<span>' + article.date + '</span>'
+          + '<span class="article-status ' + statusClass + '">' + statusText + '</span>'
+          + '<span class="article-category">' + (article.category || '') + '</span>'
+          + '</div>'
+          + '</div>'
+          + '<div class="article-actions">'
+          + '<a href="/topics/article-detail.html?id=' + article.id + '" class="btn btn-ghost btn-sm">查看</a>'
+          + (article.status === 'draft' ? '<a href="/topics/write-article.html?id=' + article.id + '" class="btn btn-outline btn-sm">编辑</a>' : '')
+          + '<button class="btn btn-ghost btn-sm delete-article-btn" data-article-id="' + article.id + '" data-article-title="' + article.title + '" style="color:var(--danger);">删除</button>'
+          + '</div>'
+          + '</div>';
+      }
+
+      function buildTabContent(articles, emptyMsg) {
+        if (articles.length === 0) {
+          return BC.renderEmptyState(emptyMsg, window.EMPTY_FOLDER_SVG || '');
+        }
+        return articles.map(renderArticleRow).join('');
+      }
+
+      var html = '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:24px;">'
+        + '<h2 style="font-size:1.3rem;font-weight:700;margin:0;">&#128214; 文章管理</h2>'
+        + '<a href="/topics/write-article.html" class="btn btn-accent">写新文章</a>'
+        + '</div>'
+        + '<div class="bc-tabs" id="articleTabs">'
+        + '<button class="bc-tab active" data-tab="published">已发布 (' + allPublished.length + ')</button>'
+        + '<button class="bc-tab" data-tab="draft">草稿 (' + allDraft.length + ')</button>'
+        + '<button class="bc-tab" data-tab="reviewing">审核中 (' + allReviewing.length + ')</button>'
+        + '</div>'
+        + '<div class="bc-tab-panel" id="tabPublished">' + buildTabContent(allPublished, '暂无已发布的文章') + '</div>'
+        + '<div class="bc-tab-panel" id="tabDraft" style="display:none;">' + buildTabContent(allDraft, '暂无草稿文章') + '</div>'
+        + '<div class="bc-tab-panel" id="tabReviewing" style="display:none;">' + buildTabContent(allReviewing, '暂无审核中的文章') + '</div>';
+
+      document.getElementById('articlesContainer').innerHTML = html;
+
+      document.getElementById('articleTabs').addEventListener('click', function(e) {
+        var btn = e.target.closest('[data-tab]');
+        if (!btn) return;
+        document.querySelectorAll('#articleTabs .bc-tab').forEach(function(t) { t.classList.remove('active'); });
+        btn.classList.add('active');
+        var tabName = btn.getAttribute('data-tab');
+        document.getElementById('tabPublished').style.display = tabName === 'published' ? '' : 'none';
+        document.getElementById('tabDraft').style.display = tabName === 'draft' ? '' : 'none';
+        document.getElementById('tabReviewing').style.display = tabName === 'reviewing' ? '' : 'none';
+      });
+
+      document.addEventListener('click', function(e) {
+        var btn = e.target.closest('.delete-article-btn');
+        if (!btn) return;
+
+        var articleId = btn.getAttribute('data-article-id');
+        var articleTitle = btn.getAttribute('data-article-title');
+
+        var overlay = document.createElement('div');
+        overlay.className = 'confirm-overlay';
+        overlay.innerHTML = '<div class="confirm-box">'
+          + '<h4>确认删除</h4>'
+          + '<p>确定要删除文章「' + articleTitle + '」吗？此操作不可撤销。</p>'
+          + '<div class="confirm-actions">'
+          + '<button class="btn btn-outline btn-sm cancel-delete-btn">取消</button>'
+          + '<button class="btn btn-accent btn-sm confirm-delete-btn" data-article-id="' + articleId + '">确认删除</button>'
+          + '</div></div>';
+        document.body.appendChild(overlay);
+
+        overlay.querySelector('.cancel-delete-btn').addEventListener('click', function() {
+          document.body.removeChild(overlay);
+        });
+
+        overlay.querySelector('.confirm-delete-btn').addEventListener('click', function() {
+          var pubArticles = BStor.getItem(BStor.KEYS.publishedArticles, []);
+          pubArticles = pubArticles.filter(function(a) { return a.id !== articleId; });
+          BStor.setItem(BStor.KEYS.publishedArticles, pubArticles);
+
+          var draftArticles = BStor.getItem(BStor.KEYS.draftArticles, []);
+          draftArticles = draftArticles.filter(function(a) { return a.id !== articleId; });
+          BStor.setItem(BStor.KEYS.draftArticles, draftArticles);
+
+          document.body.removeChild(overlay);
+          BI.showToast('文章已删除', 'success');
+          setTimeout(function() { location.reload(); }, 600);
+        });
+
+        overlay.addEventListener('click', function(ev) {
+          if (ev.target === overlay) document.body.removeChild(overlay);
+        });
+      });
+    });
+  </script>
+</body>
+</html>

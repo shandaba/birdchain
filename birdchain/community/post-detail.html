@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>帖子详情 - BirdChain鸟链</title>
+  <meta name="description" content="查看BirdChain社区帖子详情，参与讨论与交流。">
+  <meta property="og:title" content="帖子详情 - BirdChain鸟链">
+  <meta property="og:description" content="鸟类爱好者社区帖子详情与讨论。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .post-detail {
+      max-width: 800px;
+    }
+    .post-detail-header {
+      margin: 28px 0 24px;
+    }
+    .post-detail-header h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text-strong);
+    }
+    .post-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .post-author-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--bg-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--brand-accent);
+    }
+    .post-author-info h6 {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+    .post-author-info span {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+    .post-stats {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .post-stat {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    .post-body {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+    }
+    .post-body p {
+      margin-bottom: 14px;
+    }
+    .post-actions {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 32px;
+      padding: 16px 0;
+      border-top: 1px solid var(--line-soft);
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .post-action-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 20px;
+      border: 1px solid var(--line-soft);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .post-action-btn:hover { border-color: var(--brand-accent); color: var(--brand-accent); }
+    .post-action-btn.liked { background: var(--brand-accent-soft); color: var(--brand-accent); border-color: var(--brand-accent); }
+    .comment-section {
+      margin-top: 32px;
+    }
+    .comment-section h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .comment-card {
+      background: var(--bg-soft);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .comment-card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .comment-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--bg-card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--brand-accent);
+    }
+    .comment-card-header h6 {
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .comment-card-header span {
+      font-size: 0.72rem;
+      color: var(--text-secondary);
+    }
+    .comment-body {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .comment-reply {
+      margin-left: 40px;
+      margin-top: 8px;
+      padding: 12px 16px;
+      background: var(--bg-card);
+      border-radius: var(--radius-sm);
+      border-left: 3px solid var(--brand-accent);
+    }
+    .comment-form {
+      margin-top: 24px;
+      background: var(--bg-soft);
+      border-radius: var(--radius-md);
+      padding: 20px;
+    }
+    .comment-form h5 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .comment-form textarea {
+      width: 100%;
+      min-height: 100px;
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      font-size: 0.9rem;
+      resize: vertical;
+      margin-bottom: 12px;
+      background: var(--bg-card);
+      color: var(--text-strong);
+    }
+    .related-posts-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 40px;
+    }
+    @media (max-width: 767px) {
+      .related-posts-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+      <div class="post-detail" id="postDetailContent"></div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BI = window.BirdChainInteractions;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('community'));
+
+      var params = new URLSearchParams(window.location.search);
+      var postId = params.get('id');
+
+      if (!postId) {
+        document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+          { label: '社区', href: '/community/index.html' },
+          { label: '帖子详情' }
+        ]);
+        document.getElementById('postDetailContent').innerHTML = '<div class="section" style="text-align:center"><h2>未找到帖子</h2><p style="color:var(--text-secondary)">请通过社区列表选择一个帖子查看</p><a href="/community/index.html" class="btn btn-accent mt-2">返回社区</a></div>';
+        app.insertAdjacentHTML('beforeend', BC.renderFooter());
+        BI.initAll();
+        return;
+      }
+
+      var posts = await loadData('communityPosts');
+      var post = findById(posts, postId);
+
+      if (!post) {
+        document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+          { label: '社区', href: '/community/index.html' },
+          { label: '帖子详情' }
+        ]);
+        document.getElementById('postDetailContent').innerHTML = '<div class="section" style="text-align:center"><h2>帖子不存在</h2><p style="color:var(--text-secondary)">未找到该帖子</p><a href="/community/index.html" class="btn btn-accent mt-2">返回社区</a></div>';
+        app.insertAdjacentHTML('beforeend', BC.renderFooter());
+        BI.initAll();
+        return;
+      }
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '社区', href: '/community/index.html' },
+        { label: post.title }
+      ]);
+
+      var comments = [];
+      try {
+        var stored = localStorage.getItem('comments_data');
+        if (stored) { var allComments = JSON.parse(stored); comments = allComments[postId] || []; }
+      } catch(e) {}
+
+      var liked = false;
+      try {
+        var likedPosts = JSON.parse(localStorage.getItem('likedPosts') || '[]');
+        liked = likedPosts.indexOf(postId) !== -1;
+      } catch(e) {}
+
+      function renderAll() {
+        var html = '';
+
+        html += '<div class="post-detail-header">';
+        html += '<h1>' + esc(post.title) + '</h1>';
+        html += '<span style="display:inline-block;padding:3px 12px;border-radius:12px;background:var(--bg-soft);font-size:0.78rem;color:var(--text-secondary);margin-bottom:12px;">' + esc(post.category) + '</span>';
+        html += '</div>';
+
+        html += '<div class="post-author">';
+        html += '<div class="post-author-avatar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>';
+        html += '<div class="post-author-info">';
+        html += '<h6>' + esc(post.author || '匿名用户') + '</h6>';
+        html += '<span>' + esc(post.time || '') + ' · 加入于2024</span>';
+        html += '</div>';
+        html += '</div>';
+
+        html += '<div class="post-stats">';
+        html += '<div class="post-stat"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg> <span id="postLikesCount">' + (post.likes || 0) + '</span> 赞</div>';
+        html += '<div class="post-stat"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> <span id="postCommentsCount">' + (post.comments || 0) + '</span> 评论</div>';
+        html += '<div class="post-stat"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg> ' + (post.views || 0) + ' 阅读</div>';
+        html += '</div>';
+
+        html += '<div class="post-body">';
+        var content = post.content || '';
+        content.split('\n').forEach(function(line) {
+          if (line.trim()) {
+            html += '<p>' + esc(line) + '</p>';
+          }
+        });
+        html += '</div>';
+
+        html += '<div class="post-actions">';
+        html += '<button class="post-action-btn' + (liked ? ' liked' : '') + '" id="likeBtn" data-action="like">';
+        html += '<svg width="16" height="16" viewBox="0 0 24 24" fill="' + (liked ? 'currentColor' : 'none') + '" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>';
+        html += ' <span id="likeBtnText">' + (liked ? '已赞' : '点赞') + '</span>';
+        html += '</button>';
+        html += '<button class="post-action-btn" data-action="share">';
+        html += '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>';
+        html += ' 分享';
+        html += '</button>';
+        html += '</div>';
+
+        html += '<div class="comment-section">';
+        html += '<h3>评论 (<span id="commentCountText">' + ((post.comments || 0) + comments.length) + '</span>)</h3>';
+
+        html += '<div id="commentsList">';
+        comments.forEach(function(c, i) {
+          html += '<div class="comment-card">';
+          html += '<div class="comment-card-header">';
+          html += '<div class="comment-avatar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>';
+          html += '<div><h6>' + esc(c.author || '匿名用户') + '</h6><span>' + esc(c.time || '刚刚') + '</span></div>';
+          html += '</div>';
+          html += '<div class="comment-body">' + esc(c.content || '') + '</div>';
+          html += '</div>';
+        });
+        html += '</div>';
+
+        html += '<div class="comment-form">';
+        html += '<h5>发表评论</h5>';
+        html += '<textarea id="commentText" placeholder="写下你的想法..."></textarea>';
+        html += '<div style="display:flex;gap:8px;align-items:center;">';
+        html += '<input type="text" id="commentName" placeholder="昵称（可选）" style="flex:1;padding:8px 12px;border:1px solid var(--line-soft);border-radius:var(--radius-md);font-size:0.85rem;background:var(--bg-card);color:var(--text-strong);">';
+        html += '<button class="btn btn-accent" id="submitComment">提交评论</button>';
+        html += '</div>';
+        html += '</div>';
+
+        html += '</div>';
+
+        var related = posts.filter(function(p) { return p.id !== postId && p.category === post.category; }).slice(0, 4);
+        if (related.length > 0) {
+          html += '<div class="section" style="margin-top:40px;">';
+          html += '<h2 class="section-title">相关帖子</h2>';
+          html += '<div class="related-posts-grid">';
+          related.forEach(function(p) {
+            html += '<a href="/community/post-detail.html?id=' + p.id + '" class="community-post-card">';
+            html += '<h5>' + esc(p.title) + '</h5>';
+            html += '<p class="community-post-excerpt">' + esc(p.excerpt || '') + '</p>';
+            html += '<div class="community-post-stats"><span>' + (p.likes || 0) + ' 赞</span><span>' + (p.comments || 0) + ' 评论</span></div>';
+            html += '</a>';
+          });
+          html += '</div>';
+          html += '</div>';
+        }
+
+        document.getElementById('postDetailContent').innerHTML = html;
+      }
+
+      renderAll();
+
+      document.addEventListener('click', function(e) {
+        var likeBtn = e.target.closest('#likeBtn');
+        if (likeBtn) {
+          liked = !liked;
+          try {
+            var likedPosts = JSON.parse(localStorage.getItem('likedPosts') || '[]');
+            if (liked) {
+              if (likedPosts.indexOf(postId) === -1) likedPosts.push(postId);
+            } else {
+              likedPosts = likedPosts.filter(function(id) { return id !== postId; });
+            }
+            localStorage.setItem('likedPosts', JSON.stringify(likedPosts));
+          } catch(e2) {}
+          var currentLikes = (post.likes || 0) + (liked ? 1 : 0);
+          document.getElementById('postLikesCount').textContent = currentLikes;
+          document.getElementById('likeBtnText').textContent = liked ? '已赞' : '点赞';
+          likeBtn.classList.toggle('liked', liked);
+          var svg = likeBtn.querySelector('svg');
+          if (svg) svg.setAttribute('fill', liked ? 'currentColor' : 'none');
+          BI.showToast(liked ? '已点赞' : '已取消点赞', 'success');
+        }
+
+        var shareBtn = e.target.closest('[data-action="share"]');
+        if (shareBtn) {
+          BI.showToast('链接已复制到剪贴板', 'success');
+        }
+
+        var submitBtn = e.target.closest('#submitComment');
+        if (submitBtn) {
+          var commentText = document.getElementById('commentText');
+          var commentName = document.getElementById('commentName');
+          var text = (commentText.value || '').trim();
+          if (!text) {
+            BI.showToast('请输入评论内容', 'warning');
+            return;
+          }
+          var authorName = (commentName.value || '').trim() || '匿名用户';
+          var now = new Date();
+          var timeStr = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+          var newComment = { author: authorName, content: text, time: timeStr };
+
+          try {
+            var allComments = JSON.parse(localStorage.getItem('comments_data') || '{}');
+            if (!allComments[postId]) allComments[postId] = [];
+            allComments[postId].push(newComment);
+            localStorage.setItem('comments_data', JSON.stringify(allComments));
+          } catch(e2) {}
+
+          commentText.value = '';
+          commentName.value = '';
+          comments.push(newComment);
+          var totalComments = (post.comments || 0) + comments.length;
+          document.getElementById('commentCountText').textContent = totalComments;
+          document.getElementById('postCommentsCount').textContent = totalComments;
+          BI.showToast('评论发表成功！', 'success');
+          renderAll();
+        }
+      });
+
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+      BI.initAll();
+    });
+  </script>
+</body>
+</html>

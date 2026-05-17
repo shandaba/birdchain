@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>项目详情 - BirdChain鸟链</title>
+  <meta name="description" content="查看鸟类保护项目详情，了解项目目标、资金用途和参与方式。">
+  <meta property="og:title" content="项目详情 - BirdChain鸟链">
+  <meta property="og:description" content="鸟类保护项目详情，了解并参与保护行动。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .project-cover {
+      aspect-ratio: 21/9;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin: 28px 0 32px;
+    }
+    .project-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .project-detail-layout {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 32px;
+      align-items: start;
+    }
+    .project-detail-main h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text-strong);
+    }
+    .project-meta {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .project-meta span {
+      padding: 4px 14px;
+      border-radius: 16px;
+      font-size: 0.8rem;
+      background: var(--bg-soft);
+      color: var(--text-secondary);
+    }
+    .project-species-badges {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .project-species-badge {
+      padding: 3px 10px;
+      border-radius: 14px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      background: var(--brand-accent-soft);
+      color: var(--brand-accent-dark);
+    }
+    .project-description {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: var(--text-secondary);
+      margin-bottom: 28px;
+    }
+    .project-description p {
+      margin-bottom: 14px;
+    }
+    .project-fund-breakdown {
+      margin-bottom: 28px;
+    }
+    .project-fund-breakdown h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .project-fund-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line-soft);
+      font-size: 0.88rem;
+    }
+    .project-fund-item span:last-child {
+      font-weight: 600;
+      color: var(--text-strong);
+    }
+    .project-sidebar-card {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      position: sticky;
+      top: 20px;
+    }
+    .project-sidebar-card h4 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .project-sidebar-progress {
+      margin-bottom: 16px;
+    }
+    .project-sidebar-progress-bar {
+      height: 8px;
+      border-radius: 4px;
+      background: var(--line-soft);
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+    .project-sidebar-progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: var(--brand-accent);
+    }
+    .project-sidebar-progress-text {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+    .project-sidebar-amount {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .project-sidebar-amount strong {
+      font-size: 1.6rem;
+      color: var(--brand-accent);
+    }
+    .project-sidebar-card .btn {
+      width: 100%;
+      margin-bottom: 8px;
+    }
+    .project-related-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 991px) {
+      .project-detail-layout { grid-template-columns: 1fr; }
+      .project-sidebar-card { position: static; }
+      .project-related-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+      <div id="projectContent"></div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BI = window.BirdChainInteractions;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('protection'));
+
+      var params = new URLSearchParams(window.location.search);
+      var projectId = params.get('id');
+
+      if (!projectId) {
+        document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+          { label: '保护行动', href: '/protection/index.html' },
+          { label: '项目详情' }
+        ]);
+        document.getElementById('projectContent').innerHTML = '<div class="section" style="text-align:center"><h2>未找到项目</h2><p style="color:var(--text-secondary)">请通过保护项目列表选择一个项目查看</p><a href="/protection/index.html" class="btn btn-accent mt-2">返回保护行动</a></div>';
+        app.insertAdjacentHTML('beforeend', BC.renderFooter());
+        BI.initAll();
+        return;
+      }
+
+      var projects = await loadData('protectionProjects');
+      var project = findById(projects, projectId);
+
+      if (!project) {
+        document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+          { label: '保护行动', href: '/protection/index.html' },
+          { label: '项目详情' }
+        ]);
+        document.getElementById('projectContent').innerHTML = '<div class="section" style="text-align:center"><h2>项目不存在</h2><p style="color:var(--text-secondary)">未找到该保护项目</p><a href="/protection/index.html" class="btn btn-accent mt-2">返回保护行动</a></div>';
+        app.insertAdjacentHTML('beforeend', BC.renderFooter());
+        BI.initAll();
+        return;
+      }
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '保护行动', href: '/protection/index.html' },
+        { label: project.title }
+      ]);
+
+      var raised = project.raised || 0;
+      var goal = project.goal || 1;
+      var percent = Math.min(100, Math.round((raised / goal) * 100));
+
+      var worksData = [];
+      if (project.relatedWorks && project.relatedWorks.length > 0) {
+        try {
+          var allWorks = await loadData('works');
+          project.relatedWorks.forEach(function(wId) {
+            var w = findById(allWorks, wId);
+            if (w) worksData.push(w);
+          });
+        } catch(e) {}
+      }
+
+      var fundItems = project.fundBreakdown || [
+        { name: '栖息地保护与恢复', amount: Math.round(goal * 0.45) },
+        { name: '巡护与监测', amount: Math.round(goal * 0.25) },
+        { name: '社区共管与教育', amount: Math.round(goal * 0.15) },
+        { name: '科学研究', amount: Math.round(goal * 0.1) },
+        { name: '项目管理', amount: Math.round(goal * 0.05) }
+      ];
+
+      var html = '';
+
+      html += '<div class="project-cover">';
+      html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: linear-gradient(135deg, #6B4226, #8B6914); width:100%; height:100%; object-fit:cover;" alt="' + esc(project.title) + '">';
+      html += '</div>';
+
+      html += '<div class="project-detail-layout">';
+      html += '<div class="project-detail-main">';
+
+      html += '<h1>' + esc(project.title) + '</h1>';
+      html += '<div class="project-meta">';
+      html += '<span>' + esc(project.location || '中国') + '</span>';
+      html += '<span>目标金额 ¥' + goal.toLocaleString() + '</span>';
+      html += '</div>';
+
+      if (project.species && project.species.length > 0) {
+        html += '<div class="project-species-badges">';
+        project.species.forEach(function(s) { html += '<span class="project-species-badge">' + esc(s) + '</span>'; });
+        html += '</div>';
+      }
+
+      html += '<div class="project-description">';
+      html += '<p>' + esc(project.title) + ' 是BirdChain保护基金重点支持的项目。该项目位于' + esc(project.location) + '，旨在保护当地珍稀鸟类及其栖息地，推动社区参与保护行动。</p>';
+      html += '<p>项目目标：通过栖息地修复、反盗猎巡护、社区共管和科学研究等手段，有效保护目标鸟种种群，提升栖息地质量，促进人与自然和谐共生。</p>';
+      html += '<p>项目将采取科学的管理方法，结合现代监测技术（无人机巡查、红外相机监测等），确保保护措施的有效性和可持续性。同时，项目将积极推动当地社区参与，通过生态补偿、生态旅游等方式，让保护成为社区的共识和行动。</p>';
+      html += '</div>';
+
+      html += '<div class="project-fund-breakdown">';
+      html += '<h3>资金用途</h3>';
+      fundItems.forEach(function(item) {
+        html += '<div class="project-fund-item"><span>' + esc(item.name) + '</span><span>¥' + (item.amount || 0).toLocaleString() + '</span></div>';
+      });
+      html += '</div>';
+
+      if (worksData.length > 0) {
+        html += '<div class="section">';
+        html += '<h2 class="section-title">相关作品</h2>';
+        html += '<p class="section-subtitle">在该保护项目中拍摄的鸟类影像</p>';
+        html += '<div class="project-related-grid">';
+        worksData.forEach(function(w) {
+          var mapped = {
+            id: w.id,
+            title: w.title,
+            image: w.image,
+            dataImg: w.dataImg || null,
+            aspectRatio: w.orientation === '竖图' ? '3/4' : (w.orientation === '方图' ? '1/1' : '4/3'),
+            author: w.creator || '未知创作者',
+            authorAvatar: null,
+            authorDataImg: null,
+            likes: w.likes || 0,
+            views: w.views || 0,
+            price: w.basePrice || 0
+          };
+          html += BC.renderWorkCard(mapped);
+        });
+        html += '</div>';
+        html += '</div>';
+      }
+
+      html += '</div>';
+
+      html += '<div class="project-sidebar-card">';
+      html += '<h4>项目进度</h4>';
+      html += '<div class="project-sidebar-amount"><strong>¥' + raised.toLocaleString() + '</strong><span style="font-size:0.8rem;color:var(--text-secondary);"> / ¥' + goal.toLocaleString() + '</span></div>';
+      html += '<div class="project-sidebar-progress">';
+      html += '<div class="project-sidebar-progress-bar"><div class="project-sidebar-progress-fill" style="width:' + percent + '%"></div></div>';
+      html += '<div class="project-sidebar-progress-text"><span>' + percent + '% 已完成</span><span>目标 ¥' + goal.toLocaleString() + '</span></div>';
+      html += '</div>';
+      html += '<a href="/protection/donation.html?projectId=' + project.id + '" class="btn btn-accent">参与捐助</a>';
+      html += '<button class="btn btn-outline" style="width:100%;" onclick="BirdChainInteractions.showToast('已分享项目', 'success')">分享项目</button>';
+      html += '</div>';
+
+      html += '</div>';
+
+      document.getElementById('projectContent').innerHTML = html;
+
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+      BI.initAll();
+    });
+  </script>
+</body>
+</html>

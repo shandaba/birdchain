@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>授权结算 - BirdChain鸟链</title>
+  <meta name="description" content="BirdChain鸟类影像版权授权结算，确认授权信息并完成支付。">
+  <meta property="og:title" content="授权结算 - BirdChain鸟链">
+  <meta property="og:description" content="确认授权信息并完成支付，获取区块链版权授权证书。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .bc-checkout-layout {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 32px;
+    }
+    .bc-checkout-list {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 20px;
+    }
+    .bc-checkout-list h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .bc-checkout-item {
+      display: flex;
+      gap: 14px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .bc-checkout-item:last-child {
+      border-bottom: none;
+    }
+    .bc-checkout-item-img {
+      width: 100px;
+      height: 70px;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .bc-checkout-item-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .bc-checkout-item-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .bc-checkout-item-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+      color: var(--text-strong);
+    }
+    .bc-checkout-item-meta {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .bc-checkout-item-price {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text-strong);
+      text-align: right;
+      white-space: nowrap;
+    }
+    .bc-checkout-item-remove {
+      color: var(--danger);
+      font-size: 0.75rem;
+      cursor: pointer;
+      margin-top: 4px;
+    }
+    .bc-checkout-item-remove:hover {
+      text-decoration: underline;
+    }
+    .bc-summary-card {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      position: sticky;
+      top: calc(var(--header-height) + 20px);
+    }
+    .bc-summary-card h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .bc-summary-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+    }
+    .bc-summary-row.total {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--line-soft);
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--text-strong);
+    }
+    .bc-summary-divider {
+      border-top: 1px dashed var(--line-soft);
+      margin: 10px 0;
+      padding-top: 6px;
+    }
+    .bc-summary-divider .bc-summary-row {
+      font-size: 0.8rem;
+    }
+    .bc-checkout-pay-btn {
+      width: 100%;
+      padding: 14px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      border-radius: var(--radius-md);
+      background: var(--brand-accent);
+      color: #fff;
+      margin-top: 16px;
+      cursor: pointer;
+      transition: background var(--transition-fast);
+    }
+    .bc-checkout-pay-btn:hover {
+      background: var(--brand-accent-dark);
+    }
+    .bc-checkout-pay-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .bc-empty-checkout {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-secondary);
+    }
+    .bc-empty-checkout svg {
+      margin-bottom: 16px;
+      opacity: 0.4;
+    }
+    .bc-empty-checkout h4 {
+      margin-bottom: 8px;
+    }
+    .bc-license-tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      background: var(--brand-accent-soft);
+      color: var(--brand-accent-dark);
+      margin-right: 4px;
+    }
+    @media (max-width: 1024px) {
+      .bc-checkout-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+
+      <h2 class="section-title" style="margin-top:20px">授权结算</h2>
+
+      <div class="bc-checkout-layout">
+        <div>
+          <div class="bc-checkout-list">
+            <h4>授权清单 (<span id="itemCount">0</span>)</h4>
+            <div id="checkoutItems"></div>
+            <div id="emptyCheckout" class="bc-empty-checkout" style="display:none">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+              <h4>授权清单为空</h4>
+              <p>前往 <a href="/market/index.html" style="color:var(--brand-accent)">版权市场</a> 选择作品获取授权</p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="bc-summary-card" id="summaryCard">
+            <h4>费用明细</h4>
+            <div id="summaryContent">
+              <p class="text-sm text-secondary" style="text-align:center;padding:20px 0;">请添加授权作品</p>
+            </div>
+            <button class="bc-checkout-pay-btn" id="payBtn" disabled>模拟支付</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BI = window.BirdChainInteractions;
+      var BS = window.BirdChainStorage;
+      var BP = window.BirdChainPricing;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('market'));
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '版权市场', href: '/market/index.html' },
+        { label: '授权结算' }
+      ]);
+
+      function loadCart() {
+        var cart = BS.getItem(BS.KEYS.cartItems, []);
+        var licenseItems = cart.filter(function(item) { return item.type === 'license'; });
+
+        document.getElementById('itemCount').textContent = licenseItems.length;
+
+        var itemsContainer = document.getElementById('checkoutItems');
+        var emptyEl = document.getElementById('emptyCheckout');
+
+        if (licenseItems.length === 0) {
+          itemsContainer.innerHTML = '';
+          emptyEl.style.display = '';
+          document.getElementById('payBtn').disabled = true;
+          document.getElementById('summaryContent').innerHTML = '<p class="text-sm text-secondary" style="text-align:center;padding:20px 0;">请添加授权作品</p>';
+          return;
+        }
+
+        emptyEl.style.display = 'none';
+
+        var html = '';
+        var totalPrice = 0;
+
+        licenseItems.forEach(function(item, idx) {
+          totalPrice += item.price || 0;
+
+          html += '<div class="bc-checkout-item" data-cart-index="' + idx + '">';
+          html += '<div class="bc-checkout-item-img">';
+          html += '<img src="' + TRANSPARENT_PIXEL + '" alt="' + esc(item.name) + '" style="' + bgGradient(item.dataImg) + ' width:100%; height:100%; object-fit:cover;">';
+          html += '</div>';
+          html += '<div class="bc-checkout-item-info">';
+          html += '<div class="bc-checkout-item-title">' + esc(item.name) + '</div>';
+          html += '<div class="bc-checkout-item-meta">';
+          html += '<span class="bc-license-tag">' + esc(item.licenseUsage || '个人') + '</span>';
+          html += '<span>' + esc(item.licenseRegion || '单地区') + '</span>';
+          html += '<span>' + esc(item.licenseDuration || '单次') + '</span>';
+          if (item.licenseAllowAI) html += '<span class="bc-license-tag">AI二创</span>';
+          if (item.licenseAllowMerch) html += '<span class="bc-license-tag">商品化</span>';
+          html += '</div>';
+          html += '<div class="bc-checkout-item-remove" onclick="removeItem(' + idx + ')">移除</div>';
+          html += '</div>';
+          html += '<div class="bc-checkout-item-price">' + formatPrice(item.price) + '</div>';
+          html += '</div>';
+        });
+
+        itemsContainer.innerHTML = html;
+
+        var summaryHtml = '';
+        summaryHtml += '<div class="bc-summary-row"><span>授权作品数</span><span>' + licenseItems.length + ' 件</span></div>';
+        summaryHtml += '<div class="bc-summary-row"><span>小计</span><span>' + formatPrice(totalPrice) + '</span></div>';
+
+        var authorShare = Math.round(totalPrice * 0.7 * 100) / 100;
+        var platformFee = Math.round(totalPrice * 0.2 * 100) / 100;
+        var protectionFund = Math.round(totalPrice * 0.1 * 100) / 100;
+
+        summaryHtml += '<div class="bc-summary-divider">';
+        summaryHtml += '<div class="bc-summary-row"><span>作者分成 (70%)</span><span>' + formatPrice(authorShare) + '</span></div>';
+        summaryHtml += '<div class="bc-summary-row"><span>平台服务费 (20%)</span><span>' + formatPrice(platformFee) + '</span></div>';
+        summaryHtml += '<div class="bc-summary-row"><span>保护基金 (10%)</span><span>' + formatPrice(protectionFund) + '</span></div>';
+        summaryHtml += '</div>';
+        summaryHtml += '<div class="bc-summary-row total"><span>总计</span><span>' + formatPrice(totalPrice) + '</span></div>';
+
+        document.getElementById('summaryContent').innerHTML = summaryHtml;
+        document.getElementById('payBtn').disabled = false;
+
+        window._checkoutTotal = totalPrice;
+        window._licenseItems = licenseItems;
+      }
+
+      window.removeItem = function(idx) {
+        var cart = BS.getItem(BS.KEYS.cartItems, []);
+        var licenseItems = cart.filter(function(item) { return item.type === 'license'; });
+        if (idx >= 0 && idx < licenseItems.length) {
+          var itemToRemove = licenseItems[idx];
+          var cartIdx = cart.indexOf(itemToRemove);
+          if (cartIdx !== -1) {
+            cart.splice(cartIdx, 1);
+            BS.setItem(BS.KEYS.cartItems, cart);
+          }
+        }
+        BI.updateCartBadge();
+        loadCart();
+        BI.showToast('已移除授权作品', 'info');
+      };
+
+      document.getElementById('payBtn').addEventListener('click', function() {
+        var items = window._licenseItems || [];
+        if (items.length === 0) {
+          BI.showToast('授权清单为空', 'warning');
+          return;
+        }
+
+        var certId = BP.generateCertificateId();
+        var now = new Date().toISOString();
+        var fakeHash = '';
+        var chars = '0123456789abcdef';
+        for (var i = 0; i < 64; i++) fakeHash += chars.charAt(Math.floor(Math.random() * chars.length));
+
+        var order = {
+          id: 'order-' + Date.now(),
+          certificateId: certId,
+          items: items.map(function(item) {
+            return {
+              id: item.id,
+              name: item.name,
+              price: item.price,
+              licenseUsage: item.licenseUsage,
+              licenseRegion: item.licenseRegion,
+              licenseDuration: item.licenseDuration,
+              licenseAllowAI: item.licenseAllowAI,
+              licenseAllowMerch: item.licenseAllowMerch,
+              certificateId: item.certificateId
+            };
+          }),
+          total: window._checkoutTotal,
+          hash: fakeHash,
+          createdAt: now,
+          status: 'completed'
+        };
+
+        var orders = BS.getItem(BS.KEYS.licenseOrders, []);
+        orders.push(order);
+        BS.setItem(BS.KEYS.licenseOrders, orders);
+
+        var cart = BS.getItem(BS.KEYS.cartItems, []);
+        cart = cart.filter(function(item) { return item.type !== 'license'; });
+        BS.setItem(BS.KEYS.cartItems, cart);
+        BI.updateCartBadge();
+
+        BI.showToast('支付成功！授权证书已生成', 'success');
+        setTimeout(function() {
+          window.location.href = '/market/certificate-detail.html?id=' + order.id;
+        }, 1000);
+      });
+
+      BI.initLikeButtons();
+      BI.initFavoriteButtons();
+      BI.initFollowButtons();
+      BI.initCartButtons();
+      BI.initNewsletterForm();
+      BI.initThemeToggle();
+      BI.initMobileMenu();
+      BI.initSearchBar();
+      BI.updateCartBadge();
+
+      loadCart();
+    });
+  </script>
+</body>
+</html>

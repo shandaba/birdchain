@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>器材详情 - BirdChain鸟链</title>
+  <meta name="description" content="查看鸟类摄影与观鸟装备的详细参数、评测和使用建议。">
+  <meta property="og:title" content="器材详情 - BirdChain鸟链">
+  <meta property="og:description" content="专业摄影器材详细参数与评测。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .product-detail-header {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 40px;
+      margin: 28px 0 40px;
+      align-items: start;
+    }
+    .product-detail-img {
+      aspect-ratio: 1/1;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: var(--bg-soft);
+    }
+    .product-detail-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .product-detail-info h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text-strong);
+    }
+    .product-detail-meta {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .product-detail-meta span {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      padding: 3px 12px;
+      border-radius: 16px;
+      background: var(--bg-soft);
+    }
+    .product-detail-rating {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .product-detail-rating .stars {
+      color: var(--brand-accent);
+      font-size: 1.2rem;
+    }
+    .product-detail-price {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--danger);
+      margin-bottom: 20px;
+    }
+    .product-specs-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 24px;
+    }
+    .product-specs-table tr {
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .product-specs-table td {
+      padding: 10px 12px;
+      font-size: 0.88rem;
+    }
+    .product-specs-table td:first-child {
+      font-weight: 500;
+      color: var(--text-secondary);
+      width: 120px;
+    }
+    .product-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .product-tag {
+      padding: 4px 12px;
+      border-radius: 16px;
+      font-size: 0.78rem;
+      background: var(--brand-accent-soft);
+      color: var(--brand-accent-dark);
+    }
+    .product-detail-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+    .product-related-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .product-review-card {
+      background: var(--bg-soft);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    .product-review-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .product-review-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--bg-card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--brand-accent);
+    }
+    .product-review-author {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .product-review-time {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+    }
+    .product-review-body {
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+    .product-purchase-banner {
+      background: var(--bg-soft);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin-bottom: 28px;
+      text-align: center;
+    }
+    .product-purchase-banner p {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+    @media (max-width: 767px) {
+      .product-detail-header { grid-template-columns: 1fr; gap: 24px; }
+      .product-related-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+      <div id="productDetailContent"></div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BI = window.BirdChainInteractions;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('gear'));
+
+      var params = new URLSearchParams(window.location.search);
+      var gearId = params.get('id');
+
+      if (!gearId) {
+        document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+          { label: '摄影器材', href: '/gear/index.html' },
+          { label: '器材详情' }
+        ]);
+        document.getElementById('productDetailContent').innerHTML = '<div class="section" style="text-align:center"><h2>未找到器材</h2><p style="color:var(--text-secondary)">请通过器材列表选择一个器材查看</p><a href="/gear/index.html" class="btn btn-accent mt-2">返回器材列表</a></div>';
+        app.insertAdjacentHTML('beforeend', BC.renderFooter());
+        BI.initAll();
+        return;
+      }
+
+      var gearData = await loadData('gear');
+      var gear = findById(gearData, gearId);
+
+      if (!gear) {
+        document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+          { label: '摄影器材', href: '/gear/index.html' },
+          { label: '器材详情' }
+        ]);
+        document.getElementById('productDetailContent').innerHTML = '<div class="section" style="text-align:center"><h2>器材不存在</h2><p style="color:var(--text-secondary)">未找到ID为 ' + esc(gearId) + ' 的器材</p><a href="/gear/index.html" class="btn btn-accent mt-2">返回器材列表</a></div>';
+        app.insertAdjacentHTML('beforeend', BC.renderFooter());
+        BI.initAll();
+        return;
+      }
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '摄影器材', href: '/gear/index.html' },
+        { label: gear.name }
+      ]);
+
+      var rating = parseFloat(gear.rating) || 0;
+      var fullStars = Math.floor(rating);
+      var starsHtml = '';
+      for (var i = 0; i < 5; i++) {
+        if (i < fullStars) starsHtml += '<span style="color:var(--brand-accent);">★</span>';
+        else starsHtml += '<span style="color:var(--line-soft);">★</span>';
+      }
+
+      var worksData = [];
+      if (gear.relatedWorks && gear.relatedWorks.length > 0) {
+        try {
+          var allWorks = await loadData('works');
+          gear.relatedWorks.forEach(function(wId) {
+            var w = findById(allWorks, wId);
+            if (w) worksData.push(w);
+          });
+        } catch(e) {}
+      }
+
+      var html = '';
+
+      html += '<div class="product-detail-header">';
+      html += '<div class="product-detail-img">';
+      html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: linear-gradient(135deg, #1B4965, #2980B9); width:100%; height:100%; object-fit:cover;" alt="' + esc(gear.name) + '">';
+      html += '</div>';
+
+      html += '<div class="product-detail-info">';
+      html += '<h1>' + esc(gear.name) + '</h1>';
+      html += '<div class="product-detail-meta">';
+      html += '<span>' + esc(gear.brand) + '</span>';
+      html += '<span>' + esc(gear.category) + '</span>';
+      html += '<span>' + esc(gear.type) + '</span>';
+      html += '</div>';
+      html += '<div class="product-detail-rating">';
+      html += '<span class="stars">' + starsHtml + '</span>';
+      html += '<span style="font-size:0.9rem;color:var(--text-secondary);">' + rating + ' (' + (gear.reviewCount || 0) + '条评测)</span>';
+      html += '</div>';
+      html += '<div class="product-detail-price">¥' + (gear.price || 0).toLocaleString() + '</div>';
+
+      if (gear.suitableFor && gear.suitableFor.length > 0) {
+        html += '<div class="product-tags">';
+        gear.suitableFor.forEach(function(s) {
+          html += '<span class="product-tag">' + esc(s) + '</span>';
+        });
+        html += '</div>';
+      }
+
+      html += '<div class="product-detail-actions">';
+      html += '<button class="btn btn-accent" onclick="BirdChainInteractions.showToast(\'即将跳转至购买页面\', \'info\')">前往购买</button>';
+      html += '<a href="/gear/review-detail.html?id=' + gear.id + '" class="btn btn-outline">查看评测</a>';
+      html += '<button class="btn btn-ghost" data-action="favorite" data-work-id="' + esc(gear.id) + '">收藏</button>';
+      html += '</div>';
+
+      html += '<div class="product-purchase-banner">';
+      html += '<p>此器材可在以下渠道购买</p>';
+      html += '<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">';
+      html += '<button class="btn btn-outline btn-sm" onclick="BirdChainInteractions.showToast(\'即将跳转至官方商城\', \'info\')">官方商城</button>';
+      html += '<button class="btn btn-outline btn-sm" onclick="BirdChainInteractions.showToast(\'即将跳转至京东旗舰店\', \'info\')">京东旗舰店</button>';
+      html += '<button class="btn btn-outline btn-sm" onclick="BirdChainInteractions.showToast(\'即将跳转至天猫旗舰店\', \'info\')">天猫旗舰店</button>';
+      html += '</div>';
+      html += '</div>';
+
+      html += '</div>';
+      html += '</div>';
+
+      if (gear.specifications && Object.keys(gear.specifications).length > 0) {
+        html += '<div class="section">';
+        html += '<h2 class="section-title">参数规格</h2>';
+        html += '<table class="product-specs-table"><tbody>';
+        Object.keys(gear.specifications).forEach(function(key) {
+          html += '<tr><td>' + esc(key) + '</td><td>' + esc(String(gear.specifications[key])) + '</td></tr>';
+        });
+        html += '</tbody></table>';
+        html += '</div>';
+      }
+
+      html += '<div class="section">';
+      html += '<h2 class="section-title">摄影师评价</h2>';
+      html += '<div class="product-review-card">';
+      html += '<div class="product-review-card-header">';
+      html += '<div class="product-review-avatar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>';
+      html += '<div><div class="product-review-author">鸟类摄影师小王</div><div class="product-review-time">2025年3月 · 已验证购买</div></div>';
+      html += '</div>';
+      html += '<div class="product-review-body">' + esc(gear.name) + ' 对于鸟类摄影来说是非常优秀的选择。画质表现出色，对焦速度快，能够轻松捕捉飞行中的鸟类瞬间。推荐给所有认真的鸟类摄影师。</div>';
+      html += '</div>';
+      html += '<div class="product-review-card">';
+      html += '<div class="product-review-card-header">';
+      html += '<div class="product-review-avatar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>';
+      html += '<div><div class="product-review-author">自然观察者</div><div class="product-review-time">2025年1月 · 已验证购买</div></div>';
+      html += '</div>';
+      html += '<div class="product-review-body">使用了一个季度，无论是湿地拍摄还是山林观察都表现出色。做工精良，防护性能优秀，适合野外长时间使用。</div>';
+      html += '</div>';
+      html += '</div>';
+
+      if (worksData.length > 0) {
+        html += '<div class="section">';
+        html += '<h2 class="section-title">使用此器材拍摄的作品</h2>';
+        html += '<p class="section-subtitle">摄影师使用 ' + esc(gear.name) + ' 拍摄的鸟类影像</p>';
+        html += '<div class="product-related-grid">';
+        worksData.forEach(function(w) {
+          var mapped = {
+            id: w.id,
+            title: w.title,
+            image: w.image,
+            dataImg: w.dataImg || null,
+            aspectRatio: w.orientation === '竖图' ? '3/4' : (w.orientation === '方图' ? '1/1' : '4/3'),
+            author: w.creator || '未知创作者',
+            authorAvatar: null,
+            authorDataImg: null,
+            likes: w.likes || 0,
+            views: w.views || 0,
+            price: w.basePrice || 0
+          };
+          html += BC.renderWorkCard(mapped);
+        });
+        html += '</div>';
+        html += '</div>';
+      }
+
+      document.getElementById('productDetailContent').innerHTML = html;
+
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+      BI.initAll();
+    });
+  </script>
+</body>
+</html>

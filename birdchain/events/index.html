@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>赛事/活动 - BirdChain鸟链</title>
+  <meta name="description" content="参与鸟链平台举办的鸟类摄影比赛、AI创作大赛、地方站活动和线上征集活动。">
+  <meta property="og:title" content="赛事/活动 - BirdChain鸟链">
+  <meta property="og:description" content="参与鸟链平台举办的鸟类摄影比赛、AI创作大赛、地方站活动和线上征集活动。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .events-hero {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      height: 280px;
+      margin: 20px 0 32px;
+    }
+    .events-hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .events-hero-content {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(7, 27, 45, 0.8), rgba(7, 27, 45, 0.15));
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 32px;
+      color: #fff;
+    }
+    .events-hero-content h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .events-hero-content p {
+      font-size: 0.95rem;
+      opacity: 0.85;
+      max-width: 560px;
+    }
+    .bc-event-card {
+      cursor: pointer;
+    }
+    .bc-winner-showcase {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .bc-winner-item {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      transition: all var(--transition-normal);
+    }
+    .bc-winner-item:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .bc-winner-item-img {
+      aspect-ratio: 16/9;
+      overflow: hidden;
+    }
+    .bc-winner-item-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform var(--transition-slow);
+    }
+    .bc-winner-item:hover .bc-winner-item-img img {
+      transform: scale(1.03);
+    }
+    .bc-winner-item-body {
+      padding: 14px;
+    }
+    .bc-winner-item-body h5 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .bc-winner-item-body p {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+    @media (max-width: 767px) {
+      .events-hero { height: 180px; margin: 12px 0 20px; border-radius: var(--radius-md); }
+      .events-hero-content { padding: 20px; }
+      .events-hero-content h1 { font-size: 1.35rem; }
+      .bc-winner-showcase { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+      <div class="events-hero">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+             style="background: linear-gradient(135deg, #16395C, #0F2E4A, #1B4965); width:100%; height:100%; object-fit:cover;" alt="赛事活动">
+        <div class="events-hero-content">
+          <h1>赛事/活动</h1>
+          <p>参与鸟类摄影比赛、AI创作大赛、地方站活动和线上征集，展示你的才华</p>
+        </div>
+      </div>
+
+      <div class="bc-tabs" id="eventTypeTabs">
+        <button class="bc-tab active" data-type="all">全部</button>
+        <button class="bc-tab" data-type="摄影比赛">摄影比赛</button>
+        <button class="bc-tab" data-type="AI创作比赛">AI创作比赛</button>
+        <button class="bc-tab" data-type="地方站活动">地方站活动</button>
+        <button class="bc-tab" data-type="线上征集">线上征集</button>
+      </div>
+
+      <section class="section" id="ongoingSection" style="padding-top:0;">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">当前赛事</h2>
+            <p class="section-subtitle">正在进行的比赛和活动</p>
+          </div>
+        </div>
+        <div class="grid-3" id="ongoingGrid"></div>
+      </section>
+
+      <section class="section" id="upcomingSection">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">即将开始</h2>
+            <p class="section-subtitle">即将开幕的赛事活动</p>
+          </div>
+        </div>
+        <div class="grid-3" id="upcomingGrid"></div>
+      </section>
+
+      <section class="section" id="endedSection">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">往届赛事</h2>
+            <p class="section-subtitle">已结束的精彩赛事回顾</p>
+          </div>
+        </div>
+        <div class="grid-3" id="endedGrid"></div>
+      </section>
+
+      <section class="section" id="winnersSection">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">获奖作品</h2>
+            <p class="section-subtitle">往届赛事获奖佳作</p>
+          </div>
+          <a href="/events/winners.html" class="btn btn-outline btn-sm">查看全部 &rarr;</a>
+        </div>
+        <div class="bc-winner-showcase" id="winnersGrid"></div>
+      </section>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BD = window.BirdChainData;
+      var BI = window.BirdChainInteractions;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('events'));
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '赛事/活动' }
+      ]);
+
+      var events = await BD.loadData('events');
+      var currentType = 'all';
+
+      function getStatusClass(status) {
+        switch (status) {
+          case '进行中': return 'live';
+          case '即将开始': return 'upcoming';
+          case '已结束': return 'ended';
+          default: return 'upcoming';
+        }
+      }
+
+      function renderEventCards(filtered) {
+        var ongoing = filtered.filter(function(e) { return e.status === '进行中'; });
+        var upcoming = filtered.filter(function(e) { return e.status === '即将开始'; });
+        var ended = filtered.filter(function(e) { return e.status === '已结束'; });
+
+        document.getElementById('ongoingGrid').innerHTML = ongoing.map(renderCard).join('') || '<div class="bc-empty" style="grid-column:1/-1"><div class="bc-empty-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div><h4>暂无进行中的赛事</h4></div>';
+        document.getElementById('upcomingGrid').innerHTML = upcoming.map(renderCard).join('') || '<div class="bc-empty" style="grid-column:1/-1"><h4>暂无即将开始的赛事</h4></div>';
+        document.getElementById('endedGrid').innerHTML = ended.map(renderCard).join('') || '<div class="bc-empty" style="grid-column:1/-1"><h4>暂无往届赛事</h4></div>';
+
+        document.getElementById('ongoingSection').style.display = ongoing.length ? '' : 'none';
+        document.getElementById('upcomingSection').style.display = upcoming.length ? '' : 'none';
+        document.getElementById('endedSection').style.display = ended.length ? '' : 'none';
+      }
+
+      function renderCard(event) {
+        var statusClass = getStatusClass(event.status);
+        var statusText = event.status;
+
+        var html = '<div class="bc-event-card" onclick="window.location.href=\'/events/event-detail.html?id=' + event.id + '\'">';
+        html += '<div class="bc-event-card-img">';
+        html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"';
+        html += ' style="background: linear-gradient(135deg, #1B4332, #2D6A4F); width:100%; height:100%; object-fit:cover;"';
+        html += ' alt="' + event.title + '">';
+        html += '</div>';
+        html += '<div class="bc-event-card-body">';
+        html += '<span class="bc-event-status ' + statusClass + '">' + statusText + '</span>';
+        html += '<h5>' + event.title + '</h5>';
+        html += '<div class="bc-event-card-meta">';
+        html += '<div style="margin-bottom:4px;"><span style="margin-right:12px;">' + CALENDAR_ICON_SVG + ' ' + event.startDate + ' ~ ' + event.endDate + '</span></div>';
+        html += '<div><span style="margin-right:12px;">' + USERS_ICON_SVG + ' ' + formatNumber(event.participants || 0) + ' 参与</span>';
+        html += '<span>' + event.type + '</span></div>';
+        html += '</div>';
+        html += '</div>';
+        html += '</div>';
+        return html;
+      }
+
+      function renderWinners() {
+        var winnerData = [
+          { title: '鄱阳湖晨曦', author: '王志远', prize: '金奖', event: '2024年度野生鸟类摄影大赛', gradient: 'linear-gradient(135deg, #B8860B, #DAA520)' },
+          { title: '丹顶鹤之舞', author: '李思雨', prize: '银奖', event: '2024年度野生鸟类摄影大赛', gradient: 'linear-gradient(135deg, #6B4226, #8B6914)' },
+          { title: '候鸟归来', author: '陈明辉', prize: '铜奖', event: '2024年度野生鸟类摄影大赛', gradient: 'linear-gradient(135deg, #2D6A4F, #40916C)' }
+        ];
+
+        var html = '';
+        winnerData.forEach(function(w) {
+          html += '<div class="bc-winner-item">';
+          html += '<div class="bc-winner-item-img">';
+          html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"';
+          html += ' style="background: ' + w.gradient + '; width:100%; height:100%; object-fit:cover;" alt="' + w.title + '">';
+          html += '</div>';
+          html += '<div class="bc-winner-item-body">';
+          html += '<span class="tag tag-accent" style="margin-bottom:6px;display:inline-block;">' + w.prize + '</span>';
+          html += '<h5>' + w.title + '</h5>';
+          html += '<p>' + w.author + ' · ' + w.event + '</p>';
+          html += '</div>';
+          html += '</div>';
+        });
+        document.getElementById('winnersGrid').innerHTML = html;
+      }
+
+      function filterEvents() {
+        var filtered = currentType === 'all'
+          ? events
+          : events.filter(function(e) { return e.type === currentType; });
+        renderEventCards(filtered);
+      }
+
+      document.getElementById('eventTypeTabs').addEventListener('click', function(e) {
+        var tab = e.target.closest('.bc-tab');
+        if (!tab) return;
+        this.querySelectorAll('.bc-tab').forEach(function(t) { t.classList.remove('active'); });
+        tab.classList.add('active');
+        currentType = tab.getAttribute('data-type');
+        filterEvents();
+      });
+
+      BI.initAll();
+      renderEventCards(events);
+      renderWinners();
+    });
+  </script>
+</body>
+</html>

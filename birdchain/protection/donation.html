@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>捐助 - BirdChain鸟链</title>
+  <meta name="description" content="捐助BirdChain鸟类保护项目，为濒危鸟类和栖息地保护贡献力量。">
+  <meta property="og:title" content="捐助 - BirdChain鸟链">
+  <meta property="og:description" content="支持鸟类保护项目，每一份捐助都是力量。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .donation-layout {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 32px;
+      margin: 28px 0;
+      align-items: start;
+    }
+    .donation-main h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text-strong);
+    }
+    .donation-project-summary {
+      background: var(--bg-soft);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin-bottom: 28px;
+    }
+    .donation-project-summary h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .donation-project-summary p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .donation-amounts {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .donation-amount-card {
+      padding: 16px 12px;
+      border-radius: var(--radius-md);
+      border: 2px solid var(--line-soft);
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      background: var(--bg-card);
+    }
+    .donation-amount-card:hover {
+      border-color: var(--brand-accent);
+    }
+    .donation-amount-card.selected {
+      border-color: var(--brand-accent);
+      background: var(--brand-accent-soft);
+    }
+    .donation-amount-card strong {
+      display: block;
+      font-size: 1.15rem;
+      color: var(--text-strong);
+    }
+    .donation-amount-card span {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+    .donation-custom-input {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 16px;
+      border-radius: var(--radius-md);
+      border: 2px solid var(--line-soft);
+      background: var(--bg-card);
+      margin-bottom: 24px;
+      transition: border-color var(--transition-fast);
+    }
+    .donation-custom-input.active {
+      border-color: var(--brand-accent);
+      background: var(--brand-accent-soft);
+    }
+    .donation-custom-input span {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+    .donation-custom-input input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      font-size: 1.05rem;
+      color: var(--text-strong);
+      outline: none;
+    }
+    .donation-form-group {
+      margin-bottom: 18px;
+    }
+    .donation-form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: var(--text-strong);
+    }
+    .donation-form-group input,
+    .donation-form-group textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      background: var(--bg-card);
+      color: var(--text-strong);
+    }
+    .donation-form-group textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+    .donation-form-group .optional {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+    .donation-checkout {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      position: sticky;
+      top: 20px;
+    }
+    .donation-checkout h4 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .donation-checkout-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line-soft);
+      font-size: 0.88rem;
+    }
+    .donation-checkout-row.total {
+      border-bottom: none;
+      padding-top: 14px;
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+    .donation-checkout-row.total span:last-child {
+      color: var(--brand-accent);
+    }
+    .donation-checkout .btn {
+      width: 100%;
+      margin-top: 16px;
+    }
+    .donation-success {
+      background: rgba(45, 106, 79, 0.1);
+      border: 1px solid rgba(45, 106, 79, 0.2);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      text-align: center;
+    }
+    .donation-success-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: #2D6A4F;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+    }
+    .donation-success h2 {
+      color: #2D6A4F;
+      margin-bottom: 8px;
+    }
+    .donation-success .donation-id {
+      font-family: monospace;
+      font-size: 0.9rem;
+      background: var(--bg-card);
+      padding: 6px 14px;
+      border-radius: 8px;
+      display: inline-block;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 991px) {
+      .donation-layout { grid-template-columns: 1fr; }
+      .donation-checkout { position: static; }
+    }
+    @media (max-width: 767px) {
+      .donation-amounts { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+      <div id="donationContent"></div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BI = window.BirdChainInteractions;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('protection'));
+
+      var params = new URLSearchParams(window.location.search);
+      var projectId = params.get('projectId');
+
+      var project = null;
+      if (projectId) {
+        try {
+          var projects = await loadData('protectionProjects');
+          project = findById(projects, projectId);
+        } catch(e) {}
+      }
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '保护行动', href: '/protection/index.html' },
+        { label: '捐助' }
+      ]);
+
+      var selectedAmount = null;
+      var isCustom = false;
+
+      function generateId() {
+        return 'BC-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substring(2, 6).toUpperCase();
+      }
+
+      function renderDonationForm() {
+        var html = '';
+
+        html += '<div class="donation-layout">';
+        html += '<div class="donation-main">';
+        html += '<h1>参与捐助</h1>';
+
+        if (project) {
+          html += '<div class="donation-project-summary">';
+          html += '<h4>' + esc(project.title) + '</h4>';
+          html += '<p>位置：' + esc(project.location || '中国') + ' · 目标金额：¥' + (project.goal || 0).toLocaleString() + '</p>';
+          html += '</div>';
+        }
+
+        html += '<h4 style="margin-bottom:12px;">选择捐助金额</h4>';
+        html += '<div class="donation-amounts" id="donationAmounts">';
+        var amounts = [50, 100, 200, 500, 1000, 5000];
+        amounts.forEach(function(amt) {
+          html += '<div class="donation-amount-card' + (selectedAmount === amt && !isCustom ? ' selected' : '') + '" data-amount="' + amt + '">';
+          html += '<strong>¥' + amt.toLocaleString() + '</strong>';
+          html += '<span>' + (amt <= 100 ? '心意捐助' : (amt <= 500 ? '支持捐助' : '守护捐助')) + '</span>';
+          html += '</div>';
+        });
+        html += '</div>';
+
+        html += '<div class="donation-custom-input' + (isCustom ? ' active' : '') + '" id="customAmountWrap">';
+        html += '<span>¥</span>';
+        html += '<input type="number" id="customAmount" placeholder="自定义金额" min="1" value="' + (isCustom && selectedAmount ? selectedAmount : '') + '">';
+        html += '</div>';
+
+        html += '<div class="donation-form-group">';
+        html += '<label>姓名 <span class="optional">（选填）</span></label>';
+        html += '<input type="text" id="donorName" placeholder="你的姓名">';
+        html += '</div>';
+
+        html += '<div class="donation-form-group">';
+        html += '<label>电子邮箱 <span class="optional">（选填）</span></label>';
+        html += '<input type="email" id="donorEmail" placeholder="your@email.com">';
+        html += '</div>';
+
+        html += '<div class="donation-form-group">';
+        html += '<label>留言 <span class="optional">（选填）</span></label>';
+        html += '<textarea id="donorMessage" placeholder="留下你对鸟类保护的祝福..."></textarea>';
+        html += '</div>';
+
+        html += '</div>';
+
+        html += '<div class="donation-checkout">';
+        html += '<h4>捐助摘要</h4>';
+        html += '<div class="donation-checkout-row"><span>捐助项目</span><span>' + (project ? esc(project.title) : '鸟类保护基金') + '</span></div>';
+        html += '<div class="donation-checkout-row"><span>捐助金额</span><span id="checkoutAmount">' + (selectedAmount ? '¥' + selectedAmount.toLocaleString() : '—') + '</span></div>';
+        html += '<div class="donation-checkout-row total"><span>合计</span><span id="checkoutTotal">' + (selectedAmount ? '¥' + selectedAmount.toLocaleString() : '—') + '</span></div>';
+        html += '<button class="btn btn-accent" id="submitDonation" ' + (!selectedAmount ? 'disabled' : '') + '>确认捐助</button>';
+        html += '</div>';
+
+        html += '</div>';
+
+        document.getElementById('donationContent').innerHTML = html;
+
+        document.getElementById('donationAmounts').addEventListener('click', function(e) {
+          var card = e.target.closest('.donation-amount-card');
+          if (!card) return;
+          isCustom = false;
+          selectedAmount = parseInt(card.getAttribute('data-amount'));
+          document.getElementById('customAmount').value = '';
+          document.getElementById('customAmountWrap').classList.remove('active');
+          updateCheckout();
+          var cards = this.querySelectorAll('.donation-amount-card');
+          cards.forEach(function(c) { c.classList.remove('selected'); });
+          card.classList.add('selected');
+          document.getElementById('submitDonation').disabled = false;
+        });
+
+        var customInput = document.getElementById('customAmount');
+        customInput.addEventListener('input', function() {
+          var val = parseInt(this.value);
+          if (val > 0) {
+            isCustom = true;
+            selectedAmount = val;
+            document.getElementById('customAmountWrap').classList.add('active');
+            document.getElementById('submitDonation').disabled = false;
+          } else {
+            selectedAmount = null;
+            document.getElementById('submitDonation').disabled = true;
+          }
+          var cards = document.querySelectorAll('.donation-amount-card');
+          cards.forEach(function(c) { c.classList.remove('selected'); });
+          updateCheckout();
+        });
+
+        customInput.addEventListener('focus', function() {
+          document.getElementById('customAmountWrap').classList.add('active');
+          var cards = document.querySelectorAll('.donation-amount-card');
+          cards.forEach(function(c) { c.classList.remove('selected'); });
+        });
+
+        document.getElementById('submitDonation').addEventListener('click', function() {
+          if (!selectedAmount || selectedAmount <= 0) {
+            BI.showToast('请选择或输入捐助金额', 'warning');
+            return;
+          }
+
+          var donorName = (document.getElementById('donorName').value || '').trim() || '匿名';
+          var donorEmail = (document.getElementById('donorEmail').value || '').trim();
+          var donorMessage = (document.getElementById('donorMessage').value || '').trim();
+
+          var donationId = generateId();
+          var donation = {
+            id: donationId,
+            projectId: projectId || null,
+            projectTitle: project ? project.title : '鸟类保护基金',
+            amount: selectedAmount,
+            donorName: donorName,
+            donorEmail: donorEmail,
+            donorMessage: donorMessage,
+            time: new Date().toISOString()
+          };
+
+          try {
+            var donations = JSON.parse(localStorage.getItem('protectionDonations') || '[]');
+            donations.push(donation);
+            localStorage.setItem('protectionDonations', JSON.stringify(donations));
+          } catch(e) {}
+
+          var html = '';
+          html += '<div class="donation-success">';
+          html += '<div class="donation-success-icon">';
+          html += '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+          html += '</div>';
+          html += '<h2>捐助成功！</h2>';
+          html += '<p style="color:var(--text-secondary);margin-bottom:12px;">感谢你对鸟类保护事业的支持</p>';
+          html += '<div class="donation-id">捐助编号：' + donationId + '</div>';
+          html += '<p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:16px;">捐助金额：<strong>¥' + selectedAmount.toLocaleString() + '</strong></p>';
+          html += '<a href="/protection/index.html" class="btn btn-accent">返回保护行动</a>';
+          html += '</div>';
+          document.getElementById('donationContent').innerHTML = html;
+
+          BI.showToast('捐助成功！感谢你的支持', 'success');
+        });
+      }
+
+      function updateCheckout() {
+        var checkoutAmount = document.getElementById('checkoutAmount');
+        var checkoutTotal = document.getElementById('checkoutTotal');
+        if (checkoutAmount && checkoutTotal) {
+          checkoutAmount.textContent = selectedAmount ? '¥' + selectedAmount.toLocaleString() : '—';
+          checkoutTotal.textContent = selectedAmount ? '¥' + selectedAmount.toLocaleString() : '—';
+        }
+      }
+
+      renderDonationForm();
+
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+      BI.initAll();
+    });
+  </script>
+</body>
+</html>

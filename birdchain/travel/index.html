@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>摄影旅行 - BirdChain鸟链</title>
+  <meta name="description" content="跟随专业导师，探索全球鸟类摄影旅行线路，小团出发，保护点位脱敏。">
+  <meta property="og:title" content="摄影旅行 - BirdChain鸟链">
+  <meta property="og:description" content="跟随专业导师，探索全球鸟类摄影旅行线路，小团出发，保护点位脱敏。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .travel-hero {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      height: 320px;
+      margin: 20px 0 32px;
+    }
+    .travel-hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .travel-hero-content {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(7, 27, 45, 0.85), rgba(7, 27, 45, 0.15));
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 32px;
+      color: #fff;
+    }
+    .travel-hero-content h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .travel-hero-content p {
+      font-size: 0.95rem;
+      opacity: 0.85;
+      max-width: 560px;
+    }
+    .bc-travel-card {
+      cursor: pointer;
+    }
+    .travel-features {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+    .travel-feature {
+      text-align: center;
+      padding: 24px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+    }
+    .travel-feature-icon {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+    .travel-feature h5 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .travel-feature p {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+    .travel-filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 16px 0;
+      margin-bottom: 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 16px;
+    }
+    @media (max-width: 767px) {
+      .travel-hero { height: 200px; margin: 12px 0 20px; border-radius: var(--radius-md); }
+      .travel-hero-content { padding: 20px; }
+      .travel-hero-content h1 { font-size: 1.35rem; }
+      .travel-features { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+      <div class="travel-hero">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+             style="background: linear-gradient(135deg, #1B4332, #40916C, #2D6A4F); width:100%; height:100%; object-fit:cover;" alt="鸟类摄影旅行">
+        <div class="travel-hero-content">
+          <h1>鸟类摄影旅行</h1>
+          <p>跟随专业导师，探索全球最佳鸟类摄影目的地</p>
+        </div>
+      </div>
+
+      <div class="travel-filter-bar" id="filterBar">
+        <select class="bc-filter-select" id="countryFilter">
+          <option value="">全部国家</option>
+        </select>
+        <select class="bc-filter-select" id="seasonFilter">
+          <option value="">全部季节</option>
+        </select>
+        <select class="bc-filter-select" id="difficultyFilter">
+          <option value="">全部难度</option>
+          <option value="入门">入门</option>
+          <option value="中级">中级</option>
+          <option value="高级">高级</option>
+          <option value="专业">专业</option>
+        </select>
+        <select class="bc-filter-select" id="speciesFilter">
+          <option value="">全部鸟种</option>
+        </select>
+        <select class="bc-filter-select" id="priceFilter">
+          <option value="">全部价格</option>
+          <option value="0-5000">¥5,000以下</option>
+          <option value="5000-10000">¥5,000 - ¥10,000</option>
+          <option value="10000-20000">¥10,000 - ¥20,000</option>
+          <option value="20000+">¥20,000以上</option>
+        </select>
+      </div>
+
+      <div class="grid-3" id="routesGrid"></div>
+      <div id="routesEmpty" style="display:none;" class="bc-empty"><h4>暂无符合条件的线路</h4></div>
+
+      <section class="section" id="featuresSection">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">为什么选择鸟链摄影旅行？</h2>
+            <p class="section-subtitle">专业、安全、独特的观鸟摄影体验</p>
+          </div>
+        </div>
+        <div class="travel-features">
+          <div class="travel-feature">
+            <div class="travel-feature-icon">&#128101;</div>
+            <h5>小团出发</h5>
+            <p>每团6-16人，确保每位团员获得充分指导</p>
+          </div>
+          <div class="travel-feature">
+            <div class="travel-feature-icon">&#127891;</div>
+            <h5>专业导师</h5>
+            <p>资深生态摄影师与鸟类学家全程带队</p>
+          </div>
+          <div class="travel-feature">
+            <div class="travel-feature-icon">&#128274;</div>
+            <h5>保护点位脱敏</h5>
+            <p>隐藏珍稀物种精确坐标，保护生态安全</p>
+          </div>
+          <div class="travel-feature">
+            <div class="travel-feature-icon">&#128279;</div>
+            <h5>作品上链确权</h5>
+            <p>旅行中拍摄的作品可一键上链，保护版权</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BD = window.BirdChainData;
+      var BI = window.BirdChainInteractions;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('travel'));
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '摄影旅行' }
+      ]);
+
+      var routes = await BD.loadData('travelRoutes');
+
+      var countries = [];
+      var allSpecies = [];
+      routes.forEach(function(r) {
+        if (countries.indexOf(r.country) === -1) countries.push(r.country);
+        (r.targetSpecies || []).forEach(function(s) {
+          if (allSpecies.indexOf(s) === -1) allSpecies.push(s);
+        });
+      });
+
+      var countrySelect = document.getElementById('countryFilter');
+      countries.forEach(function(c) {
+        var opt = document.createElement('option');
+        opt.value = c;
+        opt.textContent = c;
+        countrySelect.appendChild(opt);
+      });
+
+      var speciesSelect = document.getElementById('speciesFilter');
+      allSpecies.forEach(function(s) {
+        var opt = document.createElement('option');
+        opt.value = s;
+        opt.textContent = s;
+        speciesSelect.appendChild(opt);
+      });
+
+      function getFilteredRoutes() {
+        var countryVal = document.getElementById('countryFilter').value;
+        var seasonVal = document.getElementById('seasonFilter').value;
+        var difficultyVal = document.getElementById('difficultyFilter').value;
+        var speciesVal = document.getElementById('speciesFilter').value;
+        var priceVal = document.getElementById('priceFilter').value;
+
+        return routes.filter(function(r) {
+          if (countryVal && r.country !== countryVal) return false;
+          if (difficultyVal && r.difficulty !== difficultyVal) return false;
+          if (seasonVal && r.season && !r.season.some(function(s) { return s.indexOf(seasonVal) !== -1 || s === '全年'; })) return false;
+          if (speciesVal && r.targetSpecies && r.targetSpecies.indexOf(speciesVal) === -1) return false;
+          if (priceVal) {
+            var range = priceVal.split('-');
+            if (range.length === 2) {
+              var min = parseInt(range[0]);
+              var max = parseInt(range[1]);
+              if (r.price < min || r.price > max) return false;
+            } else if (priceVal === '20000+') {
+              if (r.price < 20000) return false;
+            }
+          }
+          return true;
+        });
+      }
+
+      function renderRoutes() {
+        var filtered = getFilteredRoutes();
+        var grid = document.getElementById('routesGrid');
+        var empty = document.getElementById('routesEmpty');
+
+        if (filtered.length === 0) {
+          grid.innerHTML = '';
+          empty.style.display = 'block';
+          return;
+        }
+        empty.style.display = 'none';
+
+        var gradients = [
+          'linear-gradient(135deg, #1B4332, #2D6A4F)',
+          'linear-gradient(135deg, #1B4F72, #2980B9)',
+          'linear-gradient(135deg, #B8860B, #DAA520)',
+          'linear-gradient(135deg, #006D77, #83C5BE)',
+          'linear-gradient(135deg, #6B4226, #8B6914)',
+          'linear-gradient(135deg, #023E8A, #0077B6)',
+          'linear-gradient(135deg, #2D6A4F, #40916C)',
+          'linear-gradient(135deg, #457B9D, #A8DADC)'
+        ];
+
+        var html = '';
+        filtered.forEach(function(r, i) {
+          var spots = r.maxParticipants - (r.enrolled || 0);
+          html += '<div class="bc-travel-card" onclick="window.location.href=\'/travel/route-detail.html?id=' + r.id + '\'">';
+          html += '<div class="bc-travel-card-img">';
+          html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"';
+          html += ' style="background: ' + gradients[i % gradients.length] + '; width:100%; height:100%; object-fit:cover;"';
+          html += ' alt="' + r.title + '">';
+          html += '</div>';
+          html += '<div class="bc-travel-card-body">';
+          html += '<h5>' + r.title + '</h5>';
+          html += '<div class="bc-travel-card-location">' + LOCATION_ICON_SVG + ' ' + r.country + ' · ' + r.destination + '</div>';
+          html += '<div class="bc-travel-card-details">';
+          html += '<span>' + CLOCK_ICON_SVG + ' ' + r.duration + '天</span>';
+          html += '<span style="font-weight:700;color:var(--brand-accent-dark);">' + formatPrice(r.price) + '</span>';
+          html += '<span>' + USERS_ICON_SVG + ' 剩余' + spots + '位</span>';
+          html += '</div>';
+          html += '<div style="margin-top:10px;font-size:0.8rem;color:var(--text-secondary);">';
+          html += '<span>难度：' + r.difficulty + '</span>';
+          html += '<span style="margin-left:12px;">导师：' + r.guideName + '</span>';
+          html += '</div>';
+          html += '<a href="/travel/route-detail.html?id=' + r.id + '" class="btn btn-outline btn-sm" style="margin-top:10px;width:100%;text-align:center;">查看详情</a>';
+          html += '</div>';
+          html += '</div>';
+        });
+        grid.innerHTML = html;
+      }
+
+      ['countryFilter', 'seasonFilter', 'difficultyFilter', 'speciesFilter', 'priceFilter'].forEach(function(id) {
+        document.getElementById(id).addEventListener('change', renderRoutes);
+      });
+
+      BI.initAll();
+      renderRoutes();
+    });
+  </script>
+</body>
+</html>

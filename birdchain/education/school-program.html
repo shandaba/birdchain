@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>学校项目 - BirdChain鸟链</title>
+  <meta name="description" content="鸟链学校产学研合作项目，包括研究课题合作、学生作品征集和学校账号申请。">
+  <meta property="og:title" content="学校项目 - BirdChain鸟链">
+  <meta property="og:description" content="鸟链学校产学研合作项目，包括研究课题合作、学生作品征集和学校账号申请。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .school-hero {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      height: 240px;
+      margin: 20px 0 32px;
+    }
+    .school-hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .school-hero-content {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(7, 27, 45, 0.8), rgba(7, 27, 45, 0.15));
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 32px;
+      color: #fff;
+    }
+    .school-hero-content h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .school-hero-content p {
+      font-size: 0.95rem;
+      opacity: 0.85;
+      max-width: 560px;
+    }
+    .school-layout {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 32px;
+    }
+    .school-section {
+      margin-bottom: 32px;
+    }
+    .school-section h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .school-section p {
+      font-size: 0.92rem;
+      color: var(--text-main);
+      line-height: 1.8;
+    }
+    .topic-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .topic-item {
+      background: var(--bg-soft);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      border: 1px solid var(--line-soft);
+    }
+    .topic-item h5 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .topic-item p {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+    .apply-form {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      position: sticky;
+      top: calc(var(--header-height) + 20px);
+      align-self: start;
+    }
+    .apply-form h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+    .student-call {
+      background: var(--brand-accent-soft);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin-top: 20px;
+    }
+    .student-call h4 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--brand-accent-dark);
+    }
+    .student-call p {
+      font-size: 0.85rem;
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+    @media (max-width: 1024px) {
+      .school-layout { grid-template-columns: 1fr; }
+      .apply-form { position: static; }
+    }
+    @media (max-width: 767px) {
+      .school-hero { height: 160px; margin: 12px 0 20px; border-radius: var(--radius-md); }
+      .school-hero-content { padding: 20px; }
+      .school-hero-content h1 { font-size: 1.35rem; }
+      .topic-list { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+      <div class="school-hero">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+             style="background: linear-gradient(135deg, #16395C, #0F2E4A, #1B4965); width:100%; height:100%; object-fit:cover;" alt="学校项目">
+        <div class="school-hero-content">
+          <h1>学校项目</h1>
+          <p>产学研合作，推动鸟类研究与自然教育发展</p>
+        </div>
+      </div>
+
+      <div class="school-layout">
+        <div>
+          <div class="school-section">
+            <h3>产学研合作</h3>
+            <p>鸟链平台致力于搭建高校、科研机构与一线保护实践之间的桥梁。我们与多所高校的鸟类学、生态学和环境科学专业建立合作关系，为学生提供实习基地、研究数据支持和课题合作机会。</p>
+            <p style="margin-top:8px;">通过鸟链平台，研究者可以访问由全球观鸟爱好者贡献的鸟类分布数据、影像资料和观测记录，为科学研究提供丰富的一手数据。同时，平台也为研究成果的科普转化提供了便捷的传播渠道。</p>
+          </div>
+
+          <div class="school-section">
+            <h3>研究课题</h3>
+            <div class="topic-list">
+              <div class="topic-item">
+                <h5>候鸟迁徙路线追踪</h5>
+                <p>利用卫星追踪数据分析候鸟迁徙路线变化及其与气候变化的关系。</p>
+              </div>
+              <div class="topic-item">
+                <h5>城市鸟类多样性调查</h5>
+                <p>开展城市绿地鸟类多样性监测，评估城市化对鸟类群落的影响。</p>
+              </div>
+              <div class="topic-item">
+                <h5>珍稀鸟类种群评估</h5>
+                <p>基于公民科学数据，评估中华秋沙鸭、朱鹮等珍稀鸟类的种群动态。</p>
+              </div>
+              <div class="topic-item">
+                <h5>鸟类行为生态学研究</h5>
+                <p>利用影像数据分析鸟类的求偶、育雏和觅食行为模式。</p>
+              </div>
+              <div class="topic-item">
+                <h5>AI在鸟类识别中的应用</h5>
+                <p>开发基于深度学习的鸟类图像和声音自动识别系统。</p>
+              </div>
+              <div class="topic-item">
+                <h5>观鸟旅游可持续研究</h5>
+                <p>评估观鸟旅游对鸟类栖息地的影响，探索可持续的生态旅游模式。</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="school-section">
+            <h3>学生作品征集</h3>
+            <p>我们面向全国高校学生征集以下类型的作品：</p>
+            <div class="topic-list" style="margin-top:12px;">
+              <div class="topic-item">
+                <h5>鸟类摄影作品</h5>
+                <p>优秀作品将在平台展示，并有机会参与年度摄影大赛。</p>
+              </div>
+              <div class="topic-item">
+                <h5>自然笔记</h5>
+                <p>鼓励学生用图文记录鸟类观察，培养科学观察习惯。</p>
+              </div>
+              <div class="topic-item">
+                <h5>研究论文</h5>
+                <p>鸟类学、生态学相关研究论文可通过平台发表和传播。</p>
+              </div>
+              <div class="topic-item">
+                <h5>科普创作</h5>
+                <p>鼓励学生创作面向公众的鸟类科普文章、视频和插画。</p>
+              </div>
+            </div>
+            <div class="student-call">
+              <h4>提交方式</h4>
+              <p>学生作品可通过平台投稿功能提交，或在赛事活动页面参与相关征集比赛。优秀作品将获得平台推荐和展示机会。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="apply-form" id="applyForm">
+          <h3>学校账号申请</h3>
+          <div class="bc-form-group">
+            <label for="schoolName">学校名称 <span style="color:var(--danger);">*</span></label>
+            <input type="text" class="bc-form-input" id="schoolName" placeholder="请输入学校名称">
+            <div class="bc-form-error" id="schoolNameError" style="display:none;">请输入学校名称</div>
+          </div>
+          <div class="bc-form-group">
+            <label for="contactPerson">联系人 <span style="color:var(--danger);">*</span></label>
+            <input type="text" class="bc-form-input" id="contactPerson" placeholder="请输入联系人姓名">
+            <div class="bc-form-error" id="contactPersonError" style="display:none;">请输入联系人姓名</div>
+          </div>
+          <div class="bc-form-group">
+            <label for="contactEmail">邮箱 <span style="color:var(--danger);">*</span></label>
+            <input type="email" class="bc-form-input" id="contactEmail" placeholder="请输入邮箱">
+            <div class="bc-form-error" id="contactEmailError" style="display:none;">请输入有效的邮箱地址</div>
+          </div>
+          <div class="bc-form-group">
+            <label for="contactPhone">电话</label>
+            <input type="tel" class="bc-form-input" id="contactPhone" placeholder="请输入联系电话">
+          </div>
+          <div class="bc-form-group">
+            <label for="programInterest">感兴趣的项目</label>
+            <select class="bc-form-select" id="programInterest">
+              <option value="">请选择</option>
+              <option value="research">研究课题合作</option>
+              <option value="internship">学生实习基地</option>
+              <option value="course">课程合作开发</option>
+              <option value="data">数据共享合作</option>
+              <option value="other">其他</option>
+            </select>
+          </div>
+          <div class="bc-form-group">
+            <label for="message">留言说明</label>
+            <textarea class="bc-form-textarea" id="message" placeholder="请描述贵校的合作需求和期望..."></textarea>
+          </div>
+          <button class="btn btn-accent btn-lg" id="submitBtn" style="width:100%;">提交申请</button>
+          <p style="text-align:center;font-size:0.82rem;color:var(--text-secondary);margin-top:12px;">提交后我们将在3个工作日内与您联系</p>
+        </div>
+      </div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BI = window.BirdChainInteractions;
+      var BStor = window.BirdChainStorage;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('education'));
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '自然教育', href: '/education/index.html' },
+        { label: '学校项目' }
+      ]);
+
+      document.getElementById('submitBtn').addEventListener('click', function() {
+        var schoolName = document.getElementById('schoolName').value.trim();
+        var contactPerson = document.getElementById('contactPerson').value.trim();
+        var contactEmail = document.getElementById('contactEmail').value.trim();
+        var contactPhone = document.getElementById('contactPhone').value.trim();
+        var programInterest = document.getElementById('programInterest').value;
+        var message = document.getElementById('message').value.trim();
+
+        var valid = true;
+
+        if (!schoolName) {
+          document.getElementById('schoolNameError').style.display = 'block';
+          document.getElementById('schoolName').classList.add('error');
+          valid = false;
+        }
+        if (!contactPerson) {
+          document.getElementById('contactPersonError').style.display = 'block';
+          document.getElementById('contactPerson').classList.add('error');
+          valid = false;
+        }
+        if (!contactEmail || contactEmail.indexOf('@') === -1) {
+          document.getElementById('contactEmailError').style.display = 'block';
+          document.getElementById('contactEmail').classList.add('error');
+          valid = false;
+        }
+
+        if (!valid) return;
+
+        var applications = BStor.getItem('bc_schoolApplications', []);
+        applications.push({
+          id: 'SCH' + Date.now().toString(36).toUpperCase(),
+          schoolName: schoolName,
+          contactPerson: contactPerson,
+          contactEmail: contactEmail,
+          contactPhone: contactPhone,
+          programInterest: programInterest,
+          message: message,
+          submittedAt: new Date().toISOString()
+        });
+        BStor.setItem('bc_schoolApplications', applications);
+
+        BI.showToast('学校合作申请已提交，我们将在3个工作日内联系您', 'success');
+
+        document.getElementById('schoolName').value = '';
+        document.getElementById('contactPerson').value = '';
+        document.getElementById('contactEmail').value = '';
+        document.getElementById('contactPhone').value = '';
+        document.getElementById('programInterest').value = '';
+        document.getElementById('message').value = '';
+      });
+
+      ['schoolName', 'contactPerson', 'contactEmail'].forEach(function(id) {
+        document.getElementById(id).addEventListener('input', function() {
+          document.getElementById(id + 'Error').style.display = 'none';
+          this.classList.remove('error');
+        });
+      });
+
+      BI.initAll();
+    });
+  </script>
+</body>
+</html>

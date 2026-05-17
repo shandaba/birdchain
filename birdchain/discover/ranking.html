@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>作品排行榜 - BirdChain鸟链</title>
+  <meta name="description" content="BirdChain鸟链作品排行榜，发现最受欢迎的鸟类影像作品、摄影师和AI创作。">
+  <meta property="og:title" content="作品排行榜 - BirdChain鸟链">
+  <meta property="og:description" content="发现最受欢迎的鸟类影像作品、摄影师和AI创作。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .bc-ranking-hero {
+      background: linear-gradient(135deg, #16395C, #1B4F72, #1B4332);
+      border-radius: var(--radius-lg);
+      padding: 48px 40px;
+      text-align: center;
+      color: #fff;
+      margin: 20px 0 32px;
+    }
+    .bc-ranking-hero h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .bc-ranking-hero p {
+      font-size: 0.95rem;
+      opacity: 0.85;
+    }
+    .bc-rank-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      transition: all var(--transition-normal);
+      cursor: pointer;
+    }
+    .bc-rank-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    .bc-rank-card.top3 {
+      padding: 20px;
+    }
+    .bc-rank-number {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--neutral-soft);
+      width: 40px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .bc-rank-number.rank-1 { color: #DAA520; font-size: 1.8rem; }
+    .bc-rank-number.rank-2 { color: #A8A8A8; font-size: 1.6rem; }
+    .bc-rank-number.rank-3 { color: #CD7F32; font-size: 1.5rem; }
+    .bc-rank-medal {
+      font-size: 1.6rem;
+      width: 40px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .bc-rank-img {
+      width: 80px;
+      height: 60px;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .bc-rank-card.top3 .bc-rank-img {
+      width: 120px;
+      height: 80px;
+    }
+    .bc-rank-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .bc-rank-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .bc-rank-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text-strong);
+      margin-bottom: 4px;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .bc-rank-card.top3 .bc-rank-title {
+      font-size: 1.05rem;
+    }
+    .bc-rank-meta {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      flex-wrap: wrap;
+    }
+    .bc-rank-author {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .bc-rank-author img {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .bc-rank-stats {
+      display: flex;
+      gap: 12px;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+    }
+    .bc-rank-stats strong {
+      color: var(--text-strong);
+    }
+    .bc-rank-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .bc-top3-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .bc-rank-section-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 20px 0 14px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line-soft);
+    }
+    .bc-rank-change {
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-left: 6px;
+    }
+    .bc-rank-change.up { color: var(--success); }
+    .bc-rank-change.down { color: var(--danger); }
+    .bc-rank-change.new { color: var(--brand-accent); }
+    @media (max-width: 767px) {
+      .bc-ranking-hero { padding: 32px 20px; margin: 12px 0 20px; border-radius: var(--radius-md); }
+      .bc-ranking-hero h1 { font-size: 1.4rem; }
+      .bc-rank-card.top3 .bc-rank-img { width: 80px; height: 60px; }
+      .bc-rank-stats { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+
+      <div class="bc-ranking-hero">
+        <h1>作品排行榜</h1>
+        <p>发现BirdChain上最受欢迎的鸟类影像作品</p>
+      </div>
+
+      <div class="bc-tabs" id="rankingTabs">
+        <button class="bc-tab active" data-tab="week">7日榜</button>
+        <button class="bc-tab" data-tab="month">30日榜</button>
+        <button class="bc-tab" data-tab="all">总榜</button>
+        <button class="bc-tab" data-tab="category">分类榜</button>
+        <button class="bc-tab" data-tab="photographer">摄影师榜</button>
+        <button class="bc-tab" data-tab="ai">AI创作榜</button>
+      </div>
+
+      <div id="rankingContent"></div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BD = window.BirdChainData;
+      var BI = window.BirdChainInteractions;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('discover'));
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '发现/灵感', href: '/discover/index.html' },
+        { label: '作品排行榜' }
+      ]);
+
+      var allWorks = await BD.loadData('works');
+      var creators = await BD.loadData('creators');
+      var creatorMap = {};
+      creators.forEach(function(c) { creatorMap[c.id] = c; });
+
+      var currentTab = 'week';
+
+      var rankChanges = {};
+      allWorks.forEach(function(w) {
+        var seed = (w.id || '').charCodeAt(w.id.length - 1) || 0;
+        var change = (seed % 7) - 3;
+        rankChanges[w.id] = change;
+      });
+
+      function getSortedWorks(sortBy) {
+        var sorted = allWorks.slice();
+        switch (sortBy) {
+          case 'views':
+            sorted.sort(function(a, b) { return (b.views || 0) - (a.views || 0); });
+            break;
+          case 'likes':
+            sorted.sort(function(a, b) { return (b.likes || 0) - (a.likes || 0); });
+            break;
+          case 'favorites':
+            sorted.sort(function(a, b) { return (b.favorites || 0) - (a.favorites || 0); });
+            break;
+          case 'random':
+            for (var i = sorted.length - 1; i > 0; i--) {
+              var j = Math.floor(Math.random() * (i + 1));
+              var tmp = sorted[i];
+              sorted[i] = sorted[j];
+              sorted[j] = tmp;
+            }
+            break;
+          default:
+            sorted.sort(function(a, b) { return (b.views || 0) - (a.views || 0); });
+        }
+        return sorted;
+      }
+
+      function renderRankCard(w, rank, isTop3) {
+        var change = rankChanges[w.id] || 0;
+        var changeHtml = '';
+        if (change > 0) changeHtml = '<span class="bc-rank-change up">&#9650;' + change + '</span>';
+        else if (change < 0) changeHtml = '<span class="bc-rank-change down">&#9660;' + Math.abs(change) + '</span>';
+        else changeHtml = '<span class="bc-rank-change new">NEW</span>';
+
+        var creator = creatorMap[w.creatorId] || {};
+
+        var html = '<div class="bc-rank-card' + (isTop3 ? ' top3' : '') + '" onclick="window.location.href=\'/discover/work-detail.html?id=' + w.id + '\'">';
+
+        if (rank === 1) {
+          html += '<div class="bc-rank-medal">&#129351;</div>';
+        } else if (rank === 2) {
+          html += '<div class="bc-rank-medal">&#129352;</div>';
+        } else if (rank === 3) {
+          html += '<div class="bc-rank-medal">&#129353;</div>';
+        } else {
+          html += '<div class="bc-rank-number">' + rank + '</div>';
+        }
+
+        html += '<div class="bc-rank-img">';
+        html += '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" style="background: linear-gradient(135deg, #2a5c4a, #1a3a2a); width:100%; height:100%; object-fit:cover;" alt="' + esc(w.title) + '">';
+        html += '</div>';
+
+        html += '<div class="bc-rank-info">';
+        html += '<div class="bc-rank-title">' + esc(w.title) + changeHtml + '</div>';
+        html += '<div class="bc-rank-meta">';
+        html += '<div class="bc-rank-author">';
+        html += imgTag(creator.avatar, creator.dataImg, esc(creator.name), 'width:20px;height:20px;border-radius:50%;');
+        html += '<span>' + esc(creator.name || '未知') + '</span>';
+        html += '</div>';
+        html += '<span>' + esc(w.category || '') + '</span>';
+        if (w.species) html += '<span class="tag tag-accent">' + esc(w.species) + '</span>';
+        html += '</div>';
+        html += '</div>';
+
+        html += '<div class="bc-rank-stats">';
+        html += '<div>' + HEART_ICON_SVG + ' <strong>' + formatNumber(w.likes || 0) + '</strong></div>';
+        html += '<div>' + EYE_ICON_SVG + ' <strong>' + formatNumber(w.views || 0) + '</strong></div>';
+        html += '</div>';
+
+        html += '</div>';
+        return html;
+      }
+
+      function renderTab(tab) {
+        var container = document.getElementById('rankingContent');
+        var html = '';
+
+        if (tab === 'week') {
+          var sorted = getSortedWorks('random');
+          html += '<div class="bc-top3-grid">';
+          for (var i = 0; i < 3 && i < sorted.length; i++) {
+            html += renderRankCard(sorted[i], i + 1, true);
+          }
+          html += '</div>';
+          html += '<div class="bc-rank-section-title">7日榜 TOP 4-20</div>';
+          html += '<div class="bc-rank-list">';
+          for (var i = 3; i < Math.min(20, sorted.length); i++) {
+            html += renderRankCard(sorted[i], i + 1, false);
+          }
+          html += '</div>';
+        } else if (tab === 'month') {
+          var sorted = getSortedWorks('likes');
+          html += '<div class="bc-top3-grid">';
+          for (var i = 0; i < 3 && i < sorted.length; i++) {
+            html += renderRankCard(sorted[i], i + 1, true);
+          }
+          html += '</div>';
+          html += '<div class="bc-rank-section-title">30日榜 TOP 4-20</div>';
+          html += '<div class="bc-rank-list">';
+          for (var i = 3; i < Math.min(20, sorted.length); i++) {
+            html += renderRankCard(sorted[i], i + 1, false);
+          }
+          html += '</div>';
+        } else if (tab === 'all') {
+          var sorted = getSortedWorks('views');
+          html += '<div class="bc-top3-grid">';
+          for (var i = 0; i < 3 && i < sorted.length; i++) {
+            html += renderRankCard(sorted[i], i + 1, true);
+          }
+          html += '</div>';
+          html += '<div class="bc-rank-section-title">总榜 TOP 4-24</div>';
+          html += '<div class="bc-rank-list">';
+          for (var i = 3; i < sorted.length; i++) {
+            html += renderRankCard(sorted[i], i + 1, false);
+          }
+          html += '</div>';
+        } else if (tab === 'category') {
+          var categories = ['摄影', '数字艺术', '插画', 'AI创作'];
+          categories.forEach(function(cat) {
+            var catWorks = allWorks.filter(function(w) { return w.category === cat; });
+            catWorks.sort(function(a, b) { return (b.views || 0) - (a.views || 0); });
+            if (catWorks.length > 0) {
+              html += '<div class="bc-rank-section-title">' + esc(cat) + ' TOP 5</div>';
+              html += '<div class="bc-rank-list">';
+              for (var i = 0; i < Math.min(5, catWorks.length); i++) {
+                html += renderRankCard(catWorks[i], i + 1, i < 3);
+              }
+              html += '</div>';
+            }
+          });
+        } else if (tab === 'photographer') {
+          var sorted = creators.slice().sort(function(a, b) { return (b.followers || 0) - (a.followers || 0); });
+          html += '<div class="bc-top3-grid">';
+          for (var i = 0; i < 3 && i < sorted.length; i++) {
+            var c = sorted[i];
+            html += '<div class="bc-rank-card top3">';
+            html += '<div class="bc-rank-medal">' + (i === 0 ? '&#129351;' : i === 1 ? '&#129352;' : '&#129353;') + '</div>';
+            html += '<div class="bc-rank-img">';
+            html += imgTag(c.avatar, c.dataImg, esc(c.name), 'width:100%;height:100%;object-fit:cover;');
+            html += '</div>';
+            html += '<div class="bc-rank-info">';
+            html += '<div class="bc-rank-title">' + esc(c.name);
+            if (c.verified) html += ' ' + VERIFIED_SVG;
+            html += '</div>';
+            html += '<div class="bc-rank-meta">';
+            html += '<span>' + formatNumber(c.works || 0) + ' 作品</span>';
+            html += '<span>' + formatNumber(c.followers || 0) + ' 粉丝</span>';
+            html += '</div>';
+            html += '</div>';
+            html += '<div class="bc-rank-stats">';
+            html += '<button class="btn btn-outline btn-sm" data-action="follow" data-creator-id="' + esc(c.id) + '" data-creator-name="' + esc(c.name) + '">关注</button>';
+            html += '</div>';
+            html += '</div>';
+          }
+          html += '</div>';
+          html += '<div class="bc-rank-section-title">摄影师榜 TOP 4-12</div>';
+          html += '<div class="bc-rank-list">';
+          for (var i = 3; i < sorted.length; i++) {
+            var c = sorted[i];
+            html += '<div class="bc-rank-card">';
+            html += '<div class="bc-rank-number">' + (i + 1) + '</div>';
+            html += '<div class="bc-rank-img" style="width:60px;height:60px;border-radius:50%;">';
+            html += imgTag(c.avatar, c.dataImg, esc(c.name), 'width:100%;height:100%;object-fit:cover;border-radius:50%;');
+            html += '</div>';
+            html += '<div class="bc-rank-info">';
+            html += '<div class="bc-rank-title">' + esc(c.name) + (c.verified ? ' ' + VERIFIED_SVG : '') + '</div>';
+            html += '<div class="bc-rank-meta">';
+            html += '<span>' + formatNumber(c.works || 0) + ' 作品</span>';
+            html += '<span>' + formatNumber(c.followers || 0) + ' 粉丝</span>';
+            html += '</div>';
+            html += '</div>';
+            html += '<button class="btn btn-outline btn-sm" data-action="follow" data-creator-id="' + esc(c.id) + '" data-creator-name="' + esc(c.name) + '">关注</button>';
+            html += '</div>';
+          }
+          html += '</div>';
+        } else if (tab === 'ai') {
+          var aiWorks = allWorks.filter(function(w) { return w.category === 'AI创作'; });
+          aiWorks.sort(function(a, b) { return (b.views || 0) - (a.views || 0); });
+          html += '<div class="bc-top3-grid">';
+          for (var i = 0; i < 3 && i < aiWorks.length; i++) {
+            html += renderRankCard(aiWorks[i], i + 1, true);
+          }
+          html += '</div>';
+          if (aiWorks.length > 3) {
+            html += '<div class="bc-rank-section-title">AI创作榜 TOP 4-' + aiWorks.length + '</div>';
+            html += '<div class="bc-rank-list">';
+            for (var i = 3; i < aiWorks.length; i++) {
+              html += renderRankCard(aiWorks[i], i + 1, false);
+            }
+            html += '</div>';
+          }
+        }
+
+        container.innerHTML = html;
+        BI.initFollowButtons();
+        BI.initLikeButtons();
+        BI.initFavoriteButtons();
+        BI.initCartButtons();
+      }
+
+      document.getElementById('rankingTabs').addEventListener('click', function(e) {
+        var tab = e.target.closest('.bc-tab');
+        if (!tab) return;
+        this.querySelectorAll('.bc-tab').forEach(function(t) { t.classList.remove('active'); });
+        tab.classList.add('active');
+        currentTab = tab.getAttribute('data-tab');
+        renderTab(currentTab);
+      });
+
+      BI.initLikeButtons();
+      BI.initFavoriteButtons();
+      BI.initFollowButtons();
+      BI.initCartButtons();
+      BI.initNewsletterForm();
+      BI.initThemeToggle();
+      BI.initMobileMenu();
+      BI.initSearchBar();
+      BI.updateCartBadge();
+
+      renderTab('week');
+    });
+  </script>
+</body>
+</html>

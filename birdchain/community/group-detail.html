@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>小组详情 - BirdChain鸟链</title>
+  <meta name="description" content="查看BirdChain社区小组详情，加入鸟类爱好者小组交流。">
+  <meta property="og:title" content="小组详情 - BirdChain鸟链">
+  <meta property="og:description" content="鸟类爱好者社区小组详情与活动。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .group-cover {
+      aspect-ratio: 21/9;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin: 28px 0 0;
+    }
+    .group-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .group-header {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+      padding: 28px 32px;
+      margin-top: -2px;
+      margin-bottom: 32px;
+    }
+    .group-header h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text-strong);
+    }
+    .group-header p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .group-stats {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .group-stat {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    .group-stat strong {
+      color: var(--text-strong);
+      font-size: 1rem;
+    }
+    .group-join-btn {
+      margin-top: 16px;
+    }
+    .group-join-btn.joined {
+      background: var(--danger);
+      color: #fff;
+      border-color: var(--danger);
+    }
+    .group-layout {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 28px;
+      align-items: start;
+    }
+    .group-section-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--line-soft);
+    }
+    .group-members-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .group-member-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--bg-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--brand-accent);
+    }
+    .group-post-card {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .group-post-card:hover {
+      border-color: var(--brand-accent);
+    }
+    .group-post-card h5 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .group-post-card .meta {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      display: flex;
+      gap: 12px;
+    }
+    .group-sidebar-card {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    .group-sidebar-card h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+    .group-event {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .group-event:last-child { border-bottom: none; }
+    .group-event h6 {
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .group-event span {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+    @media (max-width: 991px) {
+      .group-layout { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+
+      <div class="group-cover">
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+             style="background: linear-gradient(135deg, #2D6A4F, #40916C); width:100%; height:100%; object-fit:cover;"
+             alt="小组封面">
+      </div>
+
+      <div class="group-header" id="groupHeader"></div>
+
+      <div class="group-layout" id="groupLayout"></div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BI = window.BirdChainInteractions;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('community'));
+
+      var params = new URLSearchParams(window.location.search);
+      var groupId = params.get('id') || '1';
+
+      var groups = [
+        { id: '1', name: '华东观鸟俱乐部', description: '江浙沪鸟类爱好者的交流平台，定期组织观鸟活动和摄影外拍。', members: 856, posts: 2340, location: '华东地区' },
+        { id: '2', name: '湿地守护者', description: '关注湿地生态保护，记录湿地鸟类种群变化，参与湿地保护志愿者行动。', members: 423, posts: 1120, location: '全国' },
+        { id: '3', name: '鸟类摄影大师班', description: '专业鸟类摄影交流小组，分享拍摄技巧、后期处理和器材使用心得。', members: 1240, posts: 3560, location: '全国' },
+        { id: '4', name: '候鸟追踪队', description: '追踪候鸟迁徙路线，记录途经鸟类种群数据，为保护研究提供支持。', members: 312, posts: 890, location: '东亚-澳大利西亚' },
+        { id: '5', name: '观鸟入门指南', description: '为观鸟初学者提供入门指导，分享观鸟技巧、识别方法和装备推荐。', members: 2100, posts: 5600, location: '全国' }
+      ];
+
+      var group = findById(groups, groupId) || groups[0];
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '社区', href: '/community/index.html' },
+        { label: group.name }
+      ]);
+
+      var joined = false;
+      try {
+        var joinedGroups = JSON.parse(localStorage.getItem('joinedGroups') || '[]');
+        joined = joinedGroups.indexOf(groupId) !== -1;
+      } catch(e) {}
+
+      var posts = [];
+      try { posts = await loadData('communityPosts'); } catch(e) {}
+
+      var groupPosts = posts.slice(0, 8);
+
+      var memberNames = ['观鸟达人张', '湿地守护者', '飞羽摄影', '自然记录者', '鸟鸣清晨', '蓝天翱翔', '生态摄影师', '候鸟追踪', '爱鸟人士', '林中漫步'];
+
+      function renderAll() {
+        var headerHtml = '';
+        headerHtml += '<h1>' + esc(group.name) + '</h1>';
+        headerHtml += '<p>' + esc(group.description) + '</p>';
+        headerHtml += '<div class="group-stats">';
+        headerHtml += '<div class="group-stat"><strong>' + group.members.toLocaleString() + '</strong> 成员</div>';
+        headerHtml += '<div class="group-stat"><strong>' + group.posts.toLocaleString() + '</strong> 帖子</div>';
+        headerHtml += '<div class="group-stat"><span>' + esc(group.location) + '</span></div>';
+        headerHtml += '</div>';
+        headerHtml += '<button class="btn btn-accent group-join-btn' + (joined ? ' joined' : '') + '" id="joinGroupBtn">' + (joined ? '退出小组' : '加入小组') + '</button>';
+        document.getElementById('groupHeader').innerHTML = headerHtml;
+
+        var layoutHtml = '';
+
+        layoutHtml += '<div class="group-main">';
+
+        layoutHtml += '<div class="group-section-title">小组帖子</div>';
+        groupPosts.forEach(function(p) {
+          layoutHtml += '<a href="/community/post-detail.html?id=' + p.id + '" class="group-post-card">';
+          layoutHtml += '<h5>' + esc(p.title) + '</h5>';
+          layoutHtml += '<div class="meta">';
+          layoutHtml += '<span>' + esc(p.author || '匿名用户') + '</span>';
+          layoutHtml += '<span>' + esc(p.time || '') + '</span>';
+          layoutHtml += '<span>' + (p.likes || 0) + ' 赞</span>';
+          layoutHtml += '<span>' + (p.comments || 0) + ' 评论</span>';
+          layoutHtml += '</div>';
+          layoutHtml += '</a>';
+        });
+        layoutHtml += '<div style="text-align:center;padding:16px 0;"><a href="/community/index.html" class="btn btn-outline">查看更多帖子</a></div>';
+
+        layoutHtml += '</div>';
+
+        layoutHtml += '<div class="group-sidebar">';
+
+        layoutHtml += '<div class="group-sidebar-card">';
+        layoutHtml += '<h4>成员列表</h4>';
+        layoutHtml += '<div class="group-members-grid">';
+        memberNames.forEach(function(name, i) {
+          var colors = ['#2D6A4F','#1B4F72','#6B4226','#457B9D','#BC6C25','#3A5A40','#2980B9','#8B6914','#588157','#DDA15E'];
+          layoutHtml += '<div class="group-member-avatar" style="background:' + colors[i] + ';color:#fff;font-size:0.7rem;font-weight:600;">' + esc(name.charAt(0)) + '</div>';
+        });
+        layoutHtml += '</div>';
+        layoutHtml += '</div>';
+
+        layoutHtml += '<div class="group-sidebar-card">';
+        layoutHtml += '<h4>小组活动</h4>';
+        var events = [
+          { title: '鄱阳湖冬季观鸟', date: '2026年1月15日' },
+          { title: '湿地保护志愿者日', date: '2026年2月8日' },
+          { title: '鸟类摄影技巧线上分享', date: '2026年3月20日' },
+          { title: '春季候鸟观测活动', date: '2026年4月12日' }
+        ];
+        events.forEach(function(ev) {
+          layoutHtml += '<div class="group-event">';
+          layoutHtml += '<h6>' + esc(ev.title) + '</h6>';
+          layoutHtml += '<span>' + esc(ev.date) + '</span>';
+          layoutHtml += '</div>';
+        });
+        layoutHtml += '</div>';
+
+        layoutHtml += '</div>';
+
+        document.getElementById('groupLayout').innerHTML = layoutHtml;
+      }
+
+      renderAll();
+
+      document.addEventListener('click', function(e) {
+        var joinBtn = e.target.closest('#joinGroupBtn');
+        if (joinBtn) {
+          joined = !joined;
+          try {
+            var joinedGroups = JSON.parse(localStorage.getItem('joinedGroups') || '[]');
+            if (joined) {
+              if (joinedGroups.indexOf(groupId) === -1) joinedGroups.push(groupId);
+            } else {
+              joinedGroups = joinedGroups.filter(function(id) { return id !== groupId; });
+            }
+            localStorage.setItem('joinedGroups', JSON.stringify(joinedGroups));
+          } catch(e2) {}
+          joinBtn.textContent = joined ? '退出小组' : '加入小组';
+          joinBtn.classList.toggle('joined', joined);
+          BI.showToast(joined ? '已加入小组！' : '已退出小组', 'success');
+        }
+      });
+
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+      BI.initAll();
+    });
+  </script>
+</body>
+</html>

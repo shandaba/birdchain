@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>任务与贡献 - 创作者中心 - BirdChain鸟链</title>
+  <meta name="description" content="完成创作者任务获取贡献值和奖励。">
+  <meta property="og:title" content="任务与贡献 - 创作者中心 - BirdChain鸟链">
+  <meta property="og:description" content="完成创作者任务获取贡献值和奖励。">
+  <meta property="og:image" content="/assets/images/logos/logo-mark.svg">
+  <link rel="icon" href="/assets/images/logos/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/global.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <style>
+    .tasks-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .task-card {
+      background: var(--bg-card);
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      margin-bottom: 12px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      transition: all var(--transition-fast);
+    }
+    .task-card.completed {
+      opacity: 0.6;
+      border-color: var(--success);
+    }
+    .task-card:hover {
+      box-shadow: var(--shadow-md);
+    }
+    .task-checkbox {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 2px solid var(--line-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      font-size: 0.75rem;
+      color: transparent;
+    }
+    .task-card.completed .task-checkbox {
+      background: var(--success);
+      border-color: var(--success);
+      color: #fff;
+    }
+    .task-card.in-progress .task-checkbox {
+      border-color: var(--brand-accent);
+    }
+    .task-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .task-title {
+      font-weight: 600;
+      font-size: 0.92rem;
+      color: var(--text-strong);
+    }
+    .task-desc {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+    .task-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+    .task-progress {
+      font-size: 0.78rem;
+      color: var(--brand-accent-dark);
+      font-weight: 500;
+    }
+    .task-points {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--brand-accent-dark);
+      padding: 2px 8px;
+      background: var(--brand-accent-soft);
+      border-radius: 12px;
+    }
+    .task-status {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 12px;
+    }
+    .task-status.in-progress {
+      background: var(--brand-primary);
+      color: #fff;
+    }
+    .task-status.completed {
+      background: var(--success);
+      color: #fff;
+    }
+    .task-status.pending {
+      background: var(--bg-soft);
+      color: var(--text-secondary);
+    }
+    .task-action {
+      flex-shrink: 0;
+    }
+    .score-header {
+      background: linear-gradient(135deg, var(--brand-primary), var(--brand-primary-deep));
+      border-radius: var(--radius-lg);
+      padding: 24px 28px;
+      margin-bottom: 24px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .score-big {
+      font-size: 3rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .score-label {
+      font-size: 0.9rem;
+      opacity: 0.85;
+      margin-bottom: 4px;
+    }
+    .score-level {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--brand-accent);
+    }
+    @media (max-width: 767px) {
+      .score-header { padding: 16px 20px; }
+      .score-big { font-size: 2rem; }
+      .task-card { flex-wrap: wrap; }
+      .task-action { width: 100%; }
+      .task-action .btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <main class="container">
+      <div id="breadcrumbContainer"></div>
+      <div id="tasksContainer" class="tasks-container"></div>
+    </main>
+  </div>
+  <div class="bc-toast-container" id="toastContainer"></div>
+  <script src="/assets/js/storage.js"></script>
+  <script src="/assets/js/data-loader.js"></script>
+  <script src="/assets/js/pricing.js"></script>
+  <script src="/assets/js/interactions.js"></script>
+  <script src="/assets/js/components.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+      var app = document.getElementById('app');
+      var BC = window.BirdChainComponents;
+      var BI = window.BirdChainInteractions;
+      var BStor = window.BirdChainStorage;
+
+      app.insertAdjacentHTML('afterbegin', BC.renderHeader('creator'));
+      app.insertAdjacentHTML('beforeend', BC.renderFooter());
+
+      document.getElementById('breadcrumbContainer').innerHTML = BC.renderBreadcrumb([
+        { label: '创作者中心', href: '/creator/index.html' },
+        { label: '任务与贡献' }
+      ]);
+
+      BI.initAll();
+
+      var completedTasks = BStor.getItem(BStor.KEYS.completedTasks, []);
+      var userWorks = BStor.getItem(BStor.KEYS.userWorks, []);
+      var publishedArticles = BStor.getItem(BStor.KEYS.publishedArticles, []);
+
+      var tasks = [
+        { id: 'task-001', title: '上传3件作品', desc: '在平台上传3件鸟类相关影像作品', points: 50, progress: userWorks.length, target: 3, action: 'upload' },
+        { id: 'task-002', title: '撰写1篇专题文章', desc: '撰写一篇关于鸟类保护或摄影技巧的专题文章', points: 80, progress: publishedArticles.length, target: 1, action: 'write' },
+        { id: 'task-003', title: '审核5个标签', desc: '帮助审核5个作品标签，提升内容质量', points: 30, progress: 2, target: 5, action: 'review' },
+        { id: 'task-004', title: '分享专题到社交媒体', desc: '将你的作品或文章分享到社交媒体平台', points: 20, progress: 0, target: 1, action: 'share' },
+        { id: 'task-005', title: '参加1个赛事活动', desc: '报名参加任意一个平台赛事或活动', points: 60, progress: 0, target: 1, action: 'event' },
+        { id: 'task-006', title: '邀请1位创作者', desc: '邀请1位鸟类摄影师/创作者加入平台', points: 100, progress: 0, target: 1, action: 'invite' }
+      ];
+
+      var contributionScore = completedTasks.reduce(function(s, t) { return s + (t.points || 0); }, 0);
+      var contribLevel = contributionScore >= 500 ? '黄金贡献者' : contributionScore >= 300 ? '白银贡献者' : contributionScore >= 100 ? '青铜贡献者' : '新手贡献者';
+
+      function isTaskCompleted(taskId) {
+        return completedTasks.some(function(t) { return t.id === taskId; });
+      }
+
+      function getTaskStatus(task) {
+        if (isTaskCompleted(task.id)) return 'completed';
+        if (task.progress > 0 && task.progress < task.target) return 'in-progress';
+        return 'pending';
+      }
+
+      function getStatusText(status) {
+        if (status === 'completed') return '已完成';
+        if (status === 'in-progress') return '进行中';
+        return '未完成';
+      }
+
+      function getStatusClass(status) {
+        return status;
+      }
+
+      function canComplete(task) {
+        return task.progress >= task.target && !isTaskCompleted(task.id);
+      }
+
+      var tasksHtml = tasks.map(function(task) {
+        var status = getTaskStatus(task);
+        var statusClass = getStatusClass(status);
+        var statusText = getStatusText(status);
+        var completedClass = status === 'completed' ? ' completed' : status === 'in-progress' ? ' in-progress' : '';
+        var canComp = canComplete(task);
+
+        return '<div class="task-card' + completedClass + '" data-task-id="' + task.id + '">'
+          + '<div class="task-checkbox">&#10003;</div>'
+          + '<div class="task-info">'
+          + '<div class="task-title">' + task.title + '</div>'
+          + '<div class="task-desc">' + task.desc + '</div>'
+          + '<div class="task-meta">'
+          + '<span class="task-progress">进度：' + Math.min(task.progress, task.target) + '/' + task.target + '</span>'
+          + '<span class="task-points">+' + task.points + '贡献值</span>'
+          + '<span class="task-status ' + statusClass + '">' + statusText + '</span>'
+          + '</div>'
+          + '</div>'
+          + '<div class="task-action">'
+          + (canComp ? '<button class="btn btn-accent btn-sm complete-task-btn" data-task-id="' + task.id + '" data-task-points="' + task.points + '">完成任务</button>' : '')
+          + '</div>'
+          + '</div>';
+      }).join('');
+
+      var headerHtml = '<div class="score-header">'
+        + '<div><div class="score-label">贡献总分</div><div class="score-big">' + contributionScore + '</div></div>'
+        + '<div><div class="score-label">贡献等级</div><div class="score-level">' + contribLevel + '</div></div>'
+        + '<div style="flex:1;text-align:right;"><div class="score-label">已完成任务</div><div style="font-size:1.5rem;font-weight:700;">' + completedTasks.length + ' / ' + tasks.length + '</div></div>'
+        + '</div>';
+
+      var html = '<h2 style="font-size:1.3rem;font-weight:700;margin-bottom:20px;">&#127919; 任务与贡献</h2>'
+        + headerHtml
+        + '<h3 style="font-size:1rem;font-weight:600;margin-bottom:14px;">每日/每周任务</h3>'
+        + tasksHtml
+        + '<div class="text-xs text-secondary mt-2" style="text-align:center;">完成任务获得贡献值，提升你的贡献等级</div>';
+
+      document.getElementById('tasksContainer').innerHTML = html;
+
+      document.addEventListener('click', function(e) {
+        var btn = e.target.closest('.complete-task-btn');
+        if (!btn) return;
+
+        var taskId = btn.getAttribute('data-task-id');
+        var points = parseInt(btn.getAttribute('data-task-points')) || 0;
+
+        if (isTaskCompleted(taskId)) {
+          BI.showToast('此任务已完成', 'info');
+          return;
+        }
+
+        var task = tasks.find(function(t) { return t.id === taskId; });
+        if (task && task.progress < task.target) {
+          BI.showToast('任务进度未完成，请继续努力！', 'warning');
+          return;
+        }
+
+        completedTasks.push({ id: taskId, points: points, completedAt: new Date().toISOString() });
+        BStor.setItem(BStor.KEYS.completedTasks, completedTasks);
+
+        BI.showToast('任务完成！获得 +' + points + ' 贡献值', 'success');
+
+        setTimeout(function() {
+          location.reload();
+        }, 800);
+      });
+    });
+  </script>
+</body>
+</html>
